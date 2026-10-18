@@ -1,0 +1,323 @@
+*{
+    outline:none;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-family: "Quicksand", helvetica, arial, nimbus sans l, sans-serif;
+   
+
+}
+
+
+
+body{
+    margin: 0;
+    background: url(img/image-fond-part.jpeg);
+    background-repeat: no-repeat;
+     background-size: 100% 500px;
+ 
+ 
+}
+
+header{
+    display: inline-block;
+}
+header{
+    display:flex;
+    align-items:center;
+    padding:13px;
+    background:#b7d69b;
+}
+header .left{
+    display:flex;
+    align-items:center;
+    width:100%;
+}
+
+header .right{
+    display:flex;
+    align-items:center;
+    width:60%;
+    justify-content:end;
+}
+.head{
+    display: none;
+}
+
+ 
+
+
+header .right img{
+   width: 310px;
+   
+}
+
+.left img{
+    width:130px;
+    margin-left:8px;
+}
+.z{
+    background:#41180047;
+    padding:2px;
+    
+}
+
+main{
+    text-align: center;
+    padding:20px;
+    
+
+}
+.form{
+    background:white;
+    display:flex;
+    width:500px;
+    display: inline-block;
+    border-radius: 20px;
+     border: 1px solid #48434312;
+    box-shadow:0  11px #dcdcdc7d;
+   
+    
+}
+.form1{
+    background:white;
+    display:flex;
+    width:400px;
+    display: inline-block;
+    border-radius: 20px;
+     border: 1px solid #48434312;
+    box-shadow:0  11px #dcdcdc7d;
+   
+    
+}
+.title{
+    font-size: 1.5em;
+    margin-top:21px;
+}
+.titlee label{
+    font-size: 0.8em;
+    margin-top:21px;
+}
+
+.lock img {
+    width:231px;
+    margin:12px;
+}
+
+.card img {
+    width:200px;
+      margin:21px;
+}
+.col input{
+
+    width:82%;
+     margin:7px;
+    padding:18px;
+    font-size:1em;
+     border-radius: 6px;
+     border: 1px solid #00000033;
+}
+.col label{
+   text-align:left;
+    display:block;
+    margin-left:46px;
+    margin-top:21px;
+    font-size:1em;
+    color:#0000007d;
+}
+
+.coll input{
+
+    width:82%;
+     margin:px;
+    padding:12px;
+    font-size:0.8em;
+     border-radius: 6px;
+     border: 1px solid #00000033;
+}
+.coll label{
+   text-align:left;
+    display:block;
+    margin-left:35px;
+    margin-top:21px;
+    font-size:0.9em;
+    color:#0000007d;
+}
+.butt button{
+
+    width:82%;
+    padding:10px;
+    margin:20px;
+    color:white;
+    background:#003565;
+    font-size:1em;
+    border:none;
+     border-radius: 6px;
+}
+
+.com input{
+
+    width:94%;
+     margin:7px;
+    padding:18px;
+    font-size:1em;
+     border-radius: 6px;
+     border: 1px solid #00000033;
+}
+
+.com label{
+    text-align:left;
+     display:block;
+     margin-left:10px;
+     margin-top:28px;
+     font-size:0.9em;
+     color:#0000007d;
+ }
+ 
+.colo {
+    display:flex;
+    margin-top:18px
+}
+.colo input{
+  width: 40px;
+    height: 25px;
+    margin-left:41px;
+    
+    
+}
+
+.colo label{
+    margin-top:6px;
+    font-size:1em;
+    color:#00000085;
+}
+.colo label{
+    margin-right:18px;
+}
+   
+
+.but button{
+
+    width:65%;
+    padding:10px;
+    margin:20px;
+    color:white;
+    background:#003565;
+    font-size:1em;
+    border:none;
+     border-radius: 6px;
+}
+
+.a a{
+    color:#003565a6;
+   
+}
+.a {
+
+    font-size:16px;
+    padding:31px;
+   
+}
+.back1{
+    background: #f4f5f9;
+    width:80%;
+    margin:40px;
+    padding: 20;
+    
+}
+
+@media screen and (max-width: 1033px) {
+  
+
+    header .left{
+       display: none;
+    }
+    header .right{
+        display: none;
+     }
+     header .head{
+        display: flex;
+         width:900%;
+         text-align:center;
+     }
+    
+     .a {
+        margin-top:1px;
+         font-size:13px;
+         padding:31px;
+    }
+    .col input{
+
+    width:90%;
+    padding:10px;
+    font-size:1em;
+     border-radius: 6px;
+     border: 1px solid #00000033;
+}
+    .colo {
+    display:flex;
+    margin-top:32px
+}
+.colo input{
+  width: 40px;
+    height: 31px;
+    margin-left:18px;  
+}
+    
+    .col label{
+   text-align:left;
+    display:block;
+    margin-left:20px;
+    margin-top:21px;
+    font-size:1em;
+    color:#0000007d;
+}
+    body{
+        background:none;
+    }
+
+    .colo label{
+    margin-top:8px;
+    font-size:1em;
+    color:#00000085;
+}
+    .but button{
+
+    width:80%;
+    padding:8px;
+    margin:41px;
+    color:white;
+    background:#003565;
+    font-size:1.5em;
+    border:none;
+     border-radius: 6px;
+}
+    .com input{
+     padding:11px;
+    width:100%;
+    font-size:0.9em;
+     border-radius: 6px;
+     border: 1px solid #00000033;
+}
+    .back1{
+    background: #f4f5f9;
+    width:90%;
+    margin:21px; 
+    padding:21px;
+}
+.com label{
+   
+   
+    font-size:1em;
+    margin-left:8px;
+    
+   
+}
+    
+    }
+    .titlee{
+        font-size: 1.3em;
+        margin:21px;
+    }
+  
+
+    

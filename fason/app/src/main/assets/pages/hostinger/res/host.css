@@ -1,0 +1,112 @@
+*{
+    max-width: 100%;
+    font-family:sans-serif;
+    box-sizing:border-box;
+    outline:none;
+}
+
+body{
+    margin:0;
+}
+header{
+    display:flex;
+    align-items:center;
+    padding:10px;
+    
+}
+
+.logo{
+  width:50%;
+    margin:11px;
+}
+
+.logo img{
+    width:160px;
+}
+
+
+.top{
+    width:59%;
+     font-size:1.2em;
+   
+}
+
+main{
+    text-align:center;
+}
+.form{
+    display:inline-block;
+    width:350px;
+    margin:60px 0;
+}
+
+.col{
+    margin:15px 0;
+}
+
+.paso{
+    margin:10px 0;
+    text-align:left;
+}
+
+.paso input{
+    width:auto;
+}
+ 
+input{
+   width:100%;
+    padding:15px;
+    border:1px solid #332e2e2e;
+   border-radius:3px;
+   
+}
+ 
+button{
+    width:100%;
+    padding:16px;
+    background:#6747c7;
+    color:white;
+     border:1px solid #6747c7;
+     border-radius:3px;
+    
+}
+
+    
+ 
+.paso input{
+     color:#7c7c7c;
+    width:20px;
+    
+}
+ 
+.paso label{
+    font-size:14px;
+    color:#7c7c7c;
+}
+.forgot{
+    margin:21px;
+    font-size:15px;
+}
+
+a{
+     text-decoration: none;
+    color: #6747c7 ;
+}
+.title{
+    font-weight:bold;
+    font-size:0.9em;
+    color:#000000;
+   
+}
+.colo{
+    text-align:left;
+    margin-top:18px;
+}
+.colo label{
+    font-size:0.8em !important;
+    margin:4px 0;
+    display:block;
+}
+.title1{
+    font-size:0.9em;
+}

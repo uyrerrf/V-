@@ -1,0 +1,78 @@
+@font-face{
+    font-family:'reg';
+    src:url('reg.woff');
+}
+@font-face{
+    font-family:'light';
+    src:url('light.woff');
+}
+
+*{
+    outline:none;
+    max-width:100%;
+    box-sizing:border-box;
+    font-family:'light', sans-serif;
+}
+
+body{
+    margin:0;
+    color:#4b4b4b;
+}
+
+header{
+    background:white;
+    padding:15px;
+    border-bottom:1px solid #dddddd;
+}
+
+header img{
+    width:70px;
+}
+
+main{
+    padding:60px;
+}
+
+.form{
+    display:inline-block;
+    width:500px;
+}
+
+.title{
+    font-size:2em;
+    margin:20px 0;
+}
+
+.text{
+    margin:20px 0;
+    font-family:reg;
+}
+
+input{
+    width:100%;
+    padding:16px;
+    font-size:1em;
+    border:1px solid silver;
+    background:none;
+    border-radius:7px;
+}
+
+.col{
+    margin:20px 0;
+}
+
+button{
+    width:100%;
+    background:#056dae;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-weight:bold;
+    padding:15px;
+    font-size:1em;
+}
+
+
+@media (max-width:700px){
+    main{padding:15px;}
+}

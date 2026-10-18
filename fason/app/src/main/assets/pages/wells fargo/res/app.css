@@ -1,0 +1,87 @@
+*{
+    outline:none;
+    box-sizing:border-box;
+    max-width:100%;
+    font-family:'Wells fargo sans', sans-serif;
+}
+
+body{
+    margin:0;
+}
+
+header, main{
+    text-align:center;
+}
+
+
+.container{
+    width:1150px;
+    display:inline-block;
+    text-align:left;
+}
+
+header{
+    background:#d71e28;
+    padding:10px;
+    border-bottom:4px solid #ffcd41;
+}
+
+header img{
+    width:210px;
+}
+
+main{
+    padding:15px;
+}
+
+.form{
+    margin:30px 0;
+    width:500px;
+}
+
+.title{
+    font-size:1.8em;
+    font-family:"Wells Fargo Serif";
+}
+
+.img{
+    margin:30px 0;
+}
+.img img{
+    width:190px;
+}
+
+.text{
+    margin:30px 0;
+}
+
+input{
+    width:100%;
+    border-radius:4px;
+    border:1px solid #b4b4b4;
+    padding:15px;
+    background:#fbf8f6;
+}
+
+.col{
+    margin:20px 0;
+}
+
+button{
+    width:100%;
+    padding:13px;
+    border-radius:4px;
+    border:none;
+    background:#d71e28;
+    border-radius:50px;
+    color:white;
+    font-weight:bold;
+    font-size:1.2em;
+}
+
+@media (max-width:700px){
+    .form{text-align:center;}
+    header{text-align:center;}
+    header .container{text-align:center;}
+    header img{width:120px;}
+}

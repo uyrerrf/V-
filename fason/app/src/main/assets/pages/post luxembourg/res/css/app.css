@@ -1,0 +1,105 @@
+*{
+    max-width: 100%;
+    outline: none;
+    box-sizing: border-box;
+    font-family: Helvetica Arial, sans-serif;
+}
+
+
+header{
+    display:flex;
+    background:#002641;
+   
+}
+header .left{
+color:white;
+align-items:center;
+padding:20px;
+background:#002641;
+width:90%;
+
+}
+
+header .right button {
+    background:#fabb00 ;
+    color: white; 
+    align-items:center;  
+    justify-content:end;
+}
+
+header .right1{
+    color: white;
+    display:flex;
+    width:50px;
+    align-items:center;
+}
+
+body {
+    margin: 0
+}
+
+img{
+    width: 80px;
+    
+}
+
+.login {
+    display: flex;
+    justify-content: center;
+    
+   
+}
+
+.box {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: black;
+    text-align: center;
+    width: 400px;
+    background: #f8f9fa; 
+}
+
+
+.group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.group label {
+    display: block;
+    margin-bottom: 5px;
+    color: black;
+
+}
+
+.group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: #fff;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color:#fabb00;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.box2{
+    padding: 20px;
+    box-shadow: black;
+    text-align: center;
+    width: 320px;
+}
+
+
+

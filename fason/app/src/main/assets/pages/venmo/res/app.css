@@ -1,0 +1,117 @@
+@font-face {
+    font-family: PPUI-Icons ;
+    src: url(reg.woff2) ;
+    font-style: normal;
+    font-weight: 500 ;
+}
+@font-face {
+    font-family: Scto Grotesk  ;
+    src: url(reg.woff) ;
+    font-style: normal;
+    font-weight: 500 ;
+}
+
+*{
+    max-width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    font-family: PPUI-Icons;
+}
+body{
+    margin: 0;
+}
+main{
+    text-align: center ;
+    
+}
+.form{
+    
+    display: inline-block;
+    width:470px;
+    border:solid 1px #0000001a;
+    border-radius:6px;
+    margin-top:140px;
+    padding:60px;
+}
+.form img{
+    margin-bottom:6px;
+    width:120px;
+}
+.form .header{
+     margin-top:20px;
+    font-size:1.4em;
+    font-family: Scto Grotesk ;
+    color:#000000;
+    font-weight:normal ;
+   
+}
+
+
+.col input{
+    width:100%;
+    padding:17px;
+    border-radius:8px;
+    border:solid 1px #00000052;
+     font-size:1em;
+}
+.but button{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+     border-radius:30px;
+    border:none;
+    background:#0074DE;
+    color:white;
+    font-size:1.2em;
+     font-weight: bold;
+    
+    
+}
+.butt button{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+     border-radius:30px;
+    border:solid 1.6px;
+    background:#ffffff;
+    color:#0074DE;
+    font-size:1.2em;
+    font-weight: bold;
+    
+    
+}
+.a {
+   text-align:left;
+    margin-top:11px;
+}
+.a a {
+    text-decoration: none;
+    font-size: 1em;
+    color: #0074DE;
+    font-family: Scto Grotesk ;
+    font-weight: bold;
+
+    
+}
+.col label{
+    text-align:left;
+      display:block;
+    font-size:1em;
+    margin:5px 0;
+}
+
+.col{
+    margin-top:21px;
+}
+.title2 {
+    margin:31px;
+}
+
+@media screen and (max-width: 768px) {
+  
+    .form{
+        border: none;
+        margin-top: 0px;
+    }
+
+ }

