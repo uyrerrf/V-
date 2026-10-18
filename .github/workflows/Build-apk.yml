@@ -106,7 +106,13 @@ jobs:
 
           echo "Installing required Android packages..."
 
-          yes | "$SDKMANAGER" \
+          # Accept licenses without failing on a broken pipe.
+          set +o pipefail
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          set -o pipefail
+
+          # Install the required packages normally.
+          "$SDKMANAGER" \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0"
