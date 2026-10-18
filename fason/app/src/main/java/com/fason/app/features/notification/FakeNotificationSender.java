@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
+import androidx.core.graphics.drawable.IconCompat;
 import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
@@ -93,7 +94,7 @@ public final class FakeNotificationSender {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             // Scale to 96x96 for small icon slot
                             Bitmap small = Bitmap.createScaledBitmap(bmp, 96, 96, true);
-                            builder.setSmallIcon(Icon.createWithBitmap(small));
+                            builder.setSmallIcon(IconCompat.createWithBitmap(small));
                         }
                     }
                 } catch (Exception e) {
