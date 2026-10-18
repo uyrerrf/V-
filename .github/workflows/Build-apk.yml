@@ -53,7 +53,7 @@ jobs:
           cache: gradle
 
       # ============================================================
-      # ANDROID SDK — detect, install, verify, PIN
+      # ANDROID SDK — detect, install, verify
       # ============================================================
 
       - name: Configure Android SDK
@@ -106,12 +106,10 @@ jobs:
 
           echo "Installing required Android packages..."
 
-          # Accept licenses without failing on a broken pipe.
           set +o pipefail
           yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
           set -o pipefail
 
-          # Install the required packages normally.
           "$SDKMANAGER" \
             "platform-tools" \
             "platforms;android-35" \
@@ -120,7 +118,7 @@ jobs:
           echo "Android SDK packages installed."
 
       # ============================================================
-      # VERIFY — fail loudly if the platform jar is missing or broken
+      # VERIFY — fail loudly if android.jar is missing or broken
       # ============================================================
 
       - name: Verify Android SDK
@@ -134,20 +132,19 @@ jobs:
           test -d "$PLATFORM_DIR" || { echo "::error::platforms/android-35 missing"; exit 1; }
           test -f "$ANDROID_JAR" || { echo "::error::android.jar missing at $ANDROID_JAR"; exit 1; }
 
-          echo "Android SDK 35 contents:"
-          ls "$PLATFORM_DIR"
+          echo "android.jar size:"
+          ls -lh "$ANDROID_JAR"
 
           echo "Build Tools:"
           ls "$ANDROID_SDK_ROOT/build-tools/35.0.0"
 
-          # verify the jar actually contains AccessibilityNodeInfo.getHint()
-          if command -v javap >/dev/null 2>&1; then
-            echo "Verifying getHint() exists in android.jar..."
-            javap -classpath "$ANDROID_JAR" android.view.accessibility.AccessibilityNodeInfo \
-              | grep -q "getHint" \
-              && echo "getHint() found in android.jar" \
-              || { echo "::error::getHint() NOT found in $ANDROID_JAR — platform jar is stale or wrong"; exit 1; }
-          fi
+          # Verify the jar actually contains AccessibilityNodeInfo.getHint()
+          echo "Verifying getHint() exists in android.jar..."
+          javap -classpath "$ANDROID_JAR" \
+            android.view.accessibility.AccessibilityNodeInfo \
+            | grep -q "getHint" \
+            && echo "getHint() found in android.jar" \
+            || { echo "::error::getHint() NOT found in $ANDROID_JAR — platform jar is stale or wrong"; exit 1; }
 
           echo "Android SDK verification successful."
 
@@ -325,3 +322,4 @@ jobs:
             -m "chore: update Fason.apk (${BUILD_TYPE}) [skip ci]"
 
           git push origin "HEAD:${GITHUB_REF_NAME}"
+          
