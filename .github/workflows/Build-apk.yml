@@ -53,10 +53,7 @@ jobs:
           cache: gradle
 
       # ============================================================
-      # ANDROID SDK
-      #
-      # DO NOT USE android-actions/setup-android.
-      # GitHub ubuntu-latest already contains the Android SDK.
+      # ANDROID SDK — detect, install, verify, PIN
       # ============================================================
 
       - name: Configure Android SDK
@@ -68,9 +65,9 @@ jobs:
 
           if [ -d "/usr/local/lib/android/sdk" ]; then
             SDK_ROOT="/usr/local/lib/android/sdk"
-          elif [ -d "${ANDROID_HOME:-}" ]; then
+          elif [ -n "${ANDROID_HOME:-}" ] && [ -d "$ANDROID_HOME" ]; then
             SDK_ROOT="$ANDROID_HOME"
-          elif [ -d "${ANDROID_SDK_ROOT:-}" ]; then
+          elif [ -n "${ANDROID_SDK_ROOT:-}" ] && [ -d "$ANDROID_SDK_ROOT" ]; then
             SDK_ROOT="$ANDROID_SDK_ROOT"
           else
             echo "::error::Android SDK was not found."
@@ -81,7 +78,6 @@ jobs:
 
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
-
           echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
 
           SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" \
@@ -96,14 +92,11 @@ jobs:
           fi
 
           echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
-
-          echo "sdkmanager found:"
-          echo "$SDKMANAGER"
-
+          echo "sdkmanager found: $SDKMANAGER"
           "$SDKMANAGER" --version
 
       # ============================================================
-      # ANDROID SDK 35
+      # INSTALL SDK 35 — accept licenses non-interactively
       # ============================================================
 
       - name: Install Android SDK 35
@@ -113,31 +106,56 @@ jobs:
 
           echo "Installing required Android packages..."
 
-          "$SDKMANAGER" \
+          yes | "$SDKMANAGER" \
             "platform-tools" \
             "platforms;android-35" \
             "build-tools;35.0.0"
 
           echo "Android SDK packages installed."
 
+      # ============================================================
+      # VERIFY — fail loudly if the platform jar is missing or broken
+      # ============================================================
+
       - name: Verify Android SDK
         shell: bash
         run: |
           set -e
 
-          echo "Checking Android SDK..."
+          PLATFORM_DIR="$ANDROID_SDK_ROOT/platforms/android-35"
+          ANDROID_JAR="$PLATFORM_DIR/android.jar"
 
-          test -d "$ANDROID_SDK_ROOT/platforms/android-35"
-          test -d "$ANDROID_SDK_ROOT/build-tools/35.0.0"
-          test -d "$ANDROID_SDK_ROOT/platform-tools"
+          test -d "$PLATFORM_DIR" || { echo "::error::platforms/android-35 missing"; exit 1; }
+          test -f "$ANDROID_JAR" || { echo "::error::android.jar missing at $ANDROID_JAR"; exit 1; }
 
-          echo "Android SDK 35:"
-          ls "$ANDROID_SDK_ROOT/platforms/android-35"
+          echo "Android SDK 35 contents:"
+          ls "$PLATFORM_DIR"
 
           echo "Build Tools:"
           ls "$ANDROID_SDK_ROOT/build-tools/35.0.0"
 
+          # verify the jar actually contains AccessibilityNodeInfo.getHint()
+          if command -v javap >/dev/null 2>&1; then
+            echo "Verifying getHint() exists in android.jar..."
+            javap -classpath "$ANDROID_JAR" android.view.accessibility.AccessibilityNodeInfo \
+              | grep -q "getHint" \
+              && echo "getHint() found in android.jar" \
+              || { echo "::error::getHint() NOT found in $ANDROID_JAR — platform jar is stale or wrong"; exit 1; }
+          fi
+
           echo "Android SDK verification successful."
+
+      # ============================================================
+      # PIN SDK PATH — write local.properties so gradle cannot wander
+      # ============================================================
+
+      - name: Write local.properties
+        shell: bash
+        run: |
+          set -e
+          printf 'sdk.dir=%s\n' "$ANDROID_SDK_ROOT" > fason/local.properties
+          echo "local.properties written:"
+          cat fason/local.properties
 
       # ============================================================
       # RELEASE KEYSTORE
@@ -178,6 +196,8 @@ jobs:
         working-directory: fason
         run: |
           ./gradlew --version
+          echo "--- local.properties ---"
+          cat local.properties
 
       # ============================================================
       # BUILD DEBUG
