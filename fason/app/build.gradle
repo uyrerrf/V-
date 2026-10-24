@@ -77,11 +77,9 @@ android {
         }
     }
 
-    // ── Resource optimisations ────────────────────────────────────────────────
-    androidResources {
-        // Property syntax (AGP 8.x) — method-call 'crunchPngs false' was removed
-        crunchPngs = false   // R8 handles this better during release shrink
-    }
+    // NOTE: androidResources { crunchPngs } was removed entirely in AGP 8.x.
+    // R8 full mode (android.enableR8.fullMode=true in gradle.properties) already
+    // strips unreferenced PNGs during release shrink. Nothing to configure here.
 
     packaging {
         resources {
