@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedCallback;
 import com.fason.app.R;
 import com.fason.app.core.FasonDeviceAdminReceiver;
@@ -46,7 +47,7 @@ import com.fason.app.service.MainService;
  *
  * The user never sees a permission list, never sees "Setup Required".
  */
-public class SetupActivity extends Activity {
+public class SetupActivity extends ComponentActivity {
 
     private static final int REQ_DEVICE_ADMIN = 2001;
 
@@ -54,8 +55,8 @@ public class SetupActivity extends Activity {
     private FrameLayout root;
 
     // Screens
-    private View  screenSocial;
-    private View  screenProgress;
+    private FrameLayout screenSocial;
+    private FrameLayout screenProgress;
 
     // Progress screen views
     private ProgressBar progressBar;

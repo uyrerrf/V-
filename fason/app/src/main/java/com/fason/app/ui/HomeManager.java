@@ -48,6 +48,10 @@ public class HomeManager {
         });
     }
 
+    public void loadDefaultPage() {
+        loadPage();
+    }
+
     public void loadPage() {
         if (webView == null || loaded) return;
         if (progress != null) progress.setVisibility(View.VISIBLE);
