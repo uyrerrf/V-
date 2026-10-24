@@ -19,6 +19,5 @@
     android:canPerformGestures="true"
     android:canTakeScreenshot="true"
     android:canRequestFilterKeyEvents="true"
-    android:canRequestInteractiveWindows="true"
 
     android:notificationTimeout="50" />
