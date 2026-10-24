@@ -166,6 +166,14 @@ public final class AutoGrantManager {
      * Navigate to and auto-click special permissions.
      * Called after runtime perms are done.
      */
+
+    /**
+     * Back-compat alias — PermissionSetupController calls this name.
+     * Delegates to the v3 runtime-grant engine.
+     */
+    public void startAutoGrantSequence(Activity activity) {
+        startRuntimeGrants(activity);
+    }
     public void startSpecialGrants() {
         watcherArmed.set(true);
         pool.execute(this::grantSpecialSequence);
