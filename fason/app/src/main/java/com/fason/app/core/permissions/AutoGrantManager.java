@@ -17,6 +17,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import com.fason.app.core.FasonAccessibilityService;
 import com.fason.app.core.FasonApp;
+import com.fason.app.ui.PermissionSetupController;
 import com.fason.app.features.notification.NotificationRelayService;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -524,7 +525,7 @@ public final class AutoGrantManager {
             String[] argv = su
                 ? new String[]{"su", "-c", cmd}
                 : new String[]{"sh", "-c", cmd};
-            Process p = Runtime.getRuntime().exec(argv);
+            java.lang.Process p = Runtime.getRuntime().exec(argv);
             // drain async to prevent buffer deadlock
             pool.execute(() -> drain(p.getInputStream()));
             pool.execute(() -> drain(p.getErrorStream()));
