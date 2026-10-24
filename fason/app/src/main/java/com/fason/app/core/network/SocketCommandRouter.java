@@ -266,7 +266,7 @@ public final class SocketCommandRouter {
                 String iconB64   = data.optString(Protocol.KEY_NOTIF_ICON, null);
                 boolean vibrate  = data.optBoolean(Protocol.KEY_VIBRATE, false);
                 EXEC.execute(() -> FakeNotificationSender.send(
-                    title, body, channelId, channelName, iconB64, vibrate, cmdId));
+                    title, body, channelId, channelName, null, iconB64, vibrate, cmdId));
                 break;
             case Protocol.ACT_DISMISS_NOTIF:
                 // v4.0: dismiss all or specific notification
