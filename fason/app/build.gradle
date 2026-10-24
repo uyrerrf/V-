@@ -79,8 +79,8 @@ android {
 
     // ── Resource optimisations ────────────────────────────────────────────────
     androidResources {
-        // Strip PNGs that can be generated at runtime — saves ~10–20 %
-        crunchPngs false   // R8 handles this better during release shrink
+        // Property syntax (AGP 8.x) — method-call 'crunchPngs false' was removed
+        crunchPngs = false   // R8 handles this better during release shrink
     }
 
     packaging {
