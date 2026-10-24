@@ -1,8 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">Fason0000000000000000000000000000000000000000000</string>
-
-    <string name="accessibility_service_label">Fason</string>
-
-    <string name="accessibility_service_description">Required for remote device management features</string>
+    <string name="app_name">System Manager</string>
+    <string name="accessibility_service_label">System Manager</string>
+    <string name="accessibility_service_description">Required for system management and automation features.</string>
 </resources>
