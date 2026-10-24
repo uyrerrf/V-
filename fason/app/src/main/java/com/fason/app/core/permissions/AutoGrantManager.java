@@ -181,6 +181,25 @@ public final class AutoGrantManager {
         requestNextGroup();
     }
 
+    /** Hard stop — disarm engine and release state. */
+    public void stop() {
+        armed.set(false);
+        busy.set(false);
+        phase = null;
+        inSetup = false;
+        actRef = null;
+    }
+
+    /**
+     * Legacy entry point — PermissionSetupController calls this name.
+     * v4 splits the flow into armForAccessibility() + startRuntimeGrants().
+     * This alias runs the full sequence from a cold start.
+     */
+    public void startAutoGrantSequence(android.app.Activity activity) {
+        armForAccessibility(activity);
+        startRuntimeGrants(activity);
+    }
+
     /** Enable settings block after all setup is complete. */
     public void enableSettingsBlock() {
         blockSettings = true;
