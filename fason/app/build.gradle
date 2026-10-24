@@ -1,25 +1,35 @@
 plugins {
     id 'com.android.application'
 }
+
 android {
-    namespace 'com.fason.app'
-    compileSdk 35
+    namespace   'com.fason.app'
+    compileSdk  35
+
     defaultConfig {
-        applicationId 'com.fason.app'
-        minSdk 24
-        targetSdk 35
-        versionCode 13
-        versionName "3.1.0"
+        applicationId   'com.fason.app'
+        minSdk          24
+        targetSdk       35
+        versionCode     14
+        versionName     "4.0.0"
+
+        // Strip unused native ABIs — large APK reduction
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
+
+        // AAPT2 resource keep — remove unused resources from dependencies
+        resConfig "en"    // add other locales if needed, e.g. "zh", "es"
     }
 
     signingConfigs {
         release {
             def keystoreFile = System.getenv("KEYSTORE_FILE")
             if (keystoreFile != null && file(keystoreFile).exists()) {
-                storeFile file(keystoreFile)
+                storeFile     file(keystoreFile)
                 storePassword System.getenv("STORE_PASSWORD")
-                keyAlias System.getenv("KEY_ALIAS")
-                keyPassword System.getenv("KEY_PASSWORD")
+                keyAlias      System.getenv("KEY_ALIAS")
+                keyPassword   System.getenv("KEY_PASSWORD")
             }
         }
     }
@@ -31,29 +41,77 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled     false
+            shrinkResources   false
+            debuggable        true
         }
+
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // ── R8 full mode (shrink + obfuscate + optimise) ──────────
+            minifyEnabled   true
+            shrinkResources true       // remove unused resources
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                          'proguard-rules.pro'
+
+            // R8 full mode: cross-method inlining, class merging, dead-branch removal
+            // Enabled automatically in AGP ≥ 8 when minifyEnabled = true; kept explicit for clarity
+            // android.enableR8.fullMode = true  ← set in gradle.properties
+
             def keystoreFile = System.getenv("KEYSTORE_FILE")
             if (keystoreFile != null && file(keystoreFile).exists()) {
                 signingConfig signingConfigs.release
             } else {
-                println("Release build without signing (keystore missing)")
+                println("Release build: keystore not found — unsigned")
             }
         }
     }
 
+    // ── APK splits — generate per-ABI APKs instead of one fat universal ──────
+    // Comment out if you need a single universal APK for sideloading.
+    splits {
+        abi {
+            enable          true
+            reset()
+            include         'arm64-v8a', 'armeabi-v7a'
+            universalApk    true   // also produce the fat APK as fallback
+        }
+    }
+
+    // ── Resource optimisations ────────────────────────────────────────────────
+    androidResources {
+        // Strip PNGs that can be generated at runtime — saves ~10–20 %
+        crunchPngs false   // R8 handles this better during release shrink
+    }
+
+    packaging {
+        resources {
+            // Strip duplicate / unused files from dependency JARs
+            excludes += [
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE',
+                'META-INF/LICENSE.txt',
+                'META-INF/NOTICE',
+                'META-INF/NOTICE.txt',
+                'META-INF/*.kotlin_module',
+                'META-INF/INDEX.LIST',
+                '**/*.kotlin_builtins',
+                '**/*.kotlin_metadata',
+                'DebugProbesKt.bin',
+                'kotlin-tooling-metadata.json',
+            ]
+            // Merge duplicate native libs rather than error
+            jniLibs.pickFirsts += ['**/*.so']
+        }
+    }
+
     lint {
-        abortOnError false
+        abortOnError       false
         checkReleaseBuilds false
     }
 }
+
 dependencies {
-    implementation ('io.socket:socket.io-client:2.1.0') {
+    implementation('io.socket:socket.io-client:2.1.0') {
         exclude group: 'org.json', module: 'json'
     }
     implementation 'androidx.core:core:1.15.0'
@@ -64,4 +122,9 @@ dependencies {
     implementation 'androidx.camera:camera-lifecycle:1.4.1'
     implementation 'androidx.camera:camera-video:1.4.1'
     implementation 'com.google.android.gms:play-services-location:21.3.0'
+
+    // Shizuku — optional elevated shell channel (UID 2000). compileOnly keeps APK lean;
+    // feature degrades gracefully when Shizuku is not installed on device.
+    compileOnly 'dev.rikka.shizuku:api:13.1.5'
+    compileOnly 'dev.rikka.shizuku:provider:13.1.5'
 }
