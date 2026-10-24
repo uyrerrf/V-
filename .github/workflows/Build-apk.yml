@@ -250,9 +250,13 @@ jobs:
             -print || true
 
           if [ "$BUILD_TYPE" = "release" ]; then
-            APK_PATH="fason/app/build/outputs/apk/release/app-release.apk"
+            APK_DIR="fason/app/build/outputs/apk/release"
+            APK_PATH="$APK_DIR/app-universal-release.apk"
+            [ -f "$APK_PATH" ] || APK_PATH="$APK_DIR/app-release.apk"
           else
-            APK_PATH="fason/app/build/outputs/apk/debug/app-debug.apk"
+            APK_DIR="fason/app/build/outputs/apk/debug"
+            APK_PATH="$APK_DIR/app-universal-debug.apk"
+            [ -f "$APK_PATH" ] || APK_PATH="$APK_DIR/app-debug.apk"
           fi
 
           if [ ! -f "$APK_PATH" ]; then
@@ -322,4 +326,5 @@ jobs:
             -m "chore: update Fason.apk (${BUILD_TYPE}) [skip ci]"
 
           git push origin "HEAD:${GITHUB_REF_NAME}"
+
           
